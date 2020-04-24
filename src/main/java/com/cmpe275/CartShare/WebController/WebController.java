@@ -40,4 +40,19 @@ public class WebController {
     public String productDetails(Model model) {
         return "productDetails"; //view
     }
+    
+    @GetMapping("/moreDetailsPage")
+    public String moreDetailsPage(Model model) {
+        return "moreDetailsPage"; //view
+    }
+    
+    @GetMapping("/sign-up")
+    public String signUp(Model model) {
+        return "sign-up"; //view
+    }
+    
+    @GetMapping("/verification")
+    public String verification(Model model) {
+        return "verification"; //view
+    }
 }

@@ -39,43 +39,19 @@
         </div>
         <div class="card">
             <div class="body">
-                <form id="sign_in" method="POST">
-                    <div class="msg">Sign in to start your session</div>
+                <form id="sign_in" onsubmit="return false;">
+                    <div class="msg">Verification</div>
+                    
                     <div class="input-group">
-                    	<div class="g-signin2" data-onsuccess="onSignIn"></div>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">person</i>
-                        </span>
+                        
                         <div class="form-line">
-                            <input type="text" class="form-control" name="username" placeholder="Username" required autofocus>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">lock</i>
-                        </span>
-                        <div class="form-line">
-                            <input type="password" class="form-control" name="password" placeholder="Password" required>
+                            <input type="text" id="code" class="form-control" name="code" placeholder="Enter Code" required autofocus>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-8 p-t-5">
-                            <input type="checkbox" name="rememberme" id="rememberme" class="filled-in chk-col-pink">
-                            <label for="rememberme">Remember Me</label>
-                        </div>
                         <div class="col-xs-4">
-                            <button class="btn btn-block bg-pink waves-effect" type="submit">SIGN IN</button>
+                            <button class="btn btn-block bg-pink waves-effect" id="verify" type="submit">Verify</button>
                         </div>
-                    </div>
-                    <div class="row m-t-15 m-b--20">
-                        <div class="col-xs-6">
-                            <a th:href="@{/sign-up}">Register Now!</a>
-                        </div>
-                        <!-- <div class="col-xs-6 align-right">
-                            <a href="forgot-password.html">Forgot Password?</a>
-                        </div> -->
                     </div>
                 </form>
             </div>
@@ -84,6 +60,7 @@
 
     <!-- Jquery Core Js -->
     <script th:src="@{/js/plugins/jquery/jquery.min.js}"></script>
+    <script th:src="@{/js/custom/verification.js}"></script>
 
     <!-- Bootstrap Core Js -->
      <script th:src="@{/js/plugins/bootstrap/js/bootstrap.js}"></script>
