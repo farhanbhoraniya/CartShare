@@ -35,8 +35,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// Works for the basic authentication
 		http.csrf().disable()
-		.authorizeRequests().antMatchers("/register").permitAll().antMatchers("/admin").access("hasRole('admin')")
-		.antMatchers("/pooler").access("hasRole('pooler')")
+		.authorizeRequests().antMatchers("/register").permitAll().antMatchers("/admin/**").access("hasRole('admin')")
+		.antMatchers("/pooler/**").access("hasRole('pooler')")
 		.anyRequest().authenticated()
 		.and()
 		.httpBasic().and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
