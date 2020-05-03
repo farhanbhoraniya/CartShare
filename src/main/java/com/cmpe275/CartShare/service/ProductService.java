@@ -1,6 +1,5 @@
 package com.cmpe275.CartShare.service;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -10,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.cmpe275.CartShare.dao.ProductRepository;
+import com.cmpe275.CartShare.dao.StoreRepository;
 import com.cmpe275.CartShare.model.Product;
 
 @Service
@@ -18,8 +18,8 @@ public class ProductService {
 	@Autowired
 	ProductRepository productRepository;
 	
-	public List<Product> findByStore(int id) {
-		return productRepository.findByStoreid(id);
+	public List<Product> findByStore(int storeid) {
+		return productRepository.findByStoreid(storeid);
 	}
 	
 	public List<Product> findByProduct(String sku) {
@@ -47,8 +47,7 @@ public class ProductService {
 	}
 	
 	@Transactional
-	public void delete(int storeId, String sku) {
-		System.out.println("In service");
-		productRepository.deleteBySkuAndStoreid(sku, storeId);
+	public void delete(int storeid, String sku) {
+		productRepository.deleteBySkuAndStoreid(sku, storeid);
 	}
 }

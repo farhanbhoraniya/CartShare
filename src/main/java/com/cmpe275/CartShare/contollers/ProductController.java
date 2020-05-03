@@ -134,6 +134,7 @@ public class ProductController {
 		}
 		
 		List<Product> products = productService.findByStore(storeId);
+
 		return ResponseEntity.status(HttpStatus.OK).body(products);
 	}
 	
@@ -235,7 +236,6 @@ public class ProductController {
 	public @ResponseBody ResponseEntity<Product> deleteProduct(@PathVariable("storeid") int storeid, @PathVariable("sku") String sku) {
 		
 		Store store = storeService.findById(storeid);
-		System.out.println("Deleting ");
 		if (store == null) {
 			System.out.println("Store does not exists");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -256,7 +256,7 @@ public class ProductController {
 		// #############################
 		// #############################
 		
-		productService.delete(product.getStoreid(), product.getSku());
+		productService.delete(storeid, sku);
 		return ResponseEntity.status(HttpStatus.OK).body(product);
 	}
 }

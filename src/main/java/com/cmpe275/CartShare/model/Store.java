@@ -1,8 +1,14 @@
 package com.cmpe275.CartShare.model;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "stores")
@@ -16,6 +22,10 @@ public class Store {
 	private String city;
 	private String zip;
 	
+	@OneToMany(mappedBy = "storeid", fetch = FetchType.EAGER)
+	@JsonIgnoreProperties({"store"})
+	private Set<Product> products;
+
 	public Store() {}
 	
 	public Store(String name, String streetname, int streetnumber, String city, String zip) {
@@ -26,6 +36,14 @@ public class Store {
 		this.zip = zip;
 	}
 	
+	public Set<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(Set<Product> products) {
+		this.products = products;
+	}
+
 	public int getId() {
 		return id;
 	}
