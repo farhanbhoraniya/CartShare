@@ -9,7 +9,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.cmpe275.CartShare.dao.ProductRepository;
-import com.cmpe275.CartShare.dao.StoreRepository;
 import com.cmpe275.CartShare.model.Product;
 
 @Service
