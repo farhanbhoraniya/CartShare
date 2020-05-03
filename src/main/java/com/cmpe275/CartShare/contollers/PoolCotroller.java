@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cmpe275.CartShare.dao.PoolMembershipRepository;
 import com.cmpe275.CartShare.model.Pool;
+import com.cmpe275.CartShare.model.PoolMembership;
 import com.cmpe275.CartShare.model.User;
 import com.cmpe275.CartShare.service.PoolService;
 import com.cmpe275.CartShare.service.UserService;
@@ -31,6 +33,9 @@ public class PoolCotroller {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	PoolMembershipRepository poolMembershipRepository;
 	
 	@PostMapping("/pool")
 	public @ResponseBody ResponseEntity<Pool> createPool(@RequestBody JSONObject poolObject) {
@@ -161,14 +166,12 @@ public class PoolCotroller {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		
-		
-		// ########################
-		// ########################
-		// ########################
-		// TODO Check for pool members
-		// ########################
-		// ########################
-		// ########################
+		List<PoolMembership> poolMembers = poolMembershipRepository.findByPool(poolid);
+		System.out.println(poolMembers);
+		if (poolMembers.size() != 0) {
+			System.out.println("There are other members in the pool.");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
 		
 		poolService.delete(poolid);
 		return ResponseEntity.status(HttpStatus.OK).body(pool);

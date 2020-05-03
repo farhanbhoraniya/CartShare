@@ -1,10 +1,13 @@
 package com.cmpe275.CartShare.model;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "pool")
@@ -22,6 +25,9 @@ public class Pool {
 	@JoinColumn(name = "leader", referencedColumnName = "id")
 	private User leader;
 
+	@Transient
+	private List<User> members;
+	
 	public Pool() {}
 	
 	public Pool(String name, String neighborhood, String description, String zip, User leader) {
@@ -78,5 +84,13 @@ public class Pool {
 
 	public void setLeader(User leader) {
 		this.leader = leader;
+	}
+	
+	public List<User> getMembers() {
+		return members;
+	}
+
+	public void setMembers(List<User> members) {
+		this.members = members;
 	}
 }
