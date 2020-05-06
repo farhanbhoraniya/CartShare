@@ -3,7 +3,53 @@ $.fn.storeDetails = function(){
 }
 
 $(document).ready(function(){
-	//ajax call to get store details
+	
+	$.ajax({
+		url: "/stores",
+		type: "GET",
+		contentType: "application/json",
+		success: function (res) {
+			var $dropdown = $("#searchStore");
+			var $ul = $("ul.dropdown-menu.inner");
+			var i=0;
+			$.each(res, function() {
+			    $dropdown.append($("<option/>").val(this.id).text(this.name));
+			    $ul.append($("</li>").text("abc"));
+			    //var $li = ;
+			    //$li.append($("</a>").addClass("waves-effect waves-block"));
+			    
+				
+			    i+=1;
+			});
+			
+        },
+        failure: function (res) {
+        	console.log(res);
+        }
+	 });
+	
+	
+	var data = {
+			name: $("#name").val(),
+			streetname: $("#stname").val(),
+			streetnumber: parseInt($("#stnumber").val()),
+			city: $("#city").val(),
+			state: $("#state").val(),
+			zip: $("#zipcode").val()
+	}
+//	 $.ajax({
+//		url: "/store/",//+storeId,
+//		type: "POST",
+//		contentType: "application/json",
+//		data: JSON.stringify(data),
+//		success: function (res) {
+//            console.log(res);
+//        },
+//        failure: function (res) {
+//        	console.log(res);
+//        }
+//	 });
+	
 	var tr = $("<tr>");
 	tr.append("<td>col1</td>");
 	tr.append("<td>col2</td>");

@@ -509,7 +509,7 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control" placeholder="Name" required/>
+                                            <input id="name" type="text" class="form-control" placeholder="Name" required/>
                                         </div>
                                     </div>
                                 </div>
@@ -518,7 +518,7 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control" placeholder="Street Number/Name" required/>
+                                            <input type="text" id="stnumber" class="form-control" placeholder="Street Number" required/>
                                         </div>
                                     </div>
                                 </div>
@@ -527,7 +527,7 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control" placeholder="City" required/>
+                                            <input type="text" id="stname" class="form-control" placeholder="Street Name" required/>
                                         </div>
                                     </div>
                                 </div>
@@ -536,7 +536,7 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control" placeholder="State" required/>
+                                            <input type="text" id="city" class="form-control" placeholder="City" required/>
                                         </div>
                                     </div>
                                 </div>
@@ -545,12 +545,21 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control" placeholder="Zipcode" name="number" maxlength="5" minlength="5" required/>
+                                            <input type="text" id="state" class="form-control" placeholder="State" required/>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-primary m-t-15 waves-effect">CREATE
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="number" id="zipcode" class="form-control" placeholder="Zipcode" name="number" maxlength="5" minlength="5" required/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" onclick="$.fn.createStore()" class="btn btn-primary m-t-15 waves-effect">CREATE
                             
                             </button>
                             
@@ -595,5 +604,7 @@
 
     <!-- Demo Js -->
     <script th:src="@{/js/js/demo.js}"></script>
+    
+    <script th:src="@{/js/custom/createStore.js}"></script>
 </body>
 </html>
