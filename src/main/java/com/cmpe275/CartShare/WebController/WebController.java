@@ -65,4 +65,9 @@ public class WebController {
     public String createPool(Model model) {
         return "createPool"; //view
     }
+    
+    @GetMapping("/joinPool")
+    public String joinPool(Model model) {
+        return "joinPool"; //view
+    }
 }
