@@ -83,7 +83,7 @@ public class UserController {
 			emailService.sendEmail(newUser.getEmail(), subject, body);
 		} catch (Exception e) {
 			System.out.println("Error while sending the confirmation email");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 		
 
