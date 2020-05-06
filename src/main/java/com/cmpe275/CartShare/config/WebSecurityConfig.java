@@ -17,34 +17,34 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private UserDetailsService userDetailsService;
-	
-	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-	
-	@Override
-	@Bean
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
-	}
-	
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		// Works for the basic authentication
-		http.csrf().disable().anonymous().and()
-		.authorizeRequests().antMatchers("/", "/css/**", "/images/**", "/js/**", "/register", "/confirm-account").permitAll().antMatchers("/admin/**").access("hasRole('admin')")
-		.antMatchers("/pooler/**").access("hasRole('pooler')")
-		.anyRequest().authenticated()
-		.and()
-		.httpBasic().and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
-		
-	}
-	
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
-	}
+@Autowired
+private UserDetailsService userDetailsService;
+
+@Bean
+public BCryptPasswordEncoder bCryptPasswordEncoder() {
+return new BCryptPasswordEncoder();
+}
+
+@Override
+@Bean
+public AuthenticationManager authenticationManagerBean() throws Exception {
+return super.authenticationManagerBean();
+}
+
+@Override
+protected void configure(HttpSecurity http) throws Exception {
+// Works for the basic authentication
+http.csrf().disable().anonymous().and()
+.authorizeRequests().antMatchers("/", "/css/**", "/images/**", "/js/**", "/register", "/confirm-account").permitAll().antMatchers("/admin/**").access("hasRole('admin')")
+.antMatchers("/pooler/**").access("hasRole('pooler')")
+.anyRequest().authenticated()
+.and()
+.httpBasic().and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+
+}
+
+@Autowired
+public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+}
 }

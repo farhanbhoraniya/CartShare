@@ -11,27 +11,27 @@ import com.cmpe275.CartShare.dao.UserRepository;
 
 @Service
 public class UserService{
-	
-	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
-	@Transactional
-	public User save(User user) {
-		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		userRepository.save(user);
-		User newUser = userRepository.findByEmail(user.getEmail());
-		return newUser;
-	}
-	
-	public User findByEmail(String email) {
-		User user = userRepository.findByEmail(email);
-		return user;
-	}
-	
-	public User findById(int id) {
-		return userRepository.findById(id);
-	}
+
+    @Autowired
+    private UserRepository userRepository;
+
+    //	@Autowired
+    //	private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Transactional
+    public User save(User user) {
+        //user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        User newUser = userRepository.findByEmail(user.getEmail());
+        return newUser;
+    }
+
+    public User findByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        return user;
+    }
+
+    public User findById(int id) {
+        return userRepository.findById(id);
+    }
 }
