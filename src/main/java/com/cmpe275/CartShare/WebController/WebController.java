@@ -51,6 +51,11 @@ public class WebController {
         return "sign-up"; //view
     }
     
+    @GetMapping("/")
+    public String path(Model model) {
+        return "login"; //view
+    }
+    
     @GetMapping("/verification")
     public String verification(Model model) {
         return "verification"; //view
