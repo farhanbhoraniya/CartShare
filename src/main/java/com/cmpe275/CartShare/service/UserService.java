@@ -1,37 +1,43 @@
 package com.cmpe275.CartShare.service;
 
-import javax.transaction.Transactional;
-
+import com.cmpe275.CartShare.dao.UserRepository;
+import com.cmpe275.CartShare.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.cmpe275.CartShare.model.User;
-import com.cmpe275.CartShare.dao.UserRepository;
+import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
-public class UserService{
+public class UserService {
+
+    private final UserRepository userRepository;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    private UserRepository userRepository;
-
-    //	@Autowired
-    //	private BCryptPasswordEncoder bCryptPasswordEncoder;
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     @Transactional
-    public User save(User user) {
-        //user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+    public Optional<User> save(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        User newUser = userRepository.findByEmail(user.getEmail());
-        return newUser;
+        return userRepository.findByEmail(user.getEmail());
     }
 
-    public User findByEmail(String email) {
-        User user = userRepository.findByEmail(email);
-        return user;
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
-    public User findById(int id) {
+    public Optional<User> findById(int id) {
         return userRepository.findById(id);
+    }
+
+    public Boolean userExists(String email) {
+        return userRepository.existsByEmail(email);
     }
 }

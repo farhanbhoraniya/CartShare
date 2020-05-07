@@ -1,8 +1,7 @@
 package com.cmpe275.CartShare.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,18 +20,14 @@ public class User {
 	private String type;
 	private boolean verified;
 	private int rating;
+
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private AuthProvider provider;
+
+	private String providerId;
 	
 	public User() {}
-	
-	public User(String email, String screenname, String nickname, String password, String type) {
-		this.email = email;
-		this.screenname = screenname;
-		this.nickname = nickname;
-		this.type = type;
-		this.password = password;
-		this.verified = false;
-		this.rating = 0;
-	}
 	
 	public int getId() {
 		return id;
@@ -98,5 +93,21 @@ public class User {
 
 	public void setRating(int rating) {
 		this.rating = rating;
-	}	
+	}
+
+	public AuthProvider getProvider() {
+		return provider;
+	}
+
+	public void setProvider(AuthProvider provider) {
+		this.provider = provider;
+	}
+
+	public String getProviderId() {
+		return providerId;
+	}
+
+	public void setProviderId(String providerId) {
+		this.providerId = providerId;
+	}
 }

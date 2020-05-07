@@ -2,6 +2,7 @@ package com.cmpe275.CartShare.contollers;
 
 import java.util.List;
 
+import com.cmpe275.CartShare.exception.ResourceNotFoundException;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,7 +65,7 @@ public class PoolMembershipController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		
-		User userObject = userRepository.findById(user);
+		User userObject = userRepository.findById(user).orElseThrow(()-> new ResourceNotFoundException("User","Id", user));
 		
 		if (userObject == null) {
 			System.out.println("User does not exits");
@@ -128,7 +129,7 @@ public class PoolMembershipController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		
-		User userObject = userRepository.findById(userId);
+		User userObject = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","Id", userId));
 		
 		if (userObject == null) {
 			System.out.println("User does not exits");

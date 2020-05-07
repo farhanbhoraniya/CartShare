@@ -1,13 +1,14 @@
 package com.cmpe275.CartShare.dao;
 
+import com.cmpe275.CartShare.model.ConfirmationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.cmpe275.CartShare.model.ConfirmationToken;
+public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationToken, Integer> {
 
-public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationToken, Integer>{
-	
-	public ConfirmationToken findByConfirmationtoken(String confirmationToken);
-	public ConfirmationToken save(ConfirmationToken confirmationToken);
-	public void delete(ConfirmationToken confirmationToken);
-	
+    ConfirmationToken findByConfirmationtoken(String confirmationToken);
+
+    ConfirmationToken save(ConfirmationToken confirmationToken);
+
+    void delete(ConfirmationToken confirmationToken);
+
 }
