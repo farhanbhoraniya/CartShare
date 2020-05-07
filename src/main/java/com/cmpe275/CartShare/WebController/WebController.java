@@ -60,4 +60,14 @@ public class WebController {
     public String verification(Model model) {
         return "verification"; //view
     }
+    
+    @GetMapping("/createPool")
+    public String createPool(Model model) {
+        return "createPool"; //view
+    }
+    
+    @GetMapping("/joinPool")
+    public String joinPool(Model model) {
+        return "joinPool"; //view
+    }
 }
