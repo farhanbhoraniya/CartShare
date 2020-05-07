@@ -1,6 +1,7 @@
 package com.cmpe275.CartShare.contollers;
 
 import com.cmpe275.CartShare.model.Store;
+import com.cmpe275.CartShare.security.UserPrincipal;
 import com.cmpe275.CartShare.service.ProductService;
 import com.cmpe275.CartShare.service.StoreService;
 import org.json.simple.JSONObject;

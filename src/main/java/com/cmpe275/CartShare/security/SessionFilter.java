@@ -18,6 +18,7 @@ public class SessionFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
+        System.out.println(((HttpServletRequest) request).getRequestURI());
         Cookie[] allCookies = req.getCookies();
         if (allCookies != null) {
             Cookie session = Arrays.stream(allCookies).filter(x -> x.getName().equals("JSESSIONID")).findFirst().orElse(null);

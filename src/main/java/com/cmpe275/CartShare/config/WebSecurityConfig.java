@@ -111,8 +111,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/confirm-account",
                         "/sign-up",
                         "/login").permitAll()
-                .antMatchers("/admin/**").access("hasRole('admin')")
-                .antMatchers("/pooler/**").access("hasRole('pooler')")
+                .antMatchers("/admin/**").access("hasRole('ADMIN')")
+                .antMatchers("/pooler/**").access("hasRole('USER')")
                 .antMatchers("/",
                         "/error",
                         "/favicon.ico",
