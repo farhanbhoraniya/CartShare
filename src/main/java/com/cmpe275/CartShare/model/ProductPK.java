@@ -14,4 +14,12 @@ public class ProductPK implements Serializable {
 		this.sku = sku;
 		this.storeid = storeid;
 	}
+
+	@Override
+	public String toString() {
+		return "ProductPK{" +
+				"sku='" + sku + '\'' +
+				", storeid=" + storeid +
+				'}';
+	}
 }

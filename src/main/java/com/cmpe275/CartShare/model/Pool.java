@@ -94,4 +94,5 @@ public class Pool {
 	public void setMembers(List<User> members) {
 		this.members = members;
 	}
+
 }

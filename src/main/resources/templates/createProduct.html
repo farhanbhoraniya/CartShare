@@ -509,7 +509,7 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control" placeholder="SKU" required/>
+                                            <input type="text" id="sku" class="form-control" placeholder="SKU" required/>
                                         </div>
                                     </div>
                                 </div>
@@ -518,7 +518,7 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control" placeholder="Name" required/>
+                                            <input type="text" id="name" class="form-control" placeholder="Name" required/>
                                         </div>
                                     </div>
                                 </div>
@@ -528,7 +528,7 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <textarea rows="4" class="form-control no-resize" placeholder="Description..."></textarea>
+                                            <textarea rows="4" id="description" class="form-control no-resize" placeholder="Description..."></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -537,7 +537,7 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control" placeholder="Image Link" required/>
+                                            <input type="text" id="imageurl" class="form-control" placeholder="Image Link" required/>
                                         </div>
                                     </div>
                                 </div>
@@ -546,7 +546,7 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control" placeholder="Brand" required/>
+                                            <input type="text" id="brand" class="form-control" placeholder="Brand" required/>
                                         </div>
                                     </div>
                                 </div>
@@ -554,7 +554,7 @@
                             <div class="body">
                             <div class="row clearfix">
                                 <div class="col-sm-6">
-                                    <select class="form-control show-tick">
+                                    <select id="unit" class="form-control show-tick">
                                         <option value="">Select</option>
                                         <option value="10">Piece</option>
                                         <option value="20">Pound</option>
@@ -566,7 +566,7 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control" placeholder="Price" required/>
+                                            <input type="text" id="price" class="form-control" placeholder="Price" required/>
                                         </div>
                                     </div>
                                 </div>
@@ -577,15 +577,15 @@
                                         <b>Store Name</b>
                                     </p>
                                     <select id="storeID" class="form-control show-tick" multiple>
-                                        <option>A</option>
-                                        <option>B</option>
-                                        <option>C</option>
+                                        <option value="1">A</option>
+                                        <option value="2">B</option>
+                                        <option value="3">C</option>
                                     </select>
 
                                 </div>
                                </div>
                         </div>
-                            <button type="button" class="btn btn-primary m-t-15 waves-effect">Create Product
+                            <button type="button" onclick="$.fn.createProduct()" class="btn btn-primary m-t-15 waves-effect">Create Product
                             
                             </button>
                             
@@ -630,5 +630,7 @@
 
     <!-- Demo Js -->
     <script th:src="@{/js/js/demo.js}"></script>
+    
+    <script th:src="@{/js/custom/createProduct.js}"></script>
 </body>
 </html>

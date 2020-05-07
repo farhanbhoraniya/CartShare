@@ -1,25 +1,37 @@
 $(document).ready(function(){
-	
-	var details = sessionStorage.editProductDetails;
-	var json = JSON.parse(details);
-	
-	$("#skn").val(json.skn);
-	$("#name").val(json.name);
-	$("#desc").val(json.desc);
-	$("#link").val(json.url);
-	$("#brand").val(json.brand);
-	$("#unit").val(json.unit);
-	$("#price").val(json.price);
-	$("#storeID").val(json.storeID);
-	
-	$("#updateStore").on("click",function(){
-		$("#skn").val(json.storeID);
-		$("#name").val(json.storeName);
-		$("#desc").val(json.streetName);
-		$("#link").val(json.city);
-		$("#brand").val(json.state);
-		$("#unit").val(json.zipcode);
-		$("#price").val(json.zipcode);
-		$("#storeID").val(json.zipcode);
+
+	$('#updateProductBtn').click(function(){
+
+		var store_id = $('#storeID').val();
+		var sku = $('#sku').val();
+
+		var data = {
+			price: parseFloat($("#price").val()),
+			name: $("#name").val(),
+			unit: $('#unit').val(),
+			description: $("#description").val(),
+			imageurl: $("#imageurl").val(),
+			brand: $("#brand").val(),
+		};
+
+		$.ajax({
+			url: "/admin/store/" + store_id + "/product/" + sku,
+			type: "PUT",
+			contentType: "application/json",
+			data: JSON.stringify(data),
+			success: function (res) {
+				console.log(res);
+				showNotification("Products updated successfully",'bg-green','bottom','right');
+				window.location = "/productList";
+			},
+			error: function(res){
+				showNotification("Error Updating Product. Please try again.",'bg-red','bottom','right');
+			},
+			failure: function (res) {
+				console.log(res);
+				showNotification("Error Creating Product. Please try again.",'bg-red','bottom','right');
+			}
+		});
 	});
+
 });

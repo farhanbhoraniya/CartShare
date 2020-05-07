@@ -28,6 +28,10 @@ public class ProductService {
 	public List<Product> findByName(String name) {
 		return productRepository.findByName(name);
 	}
+
+	public List<Product> findAll() {
+		return productRepository.findAll();
+	}
 	
 	@Transactional
 	public void save(Product product) throws DataIntegrityViolationException {

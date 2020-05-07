@@ -310,29 +310,18 @@
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
                     <li>
-                        <a th:href="@{createStore}">
+                        <a th:href="@{createPool}">
                             <i class="material-icons">home</i>
-                            <span>Create Store</span>
+                            <span>Create Pool</span>
                         </a>
                     </li>
                     <li>
-                        <a th:href="@{searchStore}">
+                        <a th:href="@{joinPool}">
                             <i class="material-icons">text_fields</i>
-                            <span>Search Store</span>
+                            <span>Join Pool</span>
                         </a>
                     </li>
-                    <li>
-                        <a th:href="@{createProduct}">
-                            <i class="material-icons">layers</i>
-                            <span>Create Product</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{searchProduct}">
-                            <i class="material-icons">layers</i>
-                            <span>Search Product</span>
-                        </a>
-                    </li>
+                    
                 </ul>
             </div>
             <!-- #Menu -->
@@ -496,31 +485,28 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <h2>SEARCH STORE</h2>
+                <h2>JOIN POOL</h2>
             </div>
             <!-- Input -->
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
-                        <div class="body">
-                            <div class="row clearfix">
-                                <div class="col-sm-6">
-                                    <select id="searchStore" class="form-control show-tick">
-                                        <!-- <option value="">-- Please select --</option>
-                                        <option value="10">10</option>
-                                        <option value="20">20</option>
-                                        <option value="30">30</option>
-                                        <option value="40">40</option>
-                                        <option value="50">50</option> -->
-                                    </select>
-                                </div>
-                                <button type="button" onclick="$.fn.storeDetails()" class="btn btn-primary m-t-15 waves-effect">Search Store
-                            
-                            	</button>
-                            </div>
-                        </div>
-                            
-                            
+                        <div class="body table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Pool ID</th>
+                                        <th>Name</th>
+                                        <th>N	eighborhood</th>
+                                        <th>Description</th>
+										<th>Description</th>
+										<th>Join Pool</th>
+										<th>Leave Pool</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="poolDetails">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -562,6 +548,7 @@
 
     <!-- Demo Js -->
     <script th:src="@{/js/js/demo.js}"></script>
-    <script th:src="@{/js/custom/storeDetails.js}"></script>
+    
+    <script th:src="@{/js/custom/poolDetails.js}"></script>
 </body>
 </html>

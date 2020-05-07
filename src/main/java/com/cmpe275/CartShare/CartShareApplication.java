@@ -8,10 +8,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 public class CartShareApplication {
 
-	public static void main(String[] args) {
-		System.out.println("Starting application");
-		SpringApplication.run(CartShareApplication.class, args);
-		System.out.println("Application started");
-	}
+    public static void main(String[] args) {
+        System.out.println("Starting application");
+        SpringApplication.run(CartShareApplication.class, args);
+        System.out.println("Application started");
+    }
 
 }

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<div th:insert="partials/header :: header"></div>
+
+<body class="theme-red">
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="preloader">
+            <div class="spinner-layer pl-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <p>Please wait...</p>
+    </div>
+</div>
+<!-- #END# Page Loader -->
+<!-- Overlay For Sidebars -->
+<div class="overlay"></div>
+<!-- #END# Overlay For Sidebars -->
+<!-- Search Bar -->
+<div class="search-bar">
+    <div class="search-icon">
+        <i class="material-icons">search</i>
+    </div>
+    <input type="text" placeholder="START TYPING...">
+    <div class="close-search">
+        <i class="material-icons">close</i>
+    </div>
+</div>
+<!-- #END# Search Bar -->
+
+<!-- Top Bar -->
+<div th:insert="partials/top_nav :: topnav"></div>
+<!-- #Top Bar -->
+<section>
+    <div th:insert="partials/left_nav :: leftnav"></div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>UPDATE PRODUCT</h2>
+        </div>
+        <!-- Input -->
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="body">
+
+                        <h2 class="card-inside-title">Product Details</h2>
+                        <div class="row clearfix">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" id="sku" class="form-control" placeholder="SKU" required th:value="${product.sku}" disabled/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" id="name" class="form-control" placeholder="Name" required th:value="${product.name}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <textarea rows="4" id="description" class="form-control no-resize" placeholder="Description..." th:text="${product.description}"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" id="imageurl" class="form-control" placeholder="Image Link" required th:value="${product.imageurl}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" id="brand" class="form-control" placeholder="Brand" required th:value="${product.brand}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="body">
+                            <div class="row clearfix">
+                                <div class="col-sm-6">
+                                    <select id="unit" class="form-control show-tick">
+                                        <option value="">Select</option>
+                                        <option th:selected="${product.unit.equals('Piece')}" value="Piece">Piece</option>
+                                        <option th:selected="${product.unit.equals('Pound')}" value="Pound">Pound</option>
+                                        <option th:selected="${product.unit.equals('Oz')}" value="Oz">Oz</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" id="price" class="form-control" placeholder="Price" required th:value="${product.price}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-md-12">
+                                    <p>
+                                        <b>Store Name</b>
+                                    </p>
+                                    <select id="storeID" class="form-control show-tick" disabled>
+                                        <option th:each="store:${stores}" th:value="${store.id}" th:text="${store.name}" th:selected="${product.storeid == store.id}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="updateProductBtn" th:data-store-id="${product.storeid }" class="btn btn-primary m-t-15 waves-effect">Update Product</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Input -->
+    </div>
+</section>
+
+<div th:insert="partials/scripts :: scripts"></div>
+
+<!-- Page specific scripts -->
+<script th:src="@{/js/custom/editProductDetails.js}"></script>
+
+</body>
+</html>

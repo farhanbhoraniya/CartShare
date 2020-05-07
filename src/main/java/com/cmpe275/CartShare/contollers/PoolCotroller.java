@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cmpe275.CartShare.dao.PoolMembershipRepository;
 import com.cmpe275.CartShare.model.Pool;
 import com.cmpe275.CartShare.model.PoolMembership;
+import com.cmpe275.CartShare.model.Store;
 import com.cmpe275.CartShare.model.User;
 import com.cmpe275.CartShare.service.PoolService;
 import com.cmpe275.CartShare.service.UserService;
@@ -189,4 +190,15 @@ public class PoolCotroller {
 		poolService.delete(poolid);
 		return ResponseEntity.status(HttpStatus.OK).body(pool);
 	}
+    
+    @GetMapping("/poolList")
+    public ModelAndView getPoolsList(ModelAndView modelAndView)
+    {
+        List<Pool> pools = poolService.findAll();
+        modelAndView.setViewName("pool/index");
+        modelAndView.addObject("pools", pools);
+        System.out.println("Pools: "+pools.toString());
+        return modelAndView;
+    }
+
 }

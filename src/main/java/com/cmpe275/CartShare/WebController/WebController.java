@@ -1,24 +1,36 @@
 package com.cmpe275.CartShare.WebController;
 
+import com.cmpe275.CartShare.model.Store;
+import com.cmpe275.CartShare.service.StoreService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
+
 @Controller
 public class WebController {
+
+    @Autowired
+    StoreService storeService;
+
     @GetMapping("/createStore")
     public String main(Model model) {
-        return "createStore"; //view
+        return "store/create"; //view
     }
     
     @GetMapping("/searchStore")
     public String searchStore(Model model) {
         return "searchStore"; //view
     }
-    
+
     @GetMapping("/createProduct")
     public String createProduct(Model model) {
-        return "createProduct"; //view
+
+        List<Store> storeList = storeService.findAll();
+        model.addAttribute("stores", storeList);
+        return "product/create"; //view
     }
     
     @GetMapping("/searchProduct")
@@ -30,11 +42,7 @@ public class WebController {
     public String storeDetails(Model model) {
         return "storeDetails"; //view
     }
-    
-    @GetMapping("/editStoreDetails")
-    public String editStoreDetails(Model model) {
-        return "editStoreDetails"; //view
-    }
+
     
     @GetMapping("/productDetails")
     public String productDetails(Model model) {
@@ -59,5 +67,15 @@ public class WebController {
     @GetMapping("/verification")
     public String verification(Model model) {
         return "verification"; //view
+    }
+    
+    @GetMapping("/createPool")
+    public String createPool(Model model) {
+        return "/pool/create"; //view
+    }
+    
+    @GetMapping("/joinPool")
+    public String joinPool(Model model) {
+        return "joinPool"; //view
     }
 }
