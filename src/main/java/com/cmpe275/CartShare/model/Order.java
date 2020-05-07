@@ -10,16 +10,17 @@ import java.util.Date;
 @Table(name = "orders")
 public class Order {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    //todo make this many to one,if the buyer chooses to get other orders as well then--
-    //todo --other orders must be linked somehow as well, could use list of cartIds
-    @OneToOne
-    @JoinColumn(name="cart", referencedColumnName = "id")
-    private Cart cart;
+//    //todo make this many to one,if the buyer chooses to get other orders as well then--
+//    //todo --other orders must be linked somehow as well, could use list of cartIds
+//    @OneToOne
+//    @JoinColumn(name="cart", referencedColumnName = "id")
+//    private Cart cart;
 
     @OneToOne
-    @JoinColumn(name="pool", referencedColumnName = "id")
+    @JoinColumn(name="pool_id", referencedColumnName = "id")
     private Pool pool;
 
     private Date date;
@@ -31,25 +32,27 @@ public class Order {
     private User pickedby;
 
     @OneToOne
-    @JoinColumn(name="buyer", referencedColumnName = "id")
+    @JoinColumn(name="buyer_id", referencedColumnName = "id")
     private User buyer;
 
-    private boolean selfPick;
+    @Column(name = "selfpick")
+    private boolean selfpick;
 
     public Order() {
     }
 
     //todo skipping picekd for now, analyze later ,User pickedby
-    public Order(Cart cart_id,Pool pool_id,Date date,String status,User buyerid, boolean selfPick) {
-        this.cart=cart_id;
+    public Order(Pool pool_id,Date date,String status,User buyerid, User pickedby, boolean selfPick) {
+//        this.cart=cart_id;
         this.pool=pool_id;
         this.date=date;
-        //this.pickedby=pickedby;
+        this.pickedby=pickedby;
         this.buyer=buyerid;
-        this.selfPick=selfPick;
+        this.selfpick=selfPick;
         this.status=status;
     }
 
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
@@ -66,13 +69,13 @@ public class Order {
         this.buyer = buyerid;
     }
 
-    public Cart getCart_id() {
-        return cart;
-    }
-
-    public void setCart_id(Cart cart_id) {
-        this.cart = cart_id;
-    }
+//    public Cart getCart_id() {
+//        return cart;
+//    }
+//
+//    public void setCart_id(Cart cart_id) {
+//        this.cart = cart_id;
+//    }
 
     public Pool getPool_id() {
         return pool;
@@ -107,10 +110,10 @@ public class Order {
     }
 
     public boolean isSelfPick() {
-        return selfPick;
+        return selfpick;
     }
 
     public void setSelfPick(boolean selfPick) {
-        this.selfPick = selfPick;
+        this.selfpick = selfPick;
     }
 }
