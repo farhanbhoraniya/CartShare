@@ -24,7 +24,6 @@ import com.cmpe275.CartShare.service.PoolService;
 
 @RestController
 public class PoolMembershipController {
-
 	@Autowired
 	PoolRepository poolRepository;
 	
