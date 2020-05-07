@@ -5,6 +5,7 @@ import com.cmpe275.CartShare.dao.CartRepository;
 import com.cmpe275.CartShare.model.Cart;
 import com.cmpe275.CartShare.model.CartItem;
 
+import com.cmpe275.CartShare.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,9 @@ public class CartService {
     CartRepository cartRepository;
     @Autowired
     CartItemRepository cartItemRepository;
+
+    @Autowired
+    UserService userService;
     
     @PersistenceContext
     private EntityManager entityManager;
@@ -32,11 +36,20 @@ public class CartService {
 //        return cart;
    // }
 
-    public CartItem saveCartItem(CartItem ci) {
-        return cartItemRepository.save(ci); 
+    public Cart createNewCart(int userid){
+        User user = userService.findById(userid);
+        Cart newCart = new Cart(user);
+        //create new cart for the user
+        cartRepository.save(newCart);
+        //return the updated cart
+        return  cartRepository.findCartByUserId(userid);
     }
 
-    public Cart findIdByUserId(int user_id) {
+    public CartItem saveCartItem(CartItem ci) {
+        return cartItemRepository.save(ci);
+    }
+
+    public Cart findCartByUserId(int user_id) {
         Cart cart = cartRepository.findCartByUserId(user_id);
         System.out.println("cart id " + cart);
         //ArrayList<CartItem> cartItems =    }
