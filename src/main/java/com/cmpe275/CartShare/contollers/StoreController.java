@@ -67,7 +67,7 @@ public class StoreController {
         String name = (String) storeObject.get("name");
         String streetname = (String) storeObject.get("streetname");
         System.out.print(storeObject.get("streetnumber"));
-        int streetnumber = (int) storeObject.get("streetnumber");
+        String streetnumber = (String) storeObject.get("streetnumber");
         String city = (String) storeObject.get("city");
         String zip = (String) storeObject.get("zip");
         String state = (String) storeObject.get("state");
@@ -102,7 +102,7 @@ public class StoreController {
         }
 
         if (storeObject.containsKey("streetnumber")) {
-            oldStoreObject.setStreetnumber((int)storeObject.get("streetnumber"));
+            oldStoreObject.setStreetnumber((String)storeObject.get("streetnumber"));
         }
 
         if (storeObject.containsKey("city")) {

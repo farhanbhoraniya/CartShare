@@ -18,7 +18,7 @@ public class Store {
     private int id;
     private String name;
     private String streetname;
-    private int streetnumber;
+    private String streetnumber;
     private String city;
     private String zip;
     private String state;
@@ -29,7 +29,7 @@ public class Store {
 
     public Store() {}
 
-    public Store(String name, String streetname, int streetnumber, String city, String zip, String state) {
+    public Store(String name, String streetname, String streetnumber, String city, String zip, String state) {
         this.name = name;
         this.streetname = streetname;
         this.streetnumber = streetnumber;
@@ -70,11 +70,11 @@ public class Store {
         this.streetname = streetname;
     }
 
-    public int getStreetnumber() {
+    public String getStreetnumber() {
         return streetnumber;
     }
 
-    public void setStreetnumber(int streetnumber) {
+    public void setStreetnumber(String streetnumber) {
         this.streetnumber = streetnumber;
     }
 
@@ -108,7 +108,7 @@ public class Store {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", streetname='" + streetname + '\'' +
-                ", streetnumber=" + streetnumber +
+                ", streetnumber='" + streetnumber + '\'' +
                 ", city='" + city + '\'' +
                 ", zip='" + zip + '\'' +
                 ", state='" + state + '\'' +

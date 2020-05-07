@@ -17,7 +17,7 @@ public class WebController {
 
     @GetMapping("/createStore")
     public String main(Model model) {
-        return "createStore"; //view
+        return "store/create"; //view
     }
     
     @GetMapping("/searchStore")

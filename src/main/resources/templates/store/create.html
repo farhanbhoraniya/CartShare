@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-
 <div th:insert="partials/header :: header"></div>
 
 <body class="theme-red">
@@ -22,7 +21,6 @@
     </div>
 </div>
 <!-- #END# Page Loader -->
-
 <!-- Overlay For Sidebars -->
 <div class="overlay"></div>
 <!-- #END# Overlay For Sidebars -->
@@ -38,13 +36,13 @@
 </div>
 <!-- #END# Search Bar -->
 
+<!-- Top Bar -->
 <div th:insert="partials/top_nav :: topnav"></div>
-
+<!-- #Top Bar -->
 <section>
     <div th:insert="partials/left_nav :: leftnav"></div>
 </section>
 
-<!-- Content -->
 <section class="content">
     <div class="container-fluid">
         <div class="block-header">
@@ -57,62 +55,62 @@
                     <div class="body">
 
                         <h2 class="card-inside-title">Store Details</h2>
-                        <form id="storeCreateForm" method="POST" action="/store/create">
-                        <div class="row clearfix">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input id="name" name="name" type="text" class="form-control" placeholder="Name" required/>
+                        <form id="createStoreForm">
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input id="name" name="name" type="text" class="form-control" placeholder="Name" required/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" id="stnumber" name="stnumber" class="form-control" placeholder="Street Number" required/>
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" name="stnumber" id="stnumber" class="form-control" placeholder="Street Number" required/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" id="stname" name="stname" class="form-control" placeholder="Street Name" required/>
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" name="stname" id="stname" class="form-control" placeholder="Street Name" required/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" id="city" name="city" class="form-control" placeholder="City" required/>
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" name="city" id="city" class="form-control" placeholder="City" required/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" id="state" name="state" class="form-control" placeholder="State" required/>
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" name="state" id="state" class="form-control" placeholder="State" required/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="number" id="zipcode" name="zipcode" class="form-control" placeholder="Zipcode" maxlength="5" minlength="5" required/>
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="number" name="zipcode" id="zipcode" class="form-control" placeholder="Zipcode" maxlength="5" minlength="5" required/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">CREATE</button>
+                            <button type="button" onclick="$.fn.createStore()" class="btn btn-primary m-t-15 waves-effect">CREATE</button>
                         </form>
                     </div>
                 </div>
@@ -121,53 +119,49 @@
         <!-- #END# Input -->
     </div>
 </section>
-<!-- Content End -->
 
-<!-- Jquery Core Js -->
-<script th:src="@{/js/plugins/jquery/jquery.min.js}"></script>
+<div th:insert="partials/scripts :: scripts"></div>
 
-<!-- Bootstrap Core Js -->
-<script th:src="@{/js/plugins/bootstrap/js/bootstrap.js}"></script>
+<!--&lt;!&ndash; Jquery Core Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/jquery/jquery.min.js}"></script>-->
 
-<!-- Select Plugin Js -->
-<script th:src="@{/js/plugins/bootstrap-select/js/bootstrap-select.js}"></script>
+<!--&lt;!&ndash; Bootstrap Core Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/bootstrap/js/bootstrap.js}"></script>-->
 
-<!-- Slimscroll Plugin Js -->
-<script th:src="@{/js/plugins/jquery-slimscroll/jquery.slimscroll.js}"></script>
+<!--&lt;!&ndash; Select Plugin Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/bootstrap-select/js/bootstrap-select.js}"></script>-->
 
-<!-- Waves Effect Plugin Js -->
-<script th:src="@{/js/plugins/node-waves/waves.js}"></script>
+<!--&lt;!&ndash; Slimscroll Plugin Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/jquery-slimscroll/jquery.slimscroll.js}"></script>-->
 
-<!-- Autosize Plugin Js -->
-<script th:src="@{/js/plugins/autosize/autosize.js}"></script>
+<!--&lt;!&ndash; Waves Effect Plugin Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/node-waves/waves.js}"></script>-->
 
-<!-- Moment Plugin Js -->
-<script th:src="@{/js/plugins/momentjs/moment.js}"></script>
+<!--&lt;!&ndash; Autosize Plugin Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/autosize/autosize.js}"></script>-->
 
-<!-- Bootstrap Material Datetime Picker Plugin Js -->
-<script th:src="@{/js/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js}"></script>
+<!--&lt;!&ndash; Moment Plugin Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/momentjs/moment.js}"></script>-->
 
-<!-- Bootstrap Datepicker Plugin Js -->
-<script th:src="@{/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
+<!--&lt;!&ndash; Bootstrap Material Datetime Picker Plugin Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js}"></script>-->
 
-<!-- Jquery DataTable Plugin Js -->
-<script th:src="@{/js/plugins/jquery-datatable/jquery.dataTables.js}"></script>
-<script th:src="@{/js/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js}"></script>
-
-<script>
-    $('.js-basic-example').DataTable({
-        responsive: true
-    });
-</script>
-
+<!--&lt;!&ndash; Bootstrap Datepicker Plugin Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>-->
 
 <!-- Custom Js -->
-<script th:src="@{/js/js/admin.js}"></script>
-<script th:src="@{/js/js/pages/forms/basic-form-elements.js}"></script>
+<!--<script th:src="@{/js/js/admin.js}"></script>-->
+<!--<script th:src="@{/js/js/pages/forms/basic-form-elements.js}"></script>-->
+
+<!--<script src="/js/plugins/bootstrap-notify/bootstrap-notify.js"></script>-->
 
 <!-- Demo Js -->
 <script th:src="@{/js/js/demo.js}"></script>
-<!--<script th:src="@{/js/custom/storeDetails.js}"></script>-->
-</body>
 
+
+<!-- Jquery Validation Plugin Css -->
+<script src="/js/plugins/jquery-validation/jquery.validate.js"></script>
+<script th:src="@{/js/custom/createStore.js}"></script>
+
+</body>
 </html>

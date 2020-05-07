@@ -139,32 +139,7 @@
 </section>
 <!-- Content End -->
 
-<!-- Jquery Core Js -->
-<script th:src="@{/js/plugins/jquery/jquery.min.js}"></script>
-
-<!-- Bootstrap Core Js -->
-<script th:src="@{/js/plugins/bootstrap/js/bootstrap.js}"></script>
-
-<!-- Select Plugin Js -->
-<script th:src="@{/js/plugins/bootstrap-select/js/bootstrap-select.js}"></script>
-
-<!-- Slimscroll Plugin Js -->
-<script th:src="@{/js/plugins/jquery-slimscroll/jquery.slimscroll.js}"></script>
-
-<!-- Waves Effect Plugin Js -->
-<script th:src="@{/js/plugins/node-waves/waves.js}"></script>
-
-<!-- Autosize Plugin Js -->
-<script th:src="@{/js/plugins/autosize/autosize.js}"></script>
-
-<!-- Moment Plugin Js -->
-<script th:src="@{/js/plugins/momentjs/moment.js}"></script>
-
-<!-- Bootstrap Material Datetime Picker Plugin Js -->
-<script th:src="@{/js/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js}"></script>
-
-<!-- Bootstrap Datepicker Plugin Js -->
-<script th:src="@{/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
+<div th:insert="partials/scripts :: scripts"></div>
 
 <!-- Jquery DataTable Plugin Js -->
 <script th:src="@{/js/plugins/jquery-datatable/jquery.dataTables.js}"></script>
@@ -176,7 +151,6 @@
     });
 </script>
 
-
 <!-- Custom Js -->
 <script th:src="@{/js/js/admin.js}"></script>
 <script th:src="@{/js/js/pages/forms/basic-form-elements.js}"></script>
@@ -185,5 +159,4 @@
 <script th:src="@{/js/js/demo.js}"></script>
 <script th:src="@{/js/custom/storeDetails.js}"></script>
 </body>
-
 </html>

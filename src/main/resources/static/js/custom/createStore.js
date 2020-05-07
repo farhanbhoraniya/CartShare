@@ -46,7 +46,7 @@ $(document).ready(function(e){
 		var data = {
 				name: $("#name").val(),
 				streetname: $("#stname").val(),
-				streetnumber: parseInt($("#stnumber").val()),
+				streetnumber: $("#stnumber").val(),
 				city: $("#city").val(),
 				state: $("#state").val(),
 				zip: $("#zipcode").val()
