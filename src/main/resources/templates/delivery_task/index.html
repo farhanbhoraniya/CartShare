@@ -75,7 +75,7 @@
                 <div class="card">
                     <div class="header">
                         <h2>
-                            My Orders
+                            My Delivery Tasks
                         </h2>
                     </div>
 
@@ -83,13 +83,13 @@
 
                         <div class="table-responsive">
 
-                            <table id="my_orders_table" class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                            <table id="delivery_task_table" class="table table-bordered table-striped table-hover js-basic-example dataTable">
                                 <thead>
                                 <tr>
                                     <th>Order Id</th>
-                                    <th>Store Name</th>
+                                    <th>Order DateTime</th>
                                     <th>Number of items</th>
-                                    <th>Total bill</th>
+                                    <th>Delivery Address</th>
                                     <th>Status</th>
                                     <th class="nosort">Actions</th>
                                 </tr>
@@ -97,32 +97,32 @@
                                 <tfoot>
                                 <tr>
                                     <th>Order Id</th>
-                                    <th>Store Name</th>
+                                    <th>Order DateTime</th>
                                     <th>Number of items</th>
-                                    <th>Total bill</th>
+                                    <th>Delivery Address</th>
                                     <th>Status</th>
                                     <th class="nosort">Actions</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
-<!--                                <tr th:each="store: ${stores}">-->
-<!--                                    <td th:text="${store.id}" />-->
-<!--                                    <td th:text="${store.name}" />-->
-<!--                                    <td th:text="${store.streetname}" />-->
-<!--                                    <td th:text="${store.city}" />-->
-<!--                                    <td th:text="${store.state}" />-->
-<!--                                    <td>-->
-<!--                                        <a th:href="'/store/' + ${store.id} + '/edit'" type="button" class="btn btn-primary waves-effect" data-toggle="tooltip" data-placement="top" title="Edit">-->
-<!--                                            <i class="material-icons">create</i>-->
-<!--                                        </a>-->
-<!--                                        <a th:href="'/store/' + ${store.id} + '/view'" type="button" class="btn btn-success waves-effect" data-toggle="tooltip" data-placement="top" title="View">-->
-<!--                                            <i class="material-icons">remove_red_eye</i>-->
-<!--                                        </a>-->
-<!--                                        <button type="button" class="btn btn-danger waves-effect store_delete_btn" th:data-id="${store.id}" data-toggle="tooltip" data-placement="top" title="Delete">-->
-<!--                                            <i class="material-icons">delete</i>-->
-<!--                                        </button>-->
-<!--                                    </td>-->
-<!--                                </tr>-->
+                                <!--                                <tr th:each="store: ${stores}">-->
+                                <!--                                    <td th:text="${store.id}" />-->
+                                <!--                                    <td th:text="${store.name}" />-->
+                                <!--                                    <td th:text="${store.streetname}" />-->
+                                <!--                                    <td th:text="${store.city}" />-->
+                                <!--                                    <td th:text="${store.state}" />-->
+                                <!--                                    <td>-->
+                                <!--                                        <a th:href="'/store/' + ${store.id} + '/edit'" type="button" class="btn btn-primary waves-effect" data-toggle="tooltip" data-placement="top" title="Edit">-->
+                                <!--                                            <i class="material-icons">create</i>-->
+                                <!--                                        </a>-->
+                                <!--                                        <a th:href="'/store/' + ${store.id} + '/view'" type="button" class="btn btn-success waves-effect" data-toggle="tooltip" data-placement="top" title="View">-->
+                                <!--                                            <i class="material-icons">remove_red_eye</i>-->
+                                <!--                                        </a>-->
+                                <!--                                        <button type="button" class="btn btn-danger waves-effect store_delete_btn" th:data-id="${store.id}" data-toggle="tooltip" data-placement="top" title="Delete">-->
+                                <!--                                            <i class="material-icons">delete</i>-->
+                                <!--                                        </button>-->
+                                <!--                                    </td>-->
+                                <!--                                </tr>-->
                                 </tbody>
                             </table>
                         </div>

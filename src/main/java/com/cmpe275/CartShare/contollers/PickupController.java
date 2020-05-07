@@ -18,23 +18,11 @@ import java.util.Optional;
 @RestController
 public class PickupController {
 
-
-//    @Autowired
-//    OrderService orderService;
-//
-//    @Autowired
-//    UserService userService;
-
     @GetMapping("/pickupList")
     public ModelAndView pickupListView(ModelAndView modelAndView) {
 
-//        int userId = 29;
-//        User user = userService.findById(userId);
-//        List<Order> orders = orderService.getSelfPickOrders(true, user);
-//
-//        modelAndView.setViewName("pickup/index");
-////        modelAndView.addObject("orders", orders);
-//        return modelAndView;
+        modelAndView.setViewName("pickup/index");
+        return modelAndView;
     }
 
     @GetMapping("/pickup/order/{order_id}")
