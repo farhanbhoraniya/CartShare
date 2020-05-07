@@ -40,6 +40,15 @@ public class StoreController {
         return modelAndView;
     }
 
+    @GetMapping("/store/{store_id}/edit")
+    public ModelAndView getEditView(ModelAndView modelAndView, @PathVariable(name = "store_id") Integer store_id) {
+
+        Store store = storeService.findById(store_id);
+        modelAndView.addObject("store", store);
+        modelAndView.setViewName("store/edit");
+        return  modelAndView;
+    }
+
     @GetMapping("/stores")
     public @ResponseBody ResponseEntity<List<Store>> getStores() {
         List<Store> stores = storeService.findAll();

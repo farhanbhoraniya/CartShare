@@ -42,11 +42,7 @@ public class WebController {
     public String storeDetails(Model model) {
         return "storeDetails"; //view
     }
-    
-    @GetMapping("/editStoreDetails")
-    public String editStoreDetails(Model model) {
-        return "editStoreDetails"; //view
-    }
+
     
     @GetMapping("/productDetails")
     public String productDetails(Model model) {

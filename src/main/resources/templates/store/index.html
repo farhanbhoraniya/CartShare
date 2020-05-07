@@ -116,13 +116,13 @@
                                     <td th:text="${store.city}" />
                                     <td th:text="${store.state}" />
                                     <td>
-                                        <a href="/store/${store.id}/edit" type="button" class="btn btn-primary waves-effect" data-toggle="tooltip" data-placement="top" title="Edit">
+                                        <a th:href="'/store/' + ${store.id} + '/edit'" type="button" class="btn btn-primary waves-effect" data-toggle="tooltip" data-placement="top" title="Edit">
                                             <i class="material-icons">create</i>
                                         </a>
-                                        <a href="/company/${ store.id}}/view" type="button" class="btn btn-success waves-effect" data-toggle="tooltip" data-placement="top" title="View">
+                                        <a th:href="'/store/' + ${store.id} + '/view'" type="button" class="btn btn-success waves-effect" data-toggle="tooltip" data-placement="top" title="View">
                                             <i class="material-icons">remove_red_eye</i>
                                         </a>
-                                        <button type="button" class="btn btn-danger waves-effect store_delete" data-id="${store.id}" data-toggle="tooltip" data-placement="top" title="Delete">
+                                        <button type="button" class="btn btn-danger waves-effect store_delete" th:data-id="${store.id}" data-toggle="tooltip" data-placement="top" title="Delete">
                                             <i class="material-icons">delete</i>
                                         </button>
                                     </td>

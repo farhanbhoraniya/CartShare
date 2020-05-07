@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<div th:insert="partials/header :: header"></div>
+
+<body class="theme-red">
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="preloader">
+            <div class="spinner-layer pl-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <p>Please wait...</p>
+    </div>
+</div>
+<!-- #END# Page Loader -->
+<!-- Overlay For Sidebars -->
+<div class="overlay"></div>
+<!-- #END# Overlay For Sidebars -->
+<!-- Search Bar -->
+<div class="search-bar">
+    <div class="search-icon">
+        <i class="material-icons">search</i>
+    </div>
+    <input type="text" placeholder="START TYPING...">
+    <div class="close-search">
+        <i class="material-icons">close</i>
+    </div>
+</div>
+<!-- #END# Search Bar -->
+
+<!-- Top Bar -->
+<div th:insert="partials/top_nav :: topnav"></div>
+<!-- #Top Bar -->
+<section>
+    <div th:insert="partials/left_nav :: leftnav"></div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>EDIT STORE</h2>
+        </div>
+        <!-- Input -->
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="body">
+
+                        <h2 class="card-inside-title">Store Info</h2>
+                        <form id="editStoreForm" th:data-id="${store.id}">
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input id="name" name="name" type="text" class="form-control" placeholder="Name" required th:value="${store.name}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" name="stnumber" id="stnumber" class="form-control" placeholder="Street Number" required th:value="${store.streetnumber}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" name="stname" id="stname" class="form-control" placeholder="Street Name" required th:value="${store.streetname}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" name="city" id="city" class="form-control" placeholder="City" required th:value="${store.city}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" name="state" id="state" class="form-control" placeholder="State" required th:value="${store.state}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="number" name="zipcode" id="zipcode" class="form-control" placeholder="Zipcode" maxlength="5" minlength="5" required th:value="${store.zip}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" id="updateStore" class="btn btn-primary m-t-15 waves-effect">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Input -->
+    </div>
+</section>
+
+<div th:insert="partials/scripts :: scripts"></div>
+
+<!-- Demo Js -->
+<script th:src="@{/js/js/demo.js}"></script>
+
+<!-- Jquery Validation Plugin Css -->
+<script src="/js/plugins/jquery-validation/jquery.validate.js"></script>
+<script th:src="@{/js/custom/editStoreDetails.js}"></script>
+
+</body>
+</html>
