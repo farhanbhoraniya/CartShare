@@ -146,20 +146,39 @@
 								</table>
 							</div>
 							
-							<a type="button" onclick="$.fn.viewCart()" class="btn btn-primary m-t-15 waves-effect">Place Order</a>
+							<a type="button" onclick="$.fn.placeOrder()" class="btn btn-primary m-t-15 waves-effect">Place Order</a>
 							<a type="button" th:href="@{/userStoreList}" class="btn btn-primary m-t-15 waves-effect">Browse Products</a>
 						</div>
 					</div>
                 </div>
             </div>
             <!-- #END# Input -->
+            <div class="modal fade" id="pickUpOrderModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="smallModalLabel">Order Pick Up</h4>
+                        </div>
+                        <div class="modal-body">
+                            You have successfully placed the order. Would you like to pick up your pool members 
+                            order in next 2 days? 
+                        </div>
+                        <div class="modal-footer">
+                            <button id="pickOrder" type="button" class="btn btn-link waves-effect">Yes</button>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <div th:insert="cartPartials/scripts :: scripts"></div>
     <!-- Demo Js -->
     <script th:src="@{/js/js/demo.js}"></script>
-    
+    <script th:src="@{/js/custom/placeOrderConfirm.js}"></script>
+    <script th:src="@{/js/plugins/jquery-datatable/jquery.dataTables.js}"></script>
+	<script th:src="@{/js/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js}"></script>
     <script>
 	    $('.js-basic-example').DataTable({
 	        responsive: true
