@@ -22,6 +22,7 @@ import com.cmpe275.CartShare.model.Product;
 import com.cmpe275.CartShare.model.Store;
 import com.cmpe275.CartShare.service.ProductService;
 import com.cmpe275.CartShare.service.StoreService;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 public class ProductController {
@@ -31,6 +32,16 @@ public class ProductController {
 
     @Autowired
     StoreService storeService;
+
+    @GetMapping("/productList")
+    public ModelAndView getProductsList(ModelAndView modelAndView)
+    {
+        List<Product> products = productService.findAll();
+        modelAndView.setViewName("product/index");
+        modelAndView.addObject("products", products);
+        System.out.println(products.toString());
+        return modelAndView;
+    }
 
     // Adds same product in multiple stores
     // All stores must be valid

@@ -98,4 +98,18 @@ public class Product {
 	public void setPrice(double price) {
 		this.price = price;
 	}
+
+	@Override
+	public String toString() {
+		return "Product{" +
+				"sku='" + sku + '\'' +
+				", storeid=" + storeid +
+				", name='" + name + '\'' +
+				", description='" + description + '\'' +
+				", imageurl='" + imageurl + '\'' +
+				", brand='" + brand + '\'' +
+				", unit='" + unit + '\'' +
+				", price=" + price +
+				'}';
+	}
 }
