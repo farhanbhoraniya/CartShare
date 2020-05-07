@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import com.cmpe275.CartShare.model.Pool;
 import com.cmpe275.CartShare.model.PoolMembership;
 import com.cmpe275.CartShare.model.User;
 import com.cmpe275.CartShare.service.PoolMembershipService;
+import com.cmpe275.CartShare.service.PoolService;
 
 @RestController
 public class PoolMembershipController {
@@ -34,6 +36,9 @@ public class PoolMembershipController {
 
     @PostMapping("/pool/join")
     public @ResponseBody ResponseEntity<PoolMembership> joinPool(@RequestBody JSONObject poolMember) {
+
+        //TODO: Find logged in user and use its user id
+        poolMember.put("user", 29);
 
         if (! (poolMember.containsKey("pool") && poolMember.containsKey("user") && poolMember.containsKey("reference"))) {
             System.out.println("Invalid or missing parameters");
@@ -111,7 +116,7 @@ public class PoolMembershipController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(newPoolMembership);
+        return ResponseEntity.status(HttpStatus.OK).body(newPoolMembership);	
     }
 
     @DeleteMapping("/pool/{poolId}/leave/{userId}")
