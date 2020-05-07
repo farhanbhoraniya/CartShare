@@ -11,7 +11,7 @@ public class PoolMembership {
 
 	// Table does not have id but JPA needs and id annotation
 	@Id
-	private int pool;
+	private String pool;
 	
 	private int user;
 	
@@ -20,18 +20,18 @@ public class PoolMembership {
 	
 	public PoolMembership() {}
 	
-	public PoolMembership(int pool, int user, int reference, boolean verified) {
+	public PoolMembership(String pool, int user, int reference, boolean verified) {
 		this.pool = pool;
 		this.user = user;
 		this.reference = reference;
 		this.verified = verified;
 	}
 	
-	public int getPool() {
+	public String getPool() {
 		return pool;
 	}
 	
-	public void setPool(int pool) {
+	public void setPool(String pool) {
 		this.pool = pool;
 	}
 	

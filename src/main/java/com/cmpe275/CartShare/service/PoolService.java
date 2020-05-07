@@ -27,7 +27,7 @@ public class PoolService {
 	@Autowired
 	UserRepository userRepository;
 	
-	private List<User> getMembers(int pool) {
+	private List<User> getMembers(String pool) {
 		List<PoolMembership> poolMemberships = poolMembershipRepository.findByPool(pool);
 		List<User> poolMembers = new ArrayList<User>();
 		
@@ -39,13 +39,23 @@ public class PoolService {
 	
 	public Pool findByName(String name) {
 		Pool pool = poolRepository.findByName(name); 
+		if (pool == null) {
+			return null;
+		}
 		List<User> poolMembers = getMembers(pool.getId());
 		pool.setMembers(poolMembers);
 		return pool;
 	}
 	
-	public Pool findById(int id) {
+	public Pool findByLeader(User user) {
+		return poolRepository.findByLeader(user);
+	}
+	
+	public Pool findById(String id) {
 		Pool pool = poolRepository.findById(id);
+		if (pool == null) {
+			return null;
+		}
 		List<User> poolMembers = getMembers(pool.getId());
 		pool.setMembers(poolMembers);
 		return pool;
@@ -96,7 +106,7 @@ public class PoolService {
 	}
 	
 	@Transactional
-	public void delete(int id) {
+	public void delete(String id) {
 		poolRepository.deleteById(id);
 	}
 }

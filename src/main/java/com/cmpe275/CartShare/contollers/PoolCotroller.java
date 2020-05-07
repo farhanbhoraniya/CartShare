@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.cmpe275.CartShare.dao.PoolMembershipRepository;
 import com.cmpe275.CartShare.model.Pool;
@@ -40,12 +42,13 @@ public class PoolCotroller {
 	@PostMapping("/pool")
 	public @ResponseBody ResponseEntity<Pool> createPool(@RequestBody JSONObject poolObject) {
 		
-		if (! (poolObject.containsKey("name") && poolObject.containsKey("neighborhood") && poolObject.containsKey("description") 
+		if (! (poolObject.containsKey("id") && poolObject.containsKey("name") && poolObject.containsKey("neighborhood") && poolObject.containsKey("description") 
 				&& poolObject.containsKey("zip") && poolObject.containsKey("leader"))) {
 			System.out.println("Invalid or missing parameters");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		
+		String id = (String) poolObject.get("id");
 		String name = (String) poolObject.get("name");
 		String neighborhood = (String) poolObject.get("neighborhood");
 		String description = (String) poolObject.get("description");
@@ -66,17 +69,28 @@ public class PoolCotroller {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		
-		// ########################
-		// ########################
-		// ########################
-		// TODO CHECK FOR EXISTING 
-		// POOL MEMBERSHIP OF USER
-		// ########################
-		// ########################
-		// ########################
+		PoolMembership userMembershipCheck = poolMembershipRepository.findByUser(user.getId());
 		
-		Pool newPoolObject = new Pool(name, neighborhood, description, zip, user);
+		if (userMembershipCheck != null) {
+			System.out.println("User is already a member of pool");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
 		
+		Pool poolLeadershipCheck = poolService.findByLeader(user);
+		
+		if (poolLeadershipCheck != null) {
+			System.out.println("User is already a leader of the pool");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+		
+		Pool newPoolObject;
+		try {
+			newPoolObject = new Pool(id, name, neighborhood, description, zip, user);
+		} catch(Exception e) {
+			System.out.println("Invalid or missing paramters");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+
 		Pool newPool = poolService.save(newPoolObject);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(newPool);
@@ -102,8 +116,7 @@ public class PoolCotroller {
 
 		List<Pool> pools = new ArrayList<Pool>();
 		if (id != null) {
-			int poolId = Integer.parseInt(id);
-			Pool pool = poolService.findById(poolId);
+			Pool pool = poolService.findById(id);
 			pools = new ArrayList<Pool>();
 			pools.add(pool);
 			
@@ -123,7 +136,7 @@ public class PoolCotroller {
 	}
 	
 	@PutMapping("/pool/{poolid}")
-	public @ResponseBody ResponseEntity<Pool> updatePool(@PathVariable int poolid, @RequestBody JSONObject poolObject) {
+	public @ResponseBody ResponseEntity<Pool> updatePool(@PathVariable String poolid, @RequestBody JSONObject poolObject) {
 		Pool pool = poolService.findById(poolid);
 		
 		if (pool == null) {
@@ -157,7 +170,7 @@ public class PoolCotroller {
 	}
 	
 	@DeleteMapping("/pool/{poolid}")
-	public @ResponseBody ResponseEntity<Pool> deletePool(@PathVariable int poolid) {
+	public @ResponseBody ResponseEntity<Pool> deletePool(@PathVariable String poolid) {
 		
 		Pool pool = poolService.findById(poolid);
 		

@@ -14,7 +14,7 @@ import javax.persistence.Transient;
 public class Pool {
 
 	@Id
-	private int id;
+	private String id;
 	
 	private String name;
 	private String neighborhood;
@@ -30,7 +30,8 @@ public class Pool {
 	
 	public Pool() {}
 	
-	public Pool(String name, String neighborhood, String description, String zip, User leader) {
+	public Pool(String id, String name, String neighborhood, String description, String zip, User leader) {
+		this.id = id;
 		this.name = name;
 		this.neighborhood = neighborhood;
 		this.description = description;
@@ -38,11 +39,11 @@ public class Pool {
 		this.leader = leader;
 	}
 	
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

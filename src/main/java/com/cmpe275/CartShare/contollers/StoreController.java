@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cmpe275.CartShare.dao.ProductRepository;
 import com.cmpe275.CartShare.model.Store;
+import com.cmpe275.CartShare.service.ProductService;
 import com.cmpe275.CartShare.service.StoreService;
 
 @RestController
@@ -24,6 +26,9 @@ public class StoreController {
 
 	@Autowired
 	StoreService storeService;
+	
+	@Autowired
+	ProductService productService;
 	
 	@GetMapping("/stores")
 	public @ResponseBody ResponseEntity<List<Store>> getStores() {
@@ -110,16 +115,21 @@ public class StoreController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 		
-		//##############################
-		//##############################
-		//##############################
-		// TODO CHECK FOR PENDING ORDERS
-		// TODO DELETE STORE PRODUCTS
-		//##############################
-		//##############################
-		//##############################
+		try {
+			productService.deleteByStore(storeObject.getId());
+		} catch(Exception e) {
+			System.out.println(e);
+			System.out.println("Error while deleteing some products. Please make sure there are no pending orders.");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
 		
-		storeService.delete(store_id);
+		try {
+			storeService.delete(store_id);			
+		} catch(Exception e) {
+			System.out.println("Can not delete store. Please make sure all products are deleted first");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+
 		
 		return ResponseEntity.status(HttpStatus.OK).body(storeObject);
 	}

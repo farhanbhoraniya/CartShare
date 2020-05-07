@@ -42,12 +42,12 @@ public class PoolMembershipController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		
-		int pool;
+		String pool;
 		int user;
 		String reference;
 		
 		try {
-			pool = (int) poolMember.get("pool");
+			pool = (String) poolMember.get("pool");
 			user = (int) poolMember.get("user");
 			reference = (String) poolMember.get("reference");
 		} catch(Exception e) {
@@ -117,7 +117,7 @@ public class PoolMembershipController {
 	}
 	
 	@DeleteMapping("/pool/{poolId}/leave/{userId}")
-	public @ResponseBody ResponseEntity<PoolMembership> leavePool(@PathVariable int poolId, @PathVariable int userId) {
+	public @ResponseBody ResponseEntity<PoolMembership> leavePool(@PathVariable String poolId, @PathVariable int userId) {
 		
 		Pool poolObject = poolRepository.findById(poolId);
 		
@@ -133,10 +133,15 @@ public class PoolMembershipController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		
+		if (poolObject.getLeader().getId() == userObject.getId()) {
+			System.out.println("Leader can not leave the pool");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+		
 		PoolMembership referenceMembershipCheck = poolMembershipService.membershipCheck(poolId, userId);
 		
 		if (referenceMembershipCheck == null) {
-			System.out.println("Reference user is not a member of the pool");
+			System.out.println("User is not a member of the pool");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		

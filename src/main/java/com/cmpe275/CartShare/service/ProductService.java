@@ -49,4 +49,9 @@ public class ProductService {
 	public void delete(int storeid, String sku) {
 		productRepository.deleteBySkuAndStoreid(sku, storeid);
 	}
+	
+	@Transactional
+	public void deleteByStore(int storeid) {
+		productRepository.deleteByStoreid(storeid);
+	}
 }

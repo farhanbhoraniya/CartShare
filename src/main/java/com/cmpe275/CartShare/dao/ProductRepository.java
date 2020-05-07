@@ -13,4 +13,5 @@ public interface ProductRepository extends JpaRepository<Product, String>{
 	public Product save(Product product);
 	public Product findBySkuAndStoreid(String sku, int store);
 	public void deleteBySkuAndStoreid(String sku, int store);
+	public void deleteByStoreid(int store);
 }

@@ -16,7 +16,7 @@ public class PoolMembershipService {
 	@Autowired
 	PoolMembershipRepository poolMembershipRepository;
 	
-	public List<PoolMembership> findByPool(int pool) {
+	public List<PoolMembership> findByPool(String pool) {
 		return poolMembershipRepository.findByPool(pool);
 	}
 	
@@ -24,7 +24,7 @@ public class PoolMembershipService {
 		return poolMembershipRepository.findByUser(user);
 	}
 	
-	public PoolMembership membershipCheck(int pool, int user) {
+	public PoolMembership membershipCheck(String pool, int user) {
 		return poolMembershipRepository.findByPoolAndUser(pool, user);
 	}
 	
