@@ -12,7 +12,7 @@ public class Cart {
     @ManyToOne
     @JoinColumn(name="user", referencedColumnName = "id")
     private User user;
-    private boolean isActive;
+    
 
     public Cart() {
     }
@@ -20,7 +20,7 @@ public class Cart {
     public Cart(int id, User user, boolean isActive){
         this.id=id;
         this.user=user;
-        this.isActive=isActive;
+        
     }
 
     public int getId() {
@@ -39,11 +39,5 @@ public class Cart {
         this.user = user;
     }
 
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
+    
 }
