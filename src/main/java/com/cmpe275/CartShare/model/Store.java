@@ -101,4 +101,18 @@ public class Store {
     public void setState(String state) {
         this.state = state;
     }
+
+    @Override
+    public String toString() {
+        return "Store{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", streetname='" + streetname + '\'' +
+                ", streetnumber=" + streetnumber +
+                ", city='" + city + '\'' +
+                ", zip='" + zip + '\'' +
+                ", state='" + state + '\'' +
+                ", products=" + products +
+                '}';
+    }
 }

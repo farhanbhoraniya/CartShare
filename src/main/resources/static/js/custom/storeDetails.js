@@ -17,8 +17,6 @@ $(document).ready(function(){
 			    $ul.append($("</li>").text("abc"));
 			    //var $li = ;
 			    //$li.append($("</a>").addClass("waves-effect waves-block"));
-			    
-				
 			    i+=1;
 			});
 			
