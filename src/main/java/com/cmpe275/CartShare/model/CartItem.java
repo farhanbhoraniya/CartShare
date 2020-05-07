@@ -7,12 +7,19 @@ import javax.persistence.*;
 public class CartItem {
     @Id
     private int id;
-    @OneToOne
-    @JoinColumn(name="store", referencedColumnName = "id")
-    private Store store;
+//    @OneToOne
+//    @JoinColumn(name="store", referencedColumnName = "id")
+//    private Store store;
 
     @OneToOne
-    @JoinColumn(name="product", referencedColumnName = "id")
+    @JoinColumns({
+        @JoinColumn(
+            name = "sku",
+            referencedColumnName = "sku"),
+        @JoinColumn(
+            name = "storeid",
+            referencedColumnName = "storeid")
+    })
     private Product product;
 
     @OneToOne
@@ -20,13 +27,13 @@ public class CartItem {
     private Cart cart;
 
     private int quantity;
-    private float price;
+    private double price;
 
     public CartItem() {
     }
-    public CartItem(int id, Store store, Product product_id, Cart cart, int quantity, float price) {
-        this.id=id;
-        this.store=store;
+    public CartItem(Store store, Product product_id, Cart cart, int quantity, double price) {
+       
+        //this.store=store;
         this.product=product_id;
         this.cart=cart;
         this.quantity=quantity;
@@ -41,13 +48,13 @@ public class CartItem {
         this.id = id;
     }
 
-    public Store getStore() {
-        return store;
-    }
-
-    public void setStore(Store store) {
-        this.store = store;
-    }
+//    public Store getStore() {
+//        return store;
+//    }
+//
+//    public void setStore(Store store) {
+//        this.store = store;
+//    }
 
     public Product getProduct() {
         return product;
@@ -73,11 +80,11 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 }
