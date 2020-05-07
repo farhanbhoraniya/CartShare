@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.cmpe275.CartShare.exception.ResourceNotFoundException;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -59,6 +60,7 @@ public class OrderController {
 	
 	@PostMapping("/order/place")
 	public ResponseEntity<Order> placeOrder(@RequestBody JSONObject requestBody) {
+
 		// TODO: GET CURRENT LOGIN USER
 //      org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //      System.out.println(principal);
@@ -69,7 +71,7 @@ public class OrderController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		
-		User currentUserObject = userService.findById(46);
+		User currentUserObject = userService.findById(46).orElseThrow(() -> new ResourceNotFoundException("User", "Id", 46));
 		Cart cart = cartService.findCartByUserId(currentUserObject.getId());
 		Pool pool = poolService.findByLeader(currentUserObject);
 		
