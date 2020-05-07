@@ -13,7 +13,7 @@ $(document).ready(function(e){
 		var stores = v.split('');
 		var data = {
 				sku: $("#sku").val(),
-				stores: stores,
+				stores: $("#storeID").val(),
 				price: parseFloat($("#price").val()),
 				name: $("#name").val(),
 				unit: unit,
@@ -28,9 +28,16 @@ $(document).ready(function(e){
 			data: JSON.stringify(data),
 			success: function (res) {
                 console.log(res);
+				showNotification("Products created successfully",'bg-green','bottom','right');
+				window.location = "/productList";
             },
+
+			 error: function(res){
+				 showNotification("Error Creating Product. Please try again.",'bg-red','bottom','right');
+			 },
             failure: function (res) {
             	console.log(res);
+				showNotification("Error Creating Product. Please try again.",'bg-red','bottom','right');
             }
 		 });
 	}

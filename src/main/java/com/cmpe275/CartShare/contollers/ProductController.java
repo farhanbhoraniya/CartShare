@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +44,7 @@ public class ProductController {
         return modelAndView;
     }
 
+
     // Adds same product in multiple stores
     // All stores must be valid
     @PostMapping("/admin/products")
@@ -69,7 +71,7 @@ public class ProductController {
         String imageurl = (String) productObject.get("imageurl");
         String brand = (String) productObject.get("brand");
         String unit = (String) productObject.get("unit");
-        double price = (double) ((Object)productObject.get("price"));
+        Double price = Double.parseDouble(productObject.get("price").toString());
 
         List<Product> products = new ArrayList<Product>();
         for (String storestr : stores) {

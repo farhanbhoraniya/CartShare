@@ -62,6 +62,9 @@ $(document).ready(function(e){
 				showNotification("Store created successfully",'bg-green','bottom','right');
                 window.location = "/storeList";
             },
+			 error: function(res){
+				 showNotification("Error Creating Store. Please try again.",'bg-red','bottom','right');
+			 },
             failure: function (res) {
             	console.log(res);
 				showNotification("Error Creating Store. Please try again.",'bg-red','bottom','right');
