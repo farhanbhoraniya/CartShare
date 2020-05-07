@@ -44,6 +44,20 @@ public class ProductController {
         return modelAndView;
     }
 
+    @GetMapping("/product/{store_id}/{product_sku}/view")
+    public ModelAndView getProductsList(ModelAndView modelAndView, @PathVariable(name="store_id") Integer store_id,
+                                        @PathVariable(name = "product_sku") String product_sku)
+    {
+        Product product = productService.findProductInStore(store_id, product_sku);
+        List<Store> stores = storeService.findAll();
+
+        modelAndView.addObject("stores", stores);
+        modelAndView.addObject("product", product);
+
+        modelAndView.setViewName("product/view");
+        return  modelAndView;
+    }
+
     @GetMapping("/product/{store_id}/{product_sku}/edit")
     public ModelAndView getEditView(ModelAndView modelAndView, @PathVariable(name = "store_id") Integer store_id,
                                     @PathVariable(name="product_sku") String sku) {
