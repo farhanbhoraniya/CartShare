@@ -9,10 +9,7 @@ import java.util.Arrays;
 
 public class SessionFilter implements Filter {
 
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        System.out.println("init filter");
-    }
+    private boolean isCookieAdded = false;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -22,18 +19,13 @@ public class SessionFilter implements Filter {
         if (allCookies != null) {
             Cookie session = Arrays.stream(allCookies).filter(x -> x.getName().equals("JSESSIONID")).findFirst().orElse(null);
 
-            if (session == null) {
+            if (session != null && !isCookieAdded) {
                 session.setHttpOnly(true);
                 session.setSecure(true);
                 res.addCookie(session);
+                isCookieAdded = true;
             }
         }
         chain.doFilter(req, res);
     }
-
-    @Override
-    public void destroy() {
-        System.out.println("destroy filter");
-    }
-
 }

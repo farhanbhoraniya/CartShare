@@ -26,8 +26,14 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     }
 
     public static UserPrincipal create(User user) {
+        String role;
+        if (user.getType().equals("admin")) {
+            role = "ROLE_ADMIN";
+        } else {
+            role = "ROLE_USER";
+        }
         List<GrantedAuthority> authorities = Collections.
-                singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+                singletonList(new SimpleGrantedAuthority(role));
 
         return new UserPrincipal(
                 user.getId(),
@@ -98,5 +104,16 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     @Override
     public String getName() {
         return String.valueOf(id);
+    }
+
+    @Override
+    public String toString() {
+        return "UserPrincipal{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", authorities=" + authorities +
+                ", attributes=" + attributes +
+                '}';
     }
 }
