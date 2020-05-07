@@ -33,6 +33,11 @@ public class OrderService {
 //		orderRepository.flush();
 		return newOrder;
 	}
+	
+	public List<Order> getUserOrders(User user) {
+		List<Order> orders= orderRepository.findByBuyer(user);
+		return orders;
+	}
 
 	public List<Order> getOpenOrdersByUserId(int userid){
 		return orderRepository.findByBuyerIdAndSelfpick(userid);
