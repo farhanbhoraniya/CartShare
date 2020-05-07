@@ -17,8 +17,7 @@ public class Cart {
     public Cart() {
     }
 
-    public Cart(int id, User user, boolean isActive){
-        this.id=id;
+    public Cart(User user){
         this.user=user;
         
     }

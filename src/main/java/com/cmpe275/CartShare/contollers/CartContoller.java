@@ -58,19 +58,28 @@ public class CartContoller {
         String product_sku = (String) cartItem.get("product_sku");
         int user_id = (int) cartItem.get("user_id");
         int quantity = (int) cartItem.get("quantity");
-        double price = Double.valueOf(cartItem.get("price").toString());
+        double price = (double) cartItem.get("price");
         
-        Cart cart= (Cart) cartService.findIdByUserId(user_id);
-        if(cart == null){
-            //create a new cart object and then add
+        try{
+            Cart cart= (Cart) cartService.findCartByUserId(user_id);
+
+            if(cart==null){
+                cart=cartService.createNewCart(user_id);
+            }
+
+
+            Store store = storeService.findById(store_id);
+            Product product = productService.findProductInStore(store_id, product_sku);
+
+            CartItem ci = new CartItem(store, product, cart, quantity, quantity*price);
+            cartService.saveCartItem(ci);
+            return ResponseEntity.status(HttpStatus.OK).body("Item Added Successfully");
         }
-        
-        Store store = storeService.findById(store_id);
-        Product product = productService.findProductInStore(store_id, product_sku);
-        
-        CartItem ci = new CartItem(store, product, cart, quantity, price*quantity);
-        CartItem c = cartService.saveCartItem(ci);
-        return ResponseEntity.status(HttpStatus.OK).body(c);
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Item Add Unsuccessful");
+        }
+
     }
     
     @PostMapping("/removeItemFromCart/{cart_item_id}")
