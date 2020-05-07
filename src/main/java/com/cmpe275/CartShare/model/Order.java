@@ -121,13 +121,12 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", cart=" + cart +
                 ", pool=" + pool +
                 ", date=" + date +
                 ", status='" + status + '\'' +
                 ", pickedby=" + pickedby +
                 ", buyer=" + buyer +
-                ", selfPick=" + selfPick +
+                ", selfPick=" + selfpick +
                 '}';
     }
 }

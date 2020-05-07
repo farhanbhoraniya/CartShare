@@ -34,4 +34,8 @@ public class OrderService {
 		return newOrder;
 	}
 
+	public List<Order> getOpenOrdersByUserId(int userid){
+		return orderRepository.findByBuyerIdAndSelfpick(userid);
+	}
+
 }
