@@ -103,7 +103,7 @@
 											<th>SKU</th>
 											<th>Name</th>
 											<th>Description</th>
-											<th>Brand</th>
+											
 											<th>Unit</th>
 											<th>Price</th>
 											<th>Qty</th>
@@ -115,7 +115,7 @@
 											<th>SKU</th>
 											<th>Name</th>
 											<th>Description</th>
-											<th>Brand</th>
+											
 											<th>Unit</th>
 											<th>Price</th>
 											<th>Qty</th>
@@ -123,21 +123,25 @@
 										</tr>
 									</tfoot>
 									<tbody>
-										<tr th:each="product: ${products}">
-											<td th:text="${product.sku}" />
-											<td th:text="${product.name}" />
-											<td th:text="${product.description}" />
-											<td th:text="${product.brand}" />
-											<td th:text="${product.unit}" />
-											<td th:text="${product.price}" />
+										<tr th:each="item: ${items}">
+										
+											<td th:text="${item.sku}" />
+											<td th:text="${item.name}" />
+											<td th:text="${item.desc}" />
+											<td th:text="${item.unit}" />
+											<td th:text="${item.price}" />
 											
-											<td style="width:7%">
+											<td style="width:10%">
 												
-					                            <input type="number" id="qty" class="form-control" name="number" value="1" required/>
+					                            <input style="width:60%" type="number" id="qty" class="form-control" name="number" th:value="${item.qty}" required/>
 					                                       
                             				</td>
+											
+											
+											
+											
                             				<td>
-		                                        <button type="button" class="btn btn-danger waves-effect store_delete_btn" th:data-id="${store.id}" data-toggle="tooltip" data-placement="top" title="Delete">
+		                                        <button type="button" class="btn btn-danger waves-effect store_delete_btn"  data-toggle="tooltip" data-placement="top" title="Delete">
                                             		<i class="material-icons">delete</i>
                                         		</button>
                                     		</td>
@@ -177,6 +181,7 @@
     <!-- Demo Js -->
     <script th:src="@{/js/js/demo.js}"></script>
     <script th:src="@{/js/custom/placeOrderConfirm.js}"></script>
+    <script th:src="@{/js/js/pages/ui/modals.js}"></script>
     <script th:src="@{/js/plugins/jquery-datatable/jquery.dataTables.js}"></script>
 	<script th:src="@{/js/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js}"></script>
     <script>
