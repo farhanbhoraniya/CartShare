@@ -78,4 +78,9 @@ public class WebController {
     public String joinPool(Model model) {
         return "joinPool"; //view
     }
+    
+    @GetMapping("/viewCart")
+    public String viewCart(Model model) {
+        return "addToCart/viewCart"; //view
+    }
 }

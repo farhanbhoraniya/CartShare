@@ -85,6 +85,16 @@ public class StoreController {
         System.out.println(stores.toString());
         return modelAndView;
     }
+    
+    @GetMapping("/userStoreList")
+    public ModelAndView getUserStoresList(ModelAndView modelAndView)
+    {
+        List<Store> stores = storeService.findAll();
+        modelAndView.setViewName("addToCart/index");
+        modelAndView.addObject("stores", stores);
+        System.out.println(stores.toString());
+        return modelAndView;
+    }
 
     @GetMapping("/store/{store_id}/edit")
     public ModelAndView getEditView(ModelAndView modelAndView, @PathVariable(name = "store_id") Integer store_id) {

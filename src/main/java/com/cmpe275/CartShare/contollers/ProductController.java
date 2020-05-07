@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -161,6 +160,24 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
+    
+ // Gets the store products(View)
+    @GetMapping("/store/{storeId}/getProducts")
+    public ModelAndView getStoreProducts(ModelAndView modelAndView, 
+                                                    @PathVariable int storeId) {
+
+        List<Product> products = new ArrayList<Product>();
+        Store store = storeService.findById(storeId);
+        
+        if(store != null) {
+            products = productService.findByStore(storeId);
+        }
+        
+        modelAndView.addObject("products", products);
+        modelAndView.setViewName("addToCart/products");
+        return  modelAndView;
+    }
+
 
     // Gets the store products
     @GetMapping("/store/{storeId}/products")
