@@ -13,84 +13,84 @@ import javax.persistence.Transient;
 @Table(name = "pool")
 public class Pool {
 
-	@Id
-	private int id;
-	
-	private String name;
-	private String neighborhood;
-	private String description;
-	private String zip;
-	
-	@OneToOne
-	@JoinColumn(name = "leader", referencedColumnName = "id")
-	private User leader;
+    @Id
+    private int id;
 
-	@Transient
-	private List<User> members;
-	
-	public Pool() {}
-	
-	public Pool(String name, String neighborhood, String description, String zip, User leader) {
-		this.name = name;
-		this.neighborhood = neighborhood;
-		this.description = description;
-		this.zip = zip;
-		this.leader = leader;
-	}
-	
-	public int getId() {
-		return id;
-	}
+    private String name;
+    private String neighborhood;
+    private String description;
+    private String zip;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    @OneToOne
+    @JoinColumn(name = "leader", referencedColumnName = "id")
+    private User leader;
 
-	public String getName() {
-		return name;
-	}
+    @Transient
+    private List<User> members;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public Pool() {}
 
-	public String getNeighborhood() {
-		return neighborhood;
-	}
+    public Pool(String name, String neighborhood, String description, String zip, User leader) {
+        this.name = name;
+        this.neighborhood = neighborhood;
+        this.description = description;
+        this.zip = zip;
+        this.leader = leader;
+    }
 
-	public void setNeighborhood(String neighborhood) {
-		this.neighborhood = neighborhood;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getZip() {
-		return zip;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setZip(String zip) {
-		this.zip = zip;
-	}
+    public String getNeighborhood() {
+        return neighborhood;
+    }
 
-	public User getLeader() {
-		return leader;
-	}
+    public void setNeighborhood(String neighborhood) {
+        this.neighborhood = neighborhood;
+    }
 
-	public void setLeader(User leader) {
-		this.leader = leader;
-	}
-	
-	public List<User> getMembers() {
-		return members;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setMembers(List<User> members) {
-		this.members = members;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
+
+    public User getLeader() {
+        return leader;
+    }
+
+    public void setLeader(User leader) {
+        this.leader = leader;
+    }
+
+    public List<User> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<User> members) {
+        this.members = members;
+    }
 }
