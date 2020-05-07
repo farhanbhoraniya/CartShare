@@ -1,0 +1,78 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="scripts">
+
+<!-- Jquery Core Js -->
+<script th:src="@{/js/plugins/jquery/jquery.min.js}"></script>
+
+<!-- Bootstrap Core Js -->
+<script th:src="@{/js/plugins/bootstrap/js/bootstrap.js}"></script>
+
+<!-- Select Plugin Js -->
+<script th:src="@{/js/plugins/bootstrap-select/js/bootstrap-select.js}"></script>
+
+<!-- Slimscroll Plugin Js -->
+<script th:src="@{/js/plugins/jquery-slimscroll/jquery.slimscroll.js}"></script>
+
+<!-- Waves Effect Plugin Js -->
+<script th:src="@{/js/plugins/node-waves/waves.js}"></script>
+
+<!-- Autosize Plugin Js -->
+<script th:src="@{/js/plugins/autosize/autosize.js}"></script>
+
+<!-- Moment Plugin Js -->
+<script th:src="@{/js/plugins/momentjs/moment.js}"></script>
+
+<!-- Bootstrap Material Datetime Picker Plugin Js -->
+<script th:src="@{/js/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js}"></script>
+
+<!-- Bootstrap Datepicker Plugin Js -->
+<script th:src="@{/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
+
+<!-- Custom Js -->
+<script th:src="@{/js/js/admin.js}"></script>
+<script th:src="@{/js/js/pages/forms/basic-form-elements.js}"></script>
+
+<!-- Demo Js -->
+<script th:src="@{/js/js/demo.js}"></script>
+
+<script src="/js/plugins/bootstrap-notify/bootstrap-notify.js"></script>
+<!-- Jquery Validation Plugin Css -->
+<script src="/js/plugins/jquery-validation/jquery.validate.js"></script>
+
+<script>
+    function showNotification(message, color, from, align)
+    {
+
+        $.notify({
+                message: message
+            },
+            {
+                type: color,
+                allow_dismiss: true,
+                newest_on_top: true,
+                timer: 1000,
+                placement: {
+                    from: from,
+                    align: align
+                },
+                animate: {
+                    enter: "animated fadeInDown",
+                    exit: "animated fadeOutUp"
+                },
+                template: '<div data-notify="container" class="bootstrap-notify-container alert alert-dismissible {0} ' + (this.allow_dismiss ? "p-r-35" : "") + '" role="alert">' +
+                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                    '<span data-notify="icon"></span> ' +
+                    '<span data-notify="title">{1}</span> ' +
+                    '<span data-notify="message">{2}</span>' +
+                    '<div class="progress" data-notify="progressbar">' +
+                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                    '</div>' +
+                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                    '</div>'
+            });
+    }
+</script>
+</div>
+</html>

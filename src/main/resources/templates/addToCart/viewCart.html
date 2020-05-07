@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Pooler's Cart - Admin Catalog</title>
+    <!-- Favicon-->
+    <link rel="icon" th:href="@{/images/images/favicon.ico}" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap Core Css -->
+    <link th:href="@{/js/plugins/bootstrap/css/bootstrap.css}" rel="stylesheet">
+
+    <!-- Waves Effect Css -->
+    <link th:href="@{/js/plugins/node-waves/waves.css}" rel="stylesheet" />
+
+    <!-- Animation Css -->
+    <link th:href="@{/js/plugins/animate-css/animate.css}" rel="stylesheet" />
+
+    <!-- Bootstrap Material Datetime Picker Css -->
+    <link th:href="@{/js/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css}" rel="stylesheet" />
+
+    <!-- Bootstrap DatePicker Css -->
+    <link th:href="@{/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css}" rel="stylesheet" />
+
+    <!-- Wait Me Css -->
+    <link th:href="@{/js/plugins/waitme/waitMe.css}" rel="stylesheet" />
+
+    <!-- Bootstrap Select Css -->
+    <link th:href="@{/js/plugins/bootstrap-select/css/bootstrap-select.css}" rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link th:href="@{/css/style.min.css}" rel="stylesheet">
+
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link th:href="@{/css/all-themes.css}" rel="stylesheet" />
+   
+</head>
+
+<body class="theme-red">
+    <!-- Page Loader -->
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="preloader">
+                <div class="spinner-layer pl-red">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>
+    <!-- #END# Page Loader -->
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <div class="search-icon">
+            <i class="material-icons">search</i>
+        </div>
+        <input type="text" placeholder="START TYPING...">
+        <div class="close-search">
+            <i class="material-icons">close</i>
+        </div>
+    </div>
+    <!-- #END# Search Bar -->
+    <div th:insert="cartPartials/top_nav :: topnav"></div>
+
+	<section>
+    	<div th:insert="cartPartials/left_nav :: leftnav"></div>
+	</section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <h2>ADD PRODUCT TO CART</h2>
+            </div>
+            <!-- Input -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+						<div class="header">
+							<h2>Product List</h2>
+						</div>
+
+						<div class="body">
+
+							<div class="table-responsive">
+
+								<table id="store_table"
+									class="table table-bordered table-striped table-hover js-basic-example dataTable">
+									<thead>
+										<tr>
+											<th>SKU</th>
+											<th>Name</th>
+											<th>Description</th>
+											<th>Brand</th>
+											<th>Unit</th>
+											<th>Price</th>
+											<th>Qty</th>
+											<th>#</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>SKU</th>
+											<th>Name</th>
+											<th>Description</th>
+											<th>Brand</th>
+											<th>Unit</th>
+											<th>Price</th>
+											<th>Qty</th>
+											<th>#</th>
+										</tr>
+									</tfoot>
+									<tbody>
+										<tr th:each="product: ${products}">
+											<td th:text="${product.sku}" />
+											<td th:text="${product.name}" />
+											<td th:text="${product.description}" />
+											<td th:text="${product.brand}" />
+											<td th:text="${product.unit}" />
+											<td th:text="${product.price}" />
+											
+											<td style="width:7%">
+												
+					                            <input type="number" id="qty" class="form-control" name="number" value="1" required/>
+					                                       
+                            				</td>
+                            				<td>
+		                                        <button type="button" class="btn btn-danger waves-effect store_delete_btn" th:data-id="${store.id}" data-toggle="tooltip" data-placement="top" title="Delete">
+                                            		<i class="material-icons">delete</i>
+                                        		</button>
+                                    		</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+							<a type="button" onclick="$.fn.viewCart()" class="btn btn-primary m-t-15 waves-effect">Place Order</a>
+							<a type="button" th:href="@{/userStoreList}" class="btn btn-primary m-t-15 waves-effect">Browse Products</a>
+						</div>
+					</div>
+                </div>
+            </div>
+            <!-- #END# Input -->
+        </div>
+    </section>
+
+    <div th:insert="cartPartials/scripts :: scripts"></div>
+    <!-- Demo Js -->
+    <script th:src="@{/js/js/demo.js}"></script>
+    
+    <script>
+	    $('.js-basic-example').DataTable({
+	        responsive: true
+	    });
+	
+	    $('.store_delete_btn').click(function(){
+	
+	        var store_row = $(this).parent().parent();
+	        var store_id = $(this).attr('data-id');
+	
+	        $.ajax({
+	            url: "/admin/store/" + store_id ,
+	            type: "DELETE",
+	            contentType: "application/json",
+	            success: function (res) {
+	
+	                showNotification("Store deleted successfully",'bg-green','bottom','right');
+	                store_row.slideUp('slow').remove();
+	            },
+	            error: function(res){
+	                showNotification("Cannot Deleting Store. Store already linked to products",'bg-red','bottom','right');
+	            },
+	            failure: function (res) {
+	                console.log(res);
+	                showNotification("Error Deleting Store.",'bg-red','bottom','right');
+	            }
+	        });
+	    });
+	</script>
+    
+</body>
+</html>
