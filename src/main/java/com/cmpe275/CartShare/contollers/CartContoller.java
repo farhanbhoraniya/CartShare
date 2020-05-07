@@ -9,12 +9,16 @@ import com.cmpe275.CartShare.service.CartService;
 import com.cmpe275.CartShare.service.ProductService;
 import com.cmpe275.CartShare.service.StoreService;
 
+import net.minidev.json.JSONArray;
+
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -42,7 +46,7 @@ public class CartContoller {
     }
 
     @PostMapping("/addItemToCart")
-    public @ResponseBody ResponseEntity<String> addItemToCart(@RequestBody JSONObject cartItem) {
+    public @ResponseBody ResponseEntity<CartItem> addItemToCart(@RequestBody JSONObject cartItem) {
         
         if (! (cartItem.containsKey("store_id") && cartItem.containsKey("product_sku") 
                 && cartItem.containsKey("user_id") && cartItem.containsKey("quantity") && cartItem.containsKey("price"))) {
@@ -75,6 +79,7 @@ public class CartContoller {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Item Add Unsuccessful");
         }
+
     }
     
     @PostMapping("/removeItemFromCart/{cart_item_id}")
@@ -83,9 +88,36 @@ public class CartContoller {
         return null;
     }
     
-    @PostMapping("/placeOrder")
-    public @ResponseBody ResponseEntity<String> placeOrder(@PathVariable String orderObject) {
+    
+    
+    @GetMapping("/getOrdersFromCart/{userId}")
+    public ModelAndView getStoreProducts(ModelAndView modelAndView, 
+                                                    @PathVariable int userId) {
+
+        List<CartItem> items = new ArrayList<CartItem>();
         
-        return null;
+        Cart cart= (Cart) cartService.findIdByUserId(userId);
+        
+        items = (ArrayList<CartItem>)cartService.findByCartId(cart);
+        
+        JSONArray array = new JSONArray();
+        for(CartItem item: items) {
+            JSONObject obj = new JSONObject();
+            obj.put("name", item.getProduct().getName());
+            obj.put("desc", item.getProduct().getDescription());
+            obj.put("sku", item.getProduct().getSku());
+            obj.put("price", item.getPrice());
+            obj.put("qty", item.getQuantity());
+            obj.put("storeId", item.getProduct().getStoreid());
+            obj.put("unit", item.getProduct().getUnit());
+            
+            array.add(obj);
+            
+        }
+        System.out.print("cartItem: "+ array);
+        System.out.print("I: "+items.get(0).getCart().getId());
+        modelAndView.addObject("items", array);
+        modelAndView.setViewName("addToCart/viewCart");
+        return  modelAndView;
     }
 }
