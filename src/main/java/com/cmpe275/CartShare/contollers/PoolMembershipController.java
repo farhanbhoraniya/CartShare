@@ -1,5 +1,6 @@
 package com.cmpe275.CartShare.contollers;
 
+import java.net.InetAddress;
 import java.util.List;
 
 import com.cmpe275.CartShare.exception.ResourceNotFoundException;
@@ -7,21 +8,27 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cmpe275.CartShare.dao.ConfirmationTokenRepository;
 import com.cmpe275.CartShare.dao.PoolRepository;
 import com.cmpe275.CartShare.dao.UserRepository;
+import com.cmpe275.CartShare.model.ConfirmationToken;
 import com.cmpe275.CartShare.model.Pool;
 import com.cmpe275.CartShare.model.PoolMembership;
 import com.cmpe275.CartShare.model.User;
+import com.cmpe275.CartShare.service.EmailServiceImpl;
 import com.cmpe275.CartShare.service.PoolMembershipService;
 import com.cmpe275.CartShare.service.PoolService;
+import com.cmpe275.CartShare.service.UserService;
 
 @RestController
 public class PoolMembershipController {
@@ -34,25 +41,45 @@ public class PoolMembershipController {
 	@Autowired
 	PoolMembershipService poolMembershipService;
 	
+	@Autowired
+	UserService userService;
+	
+	@Autowired
+	ConfirmationTokenRepository confirmationTokenRepository;
+	
+	@Autowired
+	EmailServiceImpl emailService;
+	
 	@PostMapping("/pool/join")
 	public @ResponseBody ResponseEntity<PoolMembership> joinPool(@RequestBody JSONObject poolMember) {
 
-		//TODO: Find logged in user and use its user id
-		poolMember.put("user", 29);
+		//TODO: GETS the logged in user but password encryption is not working
+//        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(principal);
+//        User currentUserObject = userService.findByEmail(principal.getUsername());
 
-		if (! (poolMember.containsKey("pool") && poolMember.containsKey("user") && poolMember.containsKey("reference"))) {
+		poolMember.put("user", 46);
+//        poolMember.put("user", currentUserObject.getId());
+
+		if (! (poolMember.containsKey("pool") && poolMember.containsKey("user"))) {
 			System.out.println("Invalid or missing parameters");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+		
+		String reference;
+		if (poolMember.containsKey("reference")) {
+			reference = (String) poolMember.get("reference");			
+		} else if(!poolMember.containsKey("knowsLeader") || !(boolean)poolMember.get("knowsLeader")) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 
 		String pool;
 		int user;
-		String reference;
 		
 		try {
 			pool = (String) poolMember.get("pool");
 			user = (int) poolMember.get("user");
-			reference = (String) poolMember.get("reference");
+
 		} catch(Exception e) {
 			System.out.println("Invalid or missing parametrers");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -64,6 +91,7 @@ public class PoolMembershipController {
 			System.out.println("Pool does not exits");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
+		reference = poolObject.getLeader().getScreenname();
 		
 		User userObject = userRepository.findById(user).orElseThrow(()-> new ResourceNotFoundException("User","Id", user));
 		
@@ -116,8 +144,44 @@ public class PoolMembershipController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		
+		ConfirmationToken confirmationToken = new ConfirmationToken(userObject);
+        confirmationTokenRepository.save(confirmationToken);
+
+        try {
+            String ip = InetAddress.getLoopbackAddress().getHostAddress();
+            String confirmationURL = "http://" + ip + ":9000/confirm-pool-join?token=" + confirmationToken.getConfirmationtoken(); 
+            String subject = "Pool join member";
+            String body = "User " + userObject.getScreenname() + " has given you reference to join pool " + poolObject.getName() 
+            + ". To confirm user reference click " + confirmationURL;
+
+            emailService.sendEmail(referenceUser.getEmail(), subject, body);
+        } catch (Exception e) {
+            System.out.println("Error while sending the confirmation email");
+        }
+
+		
 		return ResponseEntity.status(HttpStatus.OK).body(newPoolMembership);	
 	}
+	
+	@GetMapping(value="/confirm-pool-join")
+    public @ResponseBody ResponseEntity confirmUserAccount(@RequestParam("token")String confirmationToken)
+    {
+        ConfirmationToken token = confirmationTokenRepository.findByConfirmationtoken(confirmationToken);
+
+        if(token != null)
+        {
+            User user = token.getUser();
+            PoolMembership poolMembership = poolMembershipService.findByUser(user.getId());
+            poolMembership.setVerified(true);
+            poolMembershipService.save(poolMembership);
+            confirmationTokenRepository.delete(token);
+        } else {
+        	System.out.println("Invalid or missing token");
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
 	
 	@DeleteMapping("/pool/{poolId}/leave/{userId}")
 	public @ResponseBody ResponseEntity<PoolMembership> leavePool(@PathVariable String poolId, @PathVariable int userId) {
