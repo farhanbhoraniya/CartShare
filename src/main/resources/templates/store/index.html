@@ -122,7 +122,7 @@
                                         <a th:href="'/store/' + ${store.id} + '/view'" type="button" class="btn btn-success waves-effect" data-toggle="tooltip" data-placement="top" title="View">
                                             <i class="material-icons">remove_red_eye</i>
                                         </a>
-                                        <button type="button" class="btn btn-danger waves-effect store_delete" th:data-id="${store.id}" data-toggle="tooltip" data-placement="top" title="Delete">
+                                        <button type="button" class="btn btn-danger waves-effect store_delete_btn" th:data-id="${store.id}" data-toggle="tooltip" data-placement="top" title="Delete">
                                             <i class="material-icons">delete</i>
                                         </button>
                                     </td>
@@ -149,6 +149,31 @@
     $('.js-basic-example').DataTable({
         responsive: true
     });
+
+    $('.store_delete_btn').click(function(){
+
+        var store_row = $(this).parent().parent();
+        var store_id = $(this).attr('data-id');
+
+        $.ajax({
+            url: "/admin/store/" + store_id ,
+            type: "DELETE",
+            contentType: "application/json",
+            success: function (res) {
+
+                showNotification("Store deleted successfully",'bg-green','bottom','right');
+                store_row.slideUp('slow').remove();
+            },
+            error: function(res){
+                showNotification("Cannot Deleting Store. Store already linked to products",'bg-red','bottom','right');
+            },
+            failure: function (res) {
+                console.log(res);
+                showNotification("Error Deleting Store.",'bg-red','bottom','right');
+            }
+        });
+    });
+
 </script>
 
 <!-- Custom Js -->
