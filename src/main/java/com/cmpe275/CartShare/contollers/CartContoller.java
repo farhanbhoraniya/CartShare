@@ -46,20 +46,20 @@ public class CartContoller {
     }
 
     @PostMapping("/addItemToCart")
-    public @ResponseBody ResponseEntity<CartItem> addItemToCart(@RequestBody JSONObject cartItem) {
-        
-        if (! (cartItem.containsKey("store_id") && cartItem.containsKey("product_sku") 
+    public @ResponseBody ResponseEntity<String> addItemToCart(@RequestBody JSONObject cartItem) {
+
+        if (! (cartItem.containsKey("store_id") && cartItem.containsKey("product_sku")
                 && cartItem.containsKey("user_id") && cartItem.containsKey("quantity") && cartItem.containsKey("price"))) {
             System.out.println("Invalid or missing parameters");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        
+
         int store_id = (int) cartItem.get("store_id");
         String product_sku = (String) cartItem.get("product_sku");
         int user_id = (int) cartItem.get("user_id");
         int quantity = (int) cartItem.get("quantity");
         double price = (double) cartItem.get("price");
-        
+
         try{
             Cart cart= (Cart) cartService.findCartByUserId(user_id);
 
@@ -79,7 +79,6 @@ public class CartContoller {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Item Add Unsuccessful");
         }
-
     }
     
     @DeleteMapping("/removeItemFromCart/{cartItem}")
@@ -103,7 +102,7 @@ public class CartContoller {
 
         List<CartItem> items = new ArrayList<CartItem>();
         
-        Cart cart= (Cart) cartService.findIdByUserId(userId);
+        Cart cart= (Cart) cartService.findCartByUserId(userId);
         
         items = (ArrayList<CartItem>)cartService.findByCartId(cart);
         
