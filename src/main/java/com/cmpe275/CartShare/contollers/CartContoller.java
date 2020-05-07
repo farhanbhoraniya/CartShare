@@ -82,10 +82,17 @@ public class CartContoller {
 
     }
     
-    @PostMapping("/removeItemFromCart/{cart_item_id}")
-    public @ResponseBody ResponseEntity<String> addItemToCart(@PathVariable String cartItem) {
-        
-        return null;
+    @DeleteMapping("/removeItemFromCart/{cartItem}")
+    public @ResponseBody ResponseEntity<String> removeItemFromCart(@PathVariable String cartItem) {
+        int cartItemId = Integer.parseInt(cartItem);
+        try{
+            cartService.removeCartItem(cartItemId);
+            return ResponseEntity.status(HttpStatus.OK).body("Item Deletion Successful");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Item Deletion Unsuccessful");
+        }
     }
     
     

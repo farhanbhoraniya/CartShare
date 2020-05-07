@@ -49,6 +49,10 @@ public class CartService {
         return cartItemRepository.save(ci);
     }
 
+    public void removeCartItem(int cartItemID){
+        cartItemRepository.deleteById(cartItemID);
+    }
+
     public Cart findCartByUserId(int user_id) {
         Cart cart = cartRepository.findCartByUserId(user_id);
         System.out.println("cart id " + cart);
