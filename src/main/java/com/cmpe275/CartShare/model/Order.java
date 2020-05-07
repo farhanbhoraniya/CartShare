@@ -116,4 +116,18 @@ public class Order {
     public void setSelfPick(boolean selfPick) {
         this.selfpick = selfPick;
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", cart=" + cart +
+                ", pool=" + pool +
+                ", date=" + date +
+                ", status='" + status + '\'' +
+                ", pickedby=" + pickedby +
+                ", buyer=" + buyer +
+                ", selfPick=" + selfPick +
+                '}';
+    }
 }
