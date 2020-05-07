@@ -117,13 +117,13 @@
                                     <td th:text="${product.unit}" />
                                     <td th:text="${product.price}" />
                                     <td>
-                                        <a href="/store/${store.id}/edit" type="button" class="btn btn-primary waves-effect" data-toggle="tooltip" data-placement="top" title="Edit">
+                                        <a th:href="'/product/' + ${product.storeid} + '/' + ${product.sku} + '/edit'" type="button" class="btn btn-primary waves-effect" data-toggle="tooltip" data-placement="top" title="Edit">
                                             <i class="material-icons">create</i>
                                         </a>
-                                        <a href="/company/${ store.id}}/view" type="button" class="btn btn-success waves-effect" data-toggle="tooltip" data-placement="top" title="View">
+                                        <a th:href="'/product/' + ${product.storeid} + '/' + ${product.sku} + '/view'" type="button" class="btn btn-success waves-effect" data-toggle="tooltip" data-placement="top" title="View">
                                             <i class="material-icons">remove_red_eye</i>
                                         </a>
-                                        <button type="button" class="btn btn-danger waves-effect store_delete" data-id="${store.id}" data-toggle="tooltip" data-placement="top" title="Delete">
+                                        <button type="button" class="btn btn-danger waves-effect product_delete" th:data-store-id="${product.storeid}" th:data-sku="${ product.sku }" data-toggle="tooltip" data-placement="top" title="Delete">
                                             <i class="material-icons">delete</i>
                                         </button>
                                     </td>
@@ -140,32 +140,7 @@
 </section>
 <!-- Content End -->
 
-<!-- Jquery Core Js -->
-<script th:src="@{/js/plugins/jquery/jquery.min.js}"></script>
-
-<!-- Bootstrap Core Js -->
-<script th:src="@{/js/plugins/bootstrap/js/bootstrap.js}"></script>
-
-<!-- Select Plugin Js -->
-<script th:src="@{/js/plugins/bootstrap-select/js/bootstrap-select.js}"></script>
-
-<!-- Slimscroll Plugin Js -->
-<script th:src="@{/js/plugins/jquery-slimscroll/jquery.slimscroll.js}"></script>
-
-<!-- Waves Effect Plugin Js -->
-<script th:src="@{/js/plugins/node-waves/waves.js}"></script>
-
-<!-- Autosize Plugin Js -->
-<script th:src="@{/js/plugins/autosize/autosize.js}"></script>
-
-<!-- Moment Plugin Js -->
-<script th:src="@{/js/plugins/momentjs/moment.js}"></script>
-
-<!-- Bootstrap Material Datetime Picker Plugin Js -->
-<script th:src="@{/js/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js}"></script>
-
-<!-- Bootstrap Datepicker Plugin Js -->
-<script th:src="@{/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
+<div th:insert="partials/scripts :: scripts"></div>
 
 <!-- Jquery DataTable Plugin Js -->
 <script th:src="@{/js/plugins/jquery-datatable/jquery.dataTables.js}"></script>
@@ -184,7 +159,6 @@
 
 <!-- Demo Js -->
 <script th:src="@{/js/js/demo.js}"></script>
-<!--<script th:src="@{/js/custom/storeDetails.js}"></script>-->
 </body>
 
 </html>

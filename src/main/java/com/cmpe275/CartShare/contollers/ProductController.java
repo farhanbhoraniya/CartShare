@@ -44,6 +44,19 @@ public class ProductController {
         return modelAndView;
     }
 
+    @GetMapping("/product/{store_id}/{product_sku}/edit")
+    public ModelAndView getEditView(ModelAndView modelAndView, @PathVariable(name = "store_id") Integer store_id,
+                                    @PathVariable(name="product_sku") String sku) {
+
+        Product product = productService.findProductInStore(store_id, sku);
+        List<Store> stores = storeService.findAll();
+
+        modelAndView.addObject("stores", stores);
+        modelAndView.addObject("product", product);
+
+        modelAndView.setViewName("product/edit");
+        return  modelAndView;
+    }
 
     // Adds same product in multiple stores
     // All stores must be valid
@@ -232,7 +245,7 @@ public class ProductController {
         }
 
         if (productObject.containsKey("price")) {
-            product.setPrice((double) productObject.get("price"));
+            product.setPrice(Double.parseDouble(productObject.get("price").toString()));
         }
 
         try {
