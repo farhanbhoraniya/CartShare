@@ -116,9 +116,9 @@
                                     <td th:text="${pool.description}" />
                                     <td th:text="${pool.zip}" />
                                     <td>
-                                        <a href="/store/${pool.id}/edit" type="button" class="btn btn-primary waves-effect" data-toggle="tooltip" data-placement="top" title="Join">
+                                        <button th:data-pool-name="${pool.name}" th:data-id="${pool.id}" type="button" class="btn btn-primary waves-effect addPoolBtn" data-placement="top" title="Join" data-toggle="modal" data-target="#joinPoolModal">
                                             <i class="material-icons">add</i>
-                                        </a>
+                                        </button>
                                         <a href="/company/${ store.id}}/view" type="button" class="btn btn-success waves-effect" data-toggle="tooltip" data-placement="top" title="Leave">
                                             <i class="material-icons">remove</i>
                                         </a>
@@ -137,43 +137,65 @@
 </section>
 <!-- Content End -->
 
-<!-- Jquery Core Js -->
-<script th:src="@{/js/plugins/jquery/jquery.min.js}"></script>
+<!-- Modal -->
+<div class="modal fade" id="joinPoolModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="joinPoolModalLabel">Please enter a reference to join this pool</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div class="row">
 
-<!-- Bootstrap Core Js -->
-<script th:src="@{/js/plugins/bootstrap/js/bootstrap.js}"></script>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <label for="input_pool_id">Pool Name</label>
+                                    <input type="text" id="input_pool_id" class="form-control" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <label for="input_ref_name">Reference Name</label>
+                                    <input type="text" id="input_ref_name" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <label for="input_pool_leader">I know the pool leader</label>
+                                    <input type="checkbox" id="input_pool_leader" class="filled-in chk-col-deep-orange">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <button class="btn btn-primary form-control" id="joinPoolBtn">Join Pool</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!--            <div class="modal-footer">-->
+<!--                <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button>-->
+<!--                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>-->
+<!--            </div>-->
+        </div>
+    </div>
+</div>
+<!-- Modal end -->
 
-<!-- Select Plugin Js -->
-<script th:src="@{/js/plugins/bootstrap-select/js/bootstrap-select.js}"></script>
-
-<!-- Slimscroll Plugin Js -->
-<script th:src="@{/js/plugins/jquery-slimscroll/jquery.slimscroll.js}"></script>
-
-<!-- Waves Effect Plugin Js -->
-<script th:src="@{/js/plugins/node-waves/waves.js}"></script>
-
-<!-- Autosize Plugin Js -->
-<script th:src="@{/js/plugins/autosize/autosize.js}"></script>
-
-<!-- Moment Plugin Js -->
-<script th:src="@{/js/plugins/momentjs/moment.js}"></script>
-
-<!-- Bootstrap Material Datetime Picker Plugin Js -->
-<script th:src="@{/js/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js}"></script>
-
-<!-- Bootstrap Datepicker Plugin Js -->
-<script th:src="@{/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
+<div th:insert="partials/scripts :: scripts"></div>
 
 <!-- Jquery DataTable Plugin Js -->
 <script th:src="@{/js/plugins/jquery-datatable/jquery.dataTables.js}"></script>
 <script th:src="@{/js/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js}"></script>
-
-<script>
-    $('.js-basic-example').DataTable({
-        responsive: true
-    });
-</script>
-
 
 <!-- Custom Js -->
 <script th:src="@{/js/js/admin.js}"></script>
@@ -181,7 +203,57 @@
 
 <!-- Demo Js -->
 <script th:src="@{/js/js/demo.js}"></script>
-<script th:src="@{/js/custom/storeDetails.js}"></script>
+
+<script>
+
+    $('.js-basic-example').DataTable({
+        responsive: true
+    });
+
+    $('.addPoolBtn').click(function(){
+
+        var poolId = $(this).attr('data-id');
+        var poolName = $(this).attr('data-pool-name');
+        $('#input_pool_id').attr('data-pool-id', poolId);
+        $('#input_pool_id').val(poolName);
+    });
+
+    $('#joinPoolBtn').click(function(){
+
+        var poolId = $('#input_pool_id').attr('data-pool-id');
+        var reference_name = $('#input_ref_name').val();
+
+        var data = {
+            pool : poolId,
+            reference : reference_name
+        };
+
+        $.ajax({
+            url: "/pool/join",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function (res) {
+
+                showNotification("Pool joined successfully",'bg-green','bottom','right');
+                window.location = "/poolList";
+            },
+            error: function(res){
+                showNotification("Cannot join pool.",'bg-red','bottom','right');
+            },
+            failure: function (res) {
+                console.log(res);
+                showNotification("Error Joining pool. Please try again.",'bg-red','bottom','right');
+            }
+        });
+    });
+
+</script>
+
+
+<!--<script th:src="@{/js/custom/storeDetails.js}"></script>-->
+
+
 </body>
 
 </html>

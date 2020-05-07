@@ -36,12 +36,15 @@ public class PoolMembershipController {
 	
 	@PostMapping("/pool/join")
 	public @ResponseBody ResponseEntity<PoolMembership> joinPool(@RequestBody JSONObject poolMember) {
-		
+
+		//TODO: Find logged in user and use its user id
+		poolMember.put("user", 29);
+
 		if (! (poolMember.containsKey("pool") && poolMember.containsKey("user") && poolMember.containsKey("reference"))) {
 			System.out.println("Invalid or missing parameters");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
-		
+
 		String pool;
 		int user;
 		String reference;

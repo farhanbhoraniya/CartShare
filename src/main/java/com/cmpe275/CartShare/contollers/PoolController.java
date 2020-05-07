@@ -29,7 +29,7 @@ import com.cmpe275.CartShare.service.PoolService;
 import com.cmpe275.CartShare.service.UserService;
 
 @RestController
-public class PoolCotroller {
+public class PoolController {
 
 	@Autowired
 	PoolService poolService;
