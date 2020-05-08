@@ -57,7 +57,7 @@ public class PoolMembershipController {
 //        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        System.out.println(principal);
 //        User currentUserObject = userService.findByEmail(principal.getUsername());
-		Integer user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+		int user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
 		System.out.println("Logged in user_id: " + user_id);
 
 		poolMember.put("user", user_id);
@@ -80,8 +80,8 @@ public class PoolMembershipController {
 		
 		try {
 			pool = (String) poolMember.get("pool");
-			user = (int) poolMember.get("user");
-			System.out.println(user);
+			user_id = (int) poolMember.get("user");
+//			System.out.println(user);
 		} catch(Exception e) {
 			System.out.println("Invalid or missing parametrers");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -96,16 +96,17 @@ public class PoolMembershipController {
 		if (poolMember.containsKey("knowsLeader")  && (boolean) poolMember.get("knowsLeader")) {
 			reference = poolObject.getLeader().getScreenname();
 		}
-		
-		
-		User userObject = userRepository.findById(user).orElseThrow(()-> new ResourceNotFoundException("User","Id", user));
+
+
+		int finalUser_id = user_id;
+		User userObject = userRepository.findById(user_id).orElseThrow(()-> new ResourceNotFoundException("User","user_id", finalUser_id));
 		
 		if (userObject == null) {
 			System.out.println("User does not exits");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		
-		PoolMembership userPool = poolMembershipService.findByUser(user);
+		PoolMembership userPool = poolMembershipService.findByUser(user_id);
 		
 		if (userPool != null) {
 			System.out.println("User is already a member of the one pool");
@@ -140,7 +141,7 @@ public class PoolMembershipController {
 			referenceId = referenceUser.getId();
 		}
 		
-		PoolMembership newPoolMembership = new PoolMembership(pool, user, referenceId, false, false);
+		PoolMembership newPoolMembership = new PoolMembership(pool, user_id, referenceId, false, false);
 		
 		try {
 			poolMembershipService.save(newPoolMembership);
