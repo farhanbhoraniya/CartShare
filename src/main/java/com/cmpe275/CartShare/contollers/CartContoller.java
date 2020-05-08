@@ -116,6 +116,7 @@ public class CartContoller {
             obj.put("qty", item.getQuantity());
             obj.put("storeId", item.getProduct().getStoreid());
             obj.put("unit", item.getProduct().getUnit());
+            obj.put("cart_item_id", item.getId());
             
             array.add(obj);
             
