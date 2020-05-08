@@ -68,7 +68,7 @@ public class PoolMembershipController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		
-		String reference;
+		String reference = null;
 		if (poolMember.containsKey("reference")) {
 			reference = (String) poolMember.get("reference");			
 		} else if(!poolMember.containsKey("knowsLeader") || !(boolean)poolMember.get("knowsLeader")) {
@@ -81,7 +81,7 @@ public class PoolMembershipController {
 		try {
 			pool = (String) poolMember.get("pool");
 			user = (int) poolMember.get("user");
-
+			System.out.println(user);
 		} catch(Exception e) {
 			System.out.println("Invalid or missing parametrers");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -93,7 +93,10 @@ public class PoolMembershipController {
 			System.out.println("Pool does not exits");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
-		reference = poolObject.getLeader().getScreenname();
+		if (poolMember.containsKey("knowsLeader")  && (boolean) poolMember.get("knowsLeader")) {
+			reference = poolObject.getLeader().getScreenname();
+		}
+		
 		
 		User userObject = userRepository.findById(user).orElseThrow(()-> new ResourceNotFoundException("User","Id", user));
 		
@@ -137,7 +140,7 @@ public class PoolMembershipController {
 			referenceId = referenceUser.getId();
 		}
 		
-		PoolMembership newPoolMembership = new PoolMembership(pool, user, referenceId, false);
+		PoolMembership newPoolMembership = new PoolMembership(pool, user, referenceId, false, false);
 		
 		try {
 			poolMembershipService.save(newPoolMembership);
@@ -168,11 +171,11 @@ public class PoolMembershipController {
     public @ResponseBody ResponseEntity confirmUserAccount(@RequestParam("token")String confirmationToken)
     {
         ConfirmationToken token = confirmationTokenRepository.findByConfirmationtoken(confirmationToken);
-
+        PoolMembership poolMembership;
         if(token != null)
         {
             User user = token.getUser();
-            PoolMembership poolMembership = poolMembershipService.findByUser(user.getId());
+            poolMembership = poolMembershipService.findByUser(user.getId());
             poolMembership.setVerified(true);
             poolMembershipService.save(poolMembership);
             confirmationTokenRepository.delete(token);
@@ -180,9 +183,45 @@ public class PoolMembershipController {
         	System.out.println("Invalid or missing token");
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+        
+        String poolId = poolMembership.getPool();
+        Pool pool = poolRepository.findById(poolId);
+        ConfirmationToken confirmationTokenApproval = new ConfirmationToken(token.getUser());
+        confirmationTokenRepository.save(confirmationTokenApproval);
+        
+        try {
+            String ip = InetAddress.getLoopbackAddress().getHostAddress();
+            String confirmationURL = "http://" + ip + ":9000/leader-approval?token=" + confirmationTokenApproval.getConfirmationtoken(); 
+            String subject = "Pool join member approval";
+            String body = "Reference verified. Please approve the membership of the User " + token.getUser().getScreenname() + " for pool " + pool.getName() 
+            + ". To approve click " + confirmationURL;
+            String email = pool.getLeader().getEmail();
+
+            emailService.sendEmail(email, subject, body);
+        } catch (Exception e) {
+            System.out.println("Error while sending the confirmation email");
+        }
+
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
+	@GetMapping(value="/leader-approval")
+	public void leaderApproval(@RequestParam("token")String confirmationToken) {
+		ConfirmationToken token = confirmationTokenRepository.findByConfirmationtoken(confirmationToken);
+		PoolMembership poolMembership;
+        if(token != null)
+        {
+            User user = token.getUser();
+            poolMembership = poolMembershipService.findByUser(user.getId());
+            poolMembership.setLeaderapproved(true);
+            poolMembershipService.save(poolMembership);
+            confirmationTokenRepository.delete(token);
+        } else {
+        	System.out.println("Invalid or missing token");
+        	return;
+        }
+	}
+	
 	
 	@DeleteMapping("/pool/{poolId}/leave/{userId}")
 	public @ResponseBody ResponseEntity<PoolMembership> leavePool(@PathVariable String poolId, @PathVariable int userId) {
