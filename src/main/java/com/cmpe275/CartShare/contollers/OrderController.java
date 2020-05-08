@@ -3,17 +3,19 @@ package com.cmpe275.CartShare.contollers;
 import com.cmpe275.CartShare.dao.CartItemRepository;
 import com.cmpe275.CartShare.exception.ResourceNotFoundException;
 import com.cmpe275.CartShare.model.*;
+import com.cmpe275.CartShare.security.UserPrincipal;
 import com.cmpe275.CartShare.service.*;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class OrderController {
@@ -100,5 +102,41 @@ public class OrderController {
         System.out.println("Items removed from cart items");
         return ResponseEntity.status(HttpStatus.OK).body(newOrder);
 
+    }
+
+    @GetMapping("/order/pool_pending/{numberOfRecords}")
+    public ModelAndView getStoreProducts(ModelAndView modelAndView,
+                                         @PathVariable int numberOfRecords) {
+        int userId = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        User currentUser = userService.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+
+        Pool pool = findPoolByUser(currentUser);
+
+        if (null != pool) {
+            List<Order> poolOrders = orderService.getOrdersByPool(pool);
+            List<Order> filteredPoolOrders =
+                    poolOrders.stream().filter(order ->
+                            order.getBuyerid().getId() != userId && order.getStatus().equals("PLACED"))
+                            .collect(Collectors.toList());
+        }
+
+        //modelAndView.addObject("items", array);
+        modelAndView.setViewName("addToCart/viewCart");
+        return modelAndView;
+    }
+
+    private Pool findPoolByUser(User currentUser) {
+        Pool pool = poolService.findByLeader(currentUser);
+
+        if (pool == null) {
+            PoolMembership poolMembership = poolMembershipService.findByUser(currentUser.getId());
+
+            if (poolMembership == null) {
+                System.out.println("User is not a member of any pool");
+                return null;
+            }
+            pool = poolService.findById(poolMembership.getPool());
+        }
+        return pool;
     }
 }

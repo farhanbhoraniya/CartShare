@@ -74,7 +74,6 @@ public class StoreController {
         List<Store> stores = storeService.findAll();
         modelAndView.setViewName("store/index");
         modelAndView.addObject("stores", stores);
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return modelAndView;
     }
 
