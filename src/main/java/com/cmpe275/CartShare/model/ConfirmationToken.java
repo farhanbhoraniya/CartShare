@@ -16,6 +16,7 @@ public class ConfirmationToken {
 	private String confirmationtoken;
 	private Date created;
 
+	@Transient
 	@OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
 	@JoinColumn(nullable = false, name = "user", referencedColumnName = "id")
 	private User user;
