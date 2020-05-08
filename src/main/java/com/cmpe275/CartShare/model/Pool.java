@@ -95,4 +95,17 @@ public class Pool {
 		this.members = members;
 	}
 
+
+	@Override
+	public String toString() {
+		return "Pool{" +
+				"id='" + id + '\'' +
+				", name='" + name + '\'' +
+				", neighborhood='" + neighborhood + '\'' +
+				", description='" + description + '\'' +
+				", zip='" + zip + '\'' +
+				", leader=" + leader +
+				", members=" + members +
+				'}';
+	}
 }
