@@ -105,22 +105,22 @@
                                 </tr>
                                 </tfoot>
                                 <tbody>
-<!--                                <tr th:each="order: ${orders}">-->
-<!--                                    <td th:text="${order.id}"></td>-->
-<!--                                    <td th:text="${order.date}"></td>-->
-<!--                                    <td th:text="${order.status}"></td>-->
-<!--                                    <td>-->
-<!--                                        <a th:href="'/order/checkout/' + ${order.id} " type="button" class="btn btn-primary waves-effect" data-toggle="tooltip" data-placement="top" title="Edit">-->
-<!--                                            <i class="material-icons">create</i>-->
+                                <tr th:each="order: ${selfPickUpOpenOrders}">
+                                    <td th:text="${order.id}"></td>
+                                    <td th:text="${order.date}"></td>
+                                    <td th:text="${order.status}"></td>
+                                    <td>
+                                        <a th:href="'/order/checkout/' + ${order.id} " type="button" class="btn btn-primary waves-effect" data-toggle="tooltip" data-placement="top" title="Edit">
+                                            <i class="material-icons">create</i>
+                                        </a>
+<!--                                        <a th:href="'/store/' + ${store.id} + '/view'" type="button" class="btn btn-success waves-effect" data-toggle="tooltip" data-placement="top" title="View">-->
+<!--                                            <i class="material-icons">remove_red_eye</i>-->
 <!--                                        </a>-->
-<!--&lt;!&ndash;                                        <a th:href="'/store/' + ${store.id} + '/view'" type="button" class="btn btn-success waves-effect" data-toggle="tooltip" data-placement="top" title="View">&ndash;&gt;-->
-<!--&lt;!&ndash;                                            <i class="material-icons">remove_red_eye</i>&ndash;&gt;-->
-<!--&lt;!&ndash;                                        </a>&ndash;&gt;-->
 <!--                                        <button type="button" class="btn btn-danger waves-effect store_delete_btn" th:data-id="${order.id}" data-toggle="tooltip" data-placement="top" title="Delete">-->
 <!--                                            <i class="material-icons">delete</i>-->
 <!--                                        </button>-->
-<!--                                    </td>-->
-<!--                                </tr>-->
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>

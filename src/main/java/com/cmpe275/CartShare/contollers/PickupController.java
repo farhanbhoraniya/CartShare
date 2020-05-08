@@ -3,11 +3,13 @@ package com.cmpe275.CartShare.contollers;
 import com.cmpe275.CartShare.model.CartItem;
 import com.cmpe275.CartShare.model.Order;
 import com.cmpe275.CartShare.model.User;
+import com.cmpe275.CartShare.security.UserPrincipal;
 import com.cmpe275.CartShare.service.OrderService;
 import com.cmpe275.CartShare.service.UserService;
 import net.minidev.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,12 +28,12 @@ public class PickupController {
     OrderService orderService;
 
 
-    /*@GetMapping("/pickupList")
-    public ModelAndView pickupListView(ModelAndView modelAndView) {
 
-        modelAndView.setViewName("pickup/index");
-        return modelAndView;
-    }*/
+//    public ModelAndView pickupListView(ModelAndView modelAndView) {
+//
+//        modelAndView.setViewName("pickup/index");
+//        return modelAndView;
+//    }
 
     @GetMapping("/pickup/order/{order_id}")
     public ModelAndView pickupOrderView(ModelAndView modelAndView, @PathVariable(name="order_id") Integer order_id){
@@ -41,25 +43,27 @@ public class PickupController {
         return modelAndView;
     }
 
+    @GetMapping("/pickupList")
+    public ModelAndView pickupListView(ModelAndView modelAndView) {
 
-    @GetMapping("/getSelfPickOpenOrders/{userid}")
-    public ModelAndView pickupListView(ModelAndView modelAndView,@PathVariable(name="userid") Integer userid) {
+        Integer user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         List<Order> selfPickUpOpenOrders = new ArrayList<>();
-        selfPickUpOpenOrders=orderService.getOpenOrdersByUserId(userid);
+        selfPickUpOpenOrders=orderService.getOpenOrdersByUserId(user_id);
 
-        JSONArray array = new JSONArray();
-        for(Order order: selfPickUpOpenOrders) {
-            JSONObject obj = new JSONObject();
-            obj.put("orderid", order.getId());
-            obj.put("date", order.getDate());
-            obj.put("status", order.getStatus());
-
-            array.add(obj);
-        }
-        System.out.print("cartItem: "+ array);
-        modelAndView.addObject("selfPickUpOpenOrders", array);
+//        JSONArray array = new JSONArray();
+//        for(Order order: selfPickUpOpenOrders) {
+//            JSONObject obj = new JSONObject();
+//            Order order = new Order();
+//            order.setId();
+//            obj.put("orderid", order.getId());
+//            obj.put("date", order.getDate());
+//            obj.put("status", order.getStatus());
+//
+//            array.add(obj);
+//        }
+//        System.out.print("cartItem: "+ array);
+        modelAndView.addObject("selfPickUpOpenOrders", selfPickUpOpenOrders);
         modelAndView.setViewName("pickup/index");
         return modelAndView;
     }
-
 }
