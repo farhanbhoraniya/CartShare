@@ -38,24 +38,25 @@ public class PickupController {
     @Autowired
     OrderItemsService orderItemsService;
 
-    @GetMapping("/pickup/order/{order_id}")
+    /*
+    * return an array of arrays
+    * array of pooledOrders, each contains array of ordered item in that order
+    * */
+    @GetMapping("/getLinkedPickupOrders/{order_id}")
     public ModelAndView pickupOrderView(ModelAndView modelAndView, @PathVariable(name="order_id") Integer order_id){
 
-        List<LinkedOrders> linkedOrders = new ArrayList<>();
-        JSONArray poolOrderList = new JSONArray();
+        List<LinkedOrders> pooledOrderList = new ArrayList<>();
+        JSONArray poolOrdersJSONarray = new JSONArray();
 
-        linkedOrders=linkedOrdersRepository.findAllByParent_id(order_id);
+        pooledOrderList=linkedOrdersRepository.findAllByParent_id(order_id);
 
-        for(LinkedOrders lo : linkedOrders){
-            System.out.println(lo.getId());
-            JSONObject linkedOrder = new JSONObject();
+        for(LinkedOrders lo : pooledOrderList){
             if(lo.getPool_order()!=null && lo.getPool_order().getStatus()!=null && lo.getPool_order().getStatus().equals("PLACED")){
-                JSONArray orderItemsPerPoolOrder = new JSONArray();
-
+                JSONArray orderItemsPerPoolOrderArray = new JSONArray();
                 List<OrderItems> orderItems =orderItemsService.getOrderItems(lo.getPool_order());
-                //add orderitems to order
+
                 for(OrderItems oi : orderItems){
-                    JSONObject orderitem = new JSONObject();
+                    JSONObject orderitemJSON = new JSONObject();
                     JSONObject product = new JSONObject();
                     if(oi.getProduct()!=null){
                         product.put("name",oi.getProduct().getName());
@@ -65,19 +66,19 @@ public class PickupController {
                         product.put("unit",oi.getProduct().getUnit());
                         product.put("brand",oi.getProduct().getBrand());
                     }
-                    orderitem.put("product",product);
-                    orderitem.put("price",oi.getPrice());
-                    orderitem.put("id",oi.getId());
-                    orderItemsPerPoolOrder.add(orderitem);
+                    orderitemJSON.put("product",product);
+                    orderitemJSON.put("price",oi.getPrice());
+                    orderitemJSON.put("id",oi.getId());
+
+                    //individual orderitem of an order added to array
+                    orderItemsPerPoolOrderArray.add(orderitemJSON);
                 }
-                linkedOrder.put("orderitems",orderItemsPerPoolOrder);
-                poolOrderList.add(linkedOrder);
+                //individual order of a pool order added
+                poolOrdersJSONarray.add(orderItemsPerPoolOrderArray);
             }
 
         }
-        //System.out.println(poolOrderList);
-
-        modelAndView.addObject("poolOrderList", poolOrderList);
+        modelAndView.addObject("poolOrderList", poolOrdersJSONarray);
         modelAndView.setViewName("pickup/view");
         return modelAndView;
     }
