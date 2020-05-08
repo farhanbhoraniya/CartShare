@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -107,7 +108,7 @@ public class OrderController {
     public ModelAndView getStoreProducts(ModelAndView modelAndView,
                                          @PathVariable int numberOfRecords) {
         int userId = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        User currentUser = userService.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+        User currentUser = userService.findById(39).orElseThrow(() -> new ResourceNotFoundException("User", "Id", 39));
 
         Pool pool = findPoolByUser(currentUser);
 
@@ -115,8 +116,10 @@ public class OrderController {
             List<Order> poolOrders = orderService.getOrdersByPool(pool);
             List<Order> filteredPoolOrders =
                     poolOrders.stream().filter(order ->
-                            order.getBuyerid().getId() != userId && order.getStatus().equals("PLACED"))
-                            .collect(Collectors.toList());
+                            order.getBuyerid().getId() != 39 && order.getStatus().equals("PLACED")).sorted(Comparator.comparing(Order::getDate))
+                            .limit(numberOfRecords).collect(Collectors.toList());
+            System.out.println(filteredPoolOrders);
+
         }
 
         //modelAndView.addObject("items", array);
