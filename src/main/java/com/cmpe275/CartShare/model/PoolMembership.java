@@ -10,21 +10,23 @@ import javax.persistence.Table;
 public class PoolMembership {
 
 	// Table does not have id but JPA needs and id annotation
-	@Id
-	private String pool;
 	
+	private String pool;
+	@Id
 	private int user;
 	
 	private int reference;
 	private boolean verified;
+	private boolean leaderapproved;
 	
 	public PoolMembership() {}
 	
-	public PoolMembership(String pool, int user, int reference, boolean verified) {
+	public PoolMembership(String pool, int user, int reference, boolean verified, boolean leaderapproved) {
 		this.pool = pool;
 		this.user = user;
 		this.reference = reference;
 		this.verified = verified;
+		this.setLeaderapproved(leaderapproved);
 	}
 	
 	public String getPool() {
@@ -57,5 +59,13 @@ public class PoolMembership {
 	
 	public void setVerified(boolean verified) {
 		this.verified = verified;
+	}
+
+	public boolean isLeaderapproved() {
+		return leaderapproved;
+	}
+
+	public void setLeaderapproved(boolean leaderapproved) {
+		this.leaderapproved = leaderapproved;
 	}
 }

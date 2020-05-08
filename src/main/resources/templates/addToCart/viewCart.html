@@ -73,16 +73,16 @@
         </div>
     </div>
     <!-- #END# Search Bar -->
-    <div th:insert="cartPartials/top_nav :: topnav"></div>
+    <div th:insert="userPartials/top_nav :: topnav"></div>
 
 	<section>
-    	<div th:insert="cartPartials/left_nav :: leftnav"></div>
+    	<div th:insert="userPartials/left_nav :: leftnav"></div>
 	</section>
 
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <h2>ADD PRODUCT TO CART</h2>
+                <h2>VIEW CART</h2>
             </div>
             <!-- Input -->
             <div class="row clearfix">
@@ -136,14 +136,11 @@
 					                            <input style="width:60%" type="number" id="qty" class="form-control" name="number" th:value="${item.qty}" required/>
 					                                       
                             				</td>
-											
-											
-											
-											
                             				<td>
-		                                        <button type="button" class="btn btn-danger waves-effect store_delete_btn"  data-toggle="tooltip" data-placement="top" title="Delete">
-                                            		<i class="material-icons">delete</i>
-                                        		</button>
+		                                       <button type="button" class="btn btn-danger waves-effect store_delete_btn" th:data-id="${item.cart_item_id}" 
+		                                       		data-toggle="tooltip" data-placement="top" title="Delete">
+                                               	<i class="material-icons">delete</i>
+                                        	   </button>
                                     		</td>
 										</tr>
 									</tbody>
@@ -164,12 +161,28 @@
                             <h4 class="modal-title" id="smallModalLabel">Order Pick Up</h4>
                         </div>
                         <div class="modal-body">
-                            You have successfully placed the order. Would you like to pick up your pool members 
-                            order in next 2 days? 
+                            Would you like to pick up your and pool members order in next 2 days? 
                         </div>
                         <div class="modal-footer">
                             <button id="pickOrder" type="button" class="btn btn-link waves-effect">Yes</button>
-                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">No</button>
+                            <button id="notpickOrder" type="button" class="btn btn-link waves-effect" data-dismiss="modal">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="noOfOrders" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="smallModalLabel">Order Pickup</h4>
+                        </div>
+                        <div class="modal-body">
+                           How many orders would you like to pick up? 
+                           <input style="width:60%" type="number" id="num" class="form-control" name="number" value="1" required/>
+                           
+                        </div>
+                        <div class="modal-footer">
+                            <button onClick="$.fn.getOrderDetailsforPickUp()" id="pickOrder" type="button" class="btn btn-link waves-effect">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -177,7 +190,7 @@
         </div>
     </section>
 
-    <div th:insert="cartPartials/scripts :: scripts"></div>
+    <div th:insert="partials/scripts :: scripts"></div>
     <!-- Demo Js -->
     <script th:src="@{/js/js/demo.js}"></script>
     <script th:src="@{/js/custom/placeOrderConfirm.js}"></script>
@@ -195,7 +208,7 @@
 	        var store_id = $(this).attr('data-id');
 	
 	        $.ajax({
-	            url: "/admin/store/" + store_id ,
+	            url: "/removeItemFromCart/" + store_id ,
 	            type: "DELETE",
 	            contentType: "application/json",
 	            success: function (res) {
@@ -212,6 +225,8 @@
 	            }
 	        });
 	    });
+	    
+	    $.fn.getOrderDetailsforPickUp = func 
 	</script>
     
 </body>
