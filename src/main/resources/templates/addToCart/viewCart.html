@@ -73,10 +73,10 @@
         </div>
     </div>
     <!-- #END# Search Bar -->
-    <div th:insert="cartPartials/top_nav :: topnav"></div>
+    <div th:insert="userPartials/top_nav :: topnav"></div>
 
 	<section>
-    	<div th:insert="cartPartials/left_nav :: leftnav"></div>
+    	<div th:insert="userPartials/left_nav :: leftnav"></div>
 	</section>
 
     <section class="content">
@@ -136,14 +136,11 @@
 					                            <input style="width:60%" type="number" id="qty" class="form-control" name="number" th:value="${item.qty}" required/>
 					                                       
                             				</td>
-											
-											
-											
-											
                             				<td>
-		                                        <button type="button" class="btn btn-danger waves-effect store_delete_btn"  data-toggle="tooltip" data-placement="top" title="Delete">
-                                            		<i class="material-icons">delete</i>
-                                        		</button>
+		                                       <button type="button" class="btn btn-danger waves-effect store_delete_btn" th:data-id="${item.cart_item_id}" 
+		                                       		data-toggle="tooltip" data-placement="top" title="Delete">
+                                               	<i class="material-icons">delete</i>
+                                        	   </button>
                                     		</td>
 										</tr>
 									</tbody>
@@ -169,7 +166,7 @@
                         </div>
                         <div class="modal-footer">
                             <button id="pickOrder" type="button" class="btn btn-link waves-effect">Yes</button>
-                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">No</button>
+                            <button id="notpickOrder" type="button" class="btn btn-link waves-effect" data-dismiss="modal">No</button>
                         </div>
                     </div>
                 </div>
@@ -177,7 +174,7 @@
         </div>
     </section>
 
-    <div th:insert="cartPartials/scripts :: scripts"></div>
+    <div th:insert="partials/scripts :: scripts"></div>
     <!-- Demo Js -->
     <script th:src="@{/js/js/demo.js}"></script>
     <script th:src="@{/js/custom/placeOrderConfirm.js}"></script>
@@ -195,7 +192,7 @@
 	        var store_id = $(this).attr('data-id');
 	
 	        $.ajax({
-	            url: "/admin/store/" + store_id ,
+	            url: "/removeItemFromCart/" + store_id ,
 	            type: "DELETE",
 	            contentType: "application/json",
 	            success: function (res) {
