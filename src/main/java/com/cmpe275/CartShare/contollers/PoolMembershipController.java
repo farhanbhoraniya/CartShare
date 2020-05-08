@@ -171,10 +171,12 @@ public class PoolMembershipController {
 	@GetMapping(value="/confirm-pool-join")
     public @ResponseBody ResponseEntity confirmUserAccount(@RequestParam("token")String confirmationToken)
     {
+    	System.out.println("Confirm Token:" + confirmationToken);
         ConfirmationToken token = confirmationTokenRepository.findByConfirmationtoken(confirmationToken);
         PoolMembership poolMembership;
         if(token != null)
         {
+        	System.out.println(token);
             User user = token.getUser();
             poolMembership = poolMembershipService.findByUser(user.getId());
             poolMembership.setVerified(true);

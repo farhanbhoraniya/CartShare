@@ -16,7 +16,7 @@ public class ConfirmationToken {
 	private String confirmationtoken;
 	private Date created;
 
-	@Transient
+//	@Transient
 	@OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
 	@JoinColumn(nullable = false, name = "user", referencedColumnName = "id")
 	private User user;
@@ -59,5 +59,15 @@ public class ConfirmationToken {
 
 	public void setCreated(Date created) {
 		this.created = created;
+	}
+
+	@Override
+	public String toString() {
+		return "ConfirmationToken{" +
+				"id=" + id +
+				", confirmationtoken='" + confirmationtoken + '\'' +
+				", created=" + created +
+				", user=" + user +
+				'}';
 	}
 }
