@@ -23,7 +23,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     //todo check why selfpick=true not working
     //todo why
-    @Query(value = "Select * from orders where buyer_id = ?1 and selfpick = 0 and status='placed'", nativeQuery = true)
+    @Query(value = "Select * from orders where buyer_id = ?1 and selfpick = 1 and status='placed'", nativeQuery = true)
     public List<Order> findByBuyerIdAndSelfpick(int buyerid);
 
 }
