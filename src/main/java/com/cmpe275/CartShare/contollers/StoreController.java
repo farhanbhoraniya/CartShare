@@ -29,52 +29,52 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class StoreController {
 
-	@Autowired
-	StoreService storeService;
-	
-	@Autowired
-	ProductService productService;
-	
-	@GetMapping("/stores")
-	public @ResponseBody ResponseEntity<List<Store>> getStores() {
-		List<Store> stores = storeService.findAll();
-		return ResponseEntity.status(HttpStatus.OK).body(stores);
-	}
-	
-	@GetMapping("/store/{store_id}")
-	public @ResponseBody ResponseEntity<Store> getStore(@PathVariable int store_id) {
-		Store store = storeService.findById(store_id);
-		
-		return ResponseEntity.status(HttpStatus.OK).body(store);
-	}
-	
-	@DeleteMapping("/admin/store/{store_id}")
-	public @ResponseBody ResponseEntity<Store> delteStore(@PathVariable int store_id) {
-		Store storeObject = storeService.findById(store_id);
-		
-		if (storeObject == null) {
-			System.out.println("Store not found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		}
-		
-		try {
-			productService.deleteByStore(storeObject.getId());
-		} catch(Exception e) {
-			System.out.println(e);
-			System.out.println("Error while deleteing some products. Please make sure there are no pending orders.");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		}
-		
-		try {
-			storeService.delete(store_id);			
-		} catch(Exception e) {
-			System.out.println("Can not delete store. Please make sure all products are deleted first");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		}
+    @Autowired
+    StoreService storeService;
 
-		
-		return ResponseEntity.status(HttpStatus.OK).body(storeObject);
-	}
+    @Autowired
+    ProductService productService;
+
+    @GetMapping("/stores")
+    public @ResponseBody ResponseEntity<List<Store>> getStores() {
+        List<Store> stores = storeService.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(stores);
+    }
+
+    @GetMapping("/store/{store_id}")
+    public @ResponseBody ResponseEntity<Store> getStore(@PathVariable int store_id) {
+        Store store = storeService.findById(store_id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(store);
+    }
+
+    @DeleteMapping("/admin/store/{store_id}")
+    public @ResponseBody ResponseEntity<Store> delteStore(@PathVariable int store_id) {
+        Store storeObject = storeService.findById(store_id);
+
+        if (storeObject == null) {
+            System.out.println("Store not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        try {
+            productService.deleteByStore(storeObject.getId());
+        } catch(Exception e) {
+            System.out.println(e);
+            System.out.println("Error while deleteing some products. Please make sure there are no pending orders.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        try {
+            storeService.delete(store_id);			
+        } catch(Exception e) {
+            System.out.println("Can not delete store. Please make sure all products are deleted first");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(storeObject);
+    }
 
     @GetMapping("/storeList")
     public ModelAndView getStoresList(ModelAndView modelAndView)
@@ -85,7 +85,7 @@ public class StoreController {
         System.out.println(stores.toString());
         return modelAndView;
     }
-    
+
     @GetMapping("/userStoreList")
     public ModelAndView getUserStoresList(ModelAndView modelAndView)
     {
@@ -123,7 +123,7 @@ public class StoreController {
             System.out.println("Invalid or missing parameters");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        
+
 
         String name = (String) storeObject.get("name");
         String streetname = (String) storeObject.get("streetname");
