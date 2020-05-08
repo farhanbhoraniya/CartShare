@@ -52,15 +52,15 @@ public class StoreController {
 
         try {
             productService.deleteByStore(storeObject.getId());
-        } catch (Exception e) {
+        } catch(Exception e) {
             System.out.println(e);
             System.out.println("Error while deleteing some products. Please make sure there are no pending orders.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
         try {
-            storeService.delete(store_id);
-        } catch (Exception e) {
+            storeService.delete(store_id);			
+        } catch(Exception e) {
             System.out.println("Can not delete store. Please make sure all products are deleted first");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }

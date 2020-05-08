@@ -46,7 +46,6 @@ public class OrderController {
 
     @PostMapping("/order/place")
     public ResponseEntity<Order> placeOrder(@RequestBody JSONObject requestBody) {
-
         // TODO: GET CURRENT LOGIN USER
 //      org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //      System.out.println(principal);
