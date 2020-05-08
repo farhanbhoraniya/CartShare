@@ -58,7 +58,7 @@ public class CartContoller {
         String product_sku = (String) cartItem.get("product_sku");
         int user_id = (int) cartItem.get("user_id");
         int quantity = (int) cartItem.get("quantity");
-        double price = (double) cartItem.get("price");
+        double price = Double.parseDouble(cartItem.get("price").toString());
 
         try{
             Cart cart= (Cart) cartService.findCartByUserId(user_id);
@@ -116,6 +116,7 @@ public class CartContoller {
             obj.put("qty", item.getQuantity());
             obj.put("storeId", item.getProduct().getStoreid());
             obj.put("unit", item.getProduct().getUnit());
+            obj.put("cart_item_id", item.getId());
             
             array.add(obj);
             
