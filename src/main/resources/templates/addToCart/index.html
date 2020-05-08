@@ -38,10 +38,10 @@
 </div>
 <!-- #END# Search Bar -->
 
-	<div th:insert="cartPartials/top_nav :: topnav"></div>
+	<div th:insert="userPartials/top_nav :: topnav"></div>
 
 	<section>
-		<div th:insert="cartPartials/left_nav :: leftnav"></div>
+		<div th:insert="userPartials/left_nav :: leftnav"></div>
 	</section>
 
 	<!-- Content -->
@@ -130,7 +130,7 @@
 	</section>
 	<!-- Content End -->
 
-	<div th:insert="cartPartials/scripts :: scripts"></div>
+	<div th:insert="partials/scripts :: scripts"></div>
 
 	<!-- Jquery DataTable Plugin Js -->
 	<script th:src="@{/js/plugins/jquery-datatable/jquery.dataTables.js}"></script>
