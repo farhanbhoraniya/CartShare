@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.util.List;
 
 import com.cmpe275.CartShare.exception.ResourceNotFoundException;
+import com.cmpe275.CartShare.security.UserPrincipal;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,12 +54,13 @@ public class PoolMembershipController {
 	@PostMapping("/pool/join")
 	public @ResponseBody ResponseEntity<PoolMembership> joinPool(@RequestBody JSONObject poolMember) {
 
-		//TODO: GETS the logged in user but password encryption is not working
 //        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        System.out.println(principal);
 //        User currentUserObject = userService.findByEmail(principal.getUsername());
+		Integer user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+		System.out.println("Logged in user_id: " + user_id);
 
-		poolMember.put("user", 46);
+		poolMember.put("user", user_id);
 //        poolMember.put("user", currentUserObject.getId());
 
 		if (! (poolMember.containsKey("pool") && poolMember.containsKey("user"))) {
@@ -158,7 +160,6 @@ public class PoolMembershipController {
         } catch (Exception e) {
             System.out.println("Error while sending the confirmation email");
         }
-
 		
 		return ResponseEntity.status(HttpStatus.OK).body(newPoolMembership);	
 	}
