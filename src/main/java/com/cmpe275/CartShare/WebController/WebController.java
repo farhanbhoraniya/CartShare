@@ -116,8 +116,14 @@ public class WebController {
     }
 
     @GetMapping("/dashboard")
-    public String getDashboard() {
+    public String getDashboard(HttpSession session) {
         String role = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAuthorities().toArray()[0].toString();
+        UserPrincipal user = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        System.out.println("User Email: " + user.getEmail());
+        System.out.println(user);
+        session.setAttribute("user_email", user.getEmail());
+        session.setAttribute("user", user);
         System.out.println("Role: " + role);
         if (role.equals("ROLE_USER")) {
             return "redirect:/pooler/dashboard";
