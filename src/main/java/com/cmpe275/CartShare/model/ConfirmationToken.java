@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Table(name = "confirmation_token")
 public class ConfirmationToken {
 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	@Column(name = "token_id")
 	private int id;
