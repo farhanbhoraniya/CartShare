@@ -24,7 +24,7 @@ import java.util.Optional;
 
 
 @Service
-public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+public class CartShareOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
 
@@ -33,7 +33,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final MailAsyncComponent mailAsyncComponent;
 
     @Autowired
-    public CustomOAuth2UserService(UserRepository userRepository, ConfirmationTokenRepository confirmationTokenRepository, MailAsyncComponent mailAsyncComponent) {
+    public CartShareOAuth2UserService(UserRepository userRepository, ConfirmationTokenRepository confirmationTokenRepository, MailAsyncComponent mailAsyncComponent) {
         this.userRepository = userRepository;
         this.confirmationTokenRepository = confirmationTokenRepository;
         this.mailAsyncComponent = mailAsyncComponent;

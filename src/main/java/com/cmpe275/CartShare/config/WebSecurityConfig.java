@@ -3,7 +3,7 @@ package com.cmpe275.CartShare.config;
 import com.cmpe275.CartShare.security.CustomUserDetailsService;
 import com.cmpe275.CartShare.security.RestAuthenticationEntryPoint;
 import com.cmpe275.CartShare.security.SessionFilter;
-import com.cmpe275.CartShare.security.oauth2.CustomOAuth2UserService;
+import com.cmpe275.CartShare.security.oauth2.CartShareOAuth2UserService;
 import com.cmpe275.CartShare.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.cmpe275.CartShare.security.oauth2.OAuth2AuthenticationFailureHandler;
 import com.cmpe275.CartShare.security.oauth2.OAuth2AuthenticationSuccessHandler;
@@ -34,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomUserDetailsService customUserDetailsService;
 
-    private final CustomOAuth2UserService customOAuth2UserService;
+    private final CartShareOAuth2UserService cartShareOAuth2UserService;
 
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
@@ -42,11 +42,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public WebSecurityConfig(CustomUserDetailsService customUserDetailsService
-            , CustomOAuth2UserService customOAuth2UserService
+            , CartShareOAuth2UserService cartShareOAuth2UserService
             , OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler
             , OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler) {
         this.customUserDetailsService = customUserDetailsService;
-        this.customOAuth2UserService = customOAuth2UserService;
+        this.cartShareOAuth2UserService = cartShareOAuth2UserService;
         this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
         this.oAuth2AuthenticationFailureHandler = oAuth2AuthenticationFailureHandler;
     }
@@ -135,7 +135,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .baseUri("/login/oauth2/code/*")
                 .and()
                 .userInfoEndpoint()
-                .userService(customOAuth2UserService)
+                .userService(cartShareOAuth2UserService)
                 .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler)
                 .failureHandler(oAuth2AuthenticationFailureHandler)

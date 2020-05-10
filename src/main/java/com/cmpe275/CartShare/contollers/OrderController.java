@@ -117,7 +117,8 @@ public class OrderController {
             List<Order> poolOrders = orderService.getOrdersByPool(pool);
             List<Order> filteredPoolOrders =
                     poolOrders.stream().filter(order ->
-                            order.getBuyerid().getId() != 39 && order.getStatus().equals("PLACED")).sorted(Comparator.comparing(Order::getDate))
+                            order.getBuyerid().getId() != 39 && order.getStatus().equals("PLACED"))
+                            .sorted(Comparator.comparing(Order::getDate))
                             .limit(numberOfRecords).collect(Collectors.toList());
             System.out.println(filteredPoolOrders);
 
