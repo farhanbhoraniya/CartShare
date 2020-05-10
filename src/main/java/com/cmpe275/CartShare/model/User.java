@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "users")
 public class User {
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private int id;
     private String email;

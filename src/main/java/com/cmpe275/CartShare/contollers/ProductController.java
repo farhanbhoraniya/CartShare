@@ -172,7 +172,7 @@ public class ProductController {
         if(store != null) {
             products = productService.findByStore(storeId);
         }
-        
+        System.out.print("Products: "+ products);
         modelAndView.addObject("products", products);
         modelAndView.setViewName("addToCart/products");
         return  modelAndView;

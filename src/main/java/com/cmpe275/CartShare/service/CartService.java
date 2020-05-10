@@ -68,4 +68,9 @@ public class CartService {
         
         return q.getResultList();
     }
+
+    public List<CartItem> findByCartId(int id) {
+        return cartItemRepository.findByCartId(id);
+    }
+
 }

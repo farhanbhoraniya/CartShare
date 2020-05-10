@@ -4,7 +4,7 @@ $(document).ready(function(e){
 				id: $("#poolid").val(),
 				name: $("#name").val(),
 				neighborhood: $("#nname").val(),
-				leader: 5,//parseInt($("#leader").val()),add the user id here
+				leader: 35,//parseInt($("#leader").val()),add the user id here
 				description: $("#description").val(),
 				zip: $("#zipcode").val()
 		}

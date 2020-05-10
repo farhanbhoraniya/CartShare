@@ -16,7 +16,14 @@ $(document).ready(function(){
 			success: function(req){
 				if(req.status === "PLACED"){
 					showNotification("Order Placed successfully",'bg-green','bottom','right');
+
 					location.reload(true);
+
+					
+					//$("#pickUpOrderModal").modal('hide');
+					//$("#noOfOrders").modal('show');
+					
+
 				}
 			},
 			error: function(req){
@@ -51,4 +58,17 @@ $(document).ready(function(){
 				}
 			});
 	});
+
 });
+
+	
+	$.fn.getOrderDetailsforPickUp = function(){
+		var data = $("#num").val();
+		$.ajax({
+			url: "",
+			type: "GET",
+			success: 
+		});
+	}
+});
+

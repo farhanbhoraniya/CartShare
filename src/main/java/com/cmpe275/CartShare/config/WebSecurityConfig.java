@@ -106,6 +106,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("./static/**",
                         "/register",
                         "/confirm-account",
+                        "/confirm-pool-join",
                         "/sign-up",
                         "/login").permitAll()
                 .antMatchers("/admin/**").access("hasRole('ADMIN')")

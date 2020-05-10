@@ -47,7 +47,6 @@ public class OrderController {
 
     @PostMapping("/order/place")
     public ResponseEntity<Order> placeOrder(@RequestBody JSONObject requestBody) {
-
         // TODO: GET CURRENT LOGIN USER
 //      org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //      System.out.println(principal);
@@ -109,7 +108,7 @@ public class OrderController {
     public ModelAndView getStoreProducts(ModelAndView modelAndView,
                                          @PathVariable int numberOfRecords) {
         int userId = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        User currentUser = userService.findById(39).orElseThrow(() -> new ResourceNotFoundException("User", "Id", 39));
+        User currentUser = userService.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
 
         Pool pool = findPoolByUser(currentUser);
 
@@ -117,7 +116,7 @@ public class OrderController {
             List<Order> poolOrders = orderService.getOrdersByPool(pool);
             List<Order> filteredPoolOrders =
                     poolOrders.stream().filter(order ->
-                            order.getBuyerid().getId() != 39 && order.getStatus().equals("PLACED"))
+                            order.getBuyerid().getId() != userId && order.getStatus().equals("PLACED"))
                             .sorted(Comparator.comparing(Order::getDate))
                             .limit(numberOfRecords).collect(Collectors.toList());
             System.out.println(filteredPoolOrders);
