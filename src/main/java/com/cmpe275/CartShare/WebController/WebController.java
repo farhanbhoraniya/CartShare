@@ -78,8 +78,17 @@ public class WebController {
 
     @GetMapping("/oauth2/code/{registrationId}")
     public String callback(@PathVariable String registrationId, @RequestParam("token") String token, HttpSession session) {
+
+        System.out.println("Get request in login/oauth2/code");
+        System.out.println("Social Login - Token: " + token);
         session.setAttribute("Token", token);
-        return "redirect:/storeList";
+        return "redirect:/dashboard";
+    }
+
+    @GetMapping("/test")
+    public String test()
+    {
+        return "test";
     }
 
     @GetMapping("/verification")

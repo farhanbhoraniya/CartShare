@@ -51,11 +51,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.oAuth2AuthenticationFailureHandler = oAuth2AuthenticationFailureHandler;
     }
 
-    /*
-      By default, Spring OAuth2 uses HttpSessionOAuth2AuthorizationRequestRepository to save
-      the authorization request. But, since our service is stateless, we can't save it in
-      the session. We'll save the request in a Base64 encoded cookie instead.
-    */
     @Bean
     public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
         return new HttpCookieOAuth2AuthorizationRequestRepository();
@@ -103,23 +98,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/admin/**").access("hasRole('ADMIN')")
+                .antMatchers("/pooler/**").access("hasRole('USER')")
                 .antMatchers("./static/**",
                         "/register",
+                        "/test",
                         "/confirm-account",
                         "/confirm-pool-join",
                         "/sign-up",
                         "/login").permitAll()
-                .antMatchers("/admin/**").access("hasRole('ADMIN')")
-                .antMatchers("/pooler/**").access("hasRole('USER')")
                 .antMatchers("/",
                         "/error",
-                        "/favicon.ico",
+                        "/images/images/favicon.ico",
                         "/**/*.png",
                         "/**/*.gif",
                         "/**/*.svg",
                         "/**/*.jpg",
                         "/**/*.html",
                         "/**/*.css",
+                        "/**/*.css.map",
                         "/**/*.js")
                 .permitAll()
                 .antMatchers("/auth/**", "/oauth2/**")
@@ -133,14 +130,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizationRequestRepository(cookieAuthorizationRequestRepository())
                 .and()
                 .redirectionEndpoint()
-                .baseUri("/login/oauth2/code/*")
                 .and()
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService)
                 .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler)
                 .failureHandler(oAuth2AuthenticationFailureHandler)
-                .failureUrl("/login")
+                .failureUrl("/test")
                 .and()
                 .sessionManagement()
                 .sessionFixation().migrateSession()
@@ -148,9 +144,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .maximumSessions(2).expiredUrl("/login");
 
         http.addFilterBefore(sessionFilter(), UsernamePasswordAuthenticationFilter.class);
-
-        // Add our custom Token based authentication filter
-        //http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
 
