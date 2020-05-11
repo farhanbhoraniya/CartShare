@@ -3,6 +3,8 @@ package com.cmpe275.CartShare.contollers;
 import java.net.InetAddress;
 import java.util.List;
 
+import com.cmpe275.CartShare.exception.ResourceNotFoundException;
+import com.cmpe275.CartShare.security.UserPrincipal;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,12 +54,13 @@ public class PoolMembershipController {
 	@PostMapping("/pool/join")
 	public @ResponseBody ResponseEntity<PoolMembership> joinPool(@RequestBody JSONObject poolMember) {
 
-		//TODO: GETS the logged in user but password encryption is not working
 //        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        System.out.println(principal);
 //        User currentUserObject = userService.findByEmail(principal.getUsername());
+		int user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+		System.out.println("Logged in user_id: " + user_id);
 
-		poolMember.put("user", 84);
+		poolMember.put("user", user_id);
 //        poolMember.put("user", currentUserObject.getId());
 
 		if (! (poolMember.containsKey("pool") && poolMember.containsKey("user"))) {
@@ -77,8 +80,8 @@ public class PoolMembershipController {
 		
 		try {
 			pool = (String) poolMember.get("pool");
-			user = (int) poolMember.get("user");
-			System.out.println(user);
+			user_id = (int) poolMember.get("user");
+//			System.out.println(user);
 		} catch(Exception e) {
 			System.out.println("Invalid or missing parametrers");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -93,16 +96,17 @@ public class PoolMembershipController {
 		if (poolMember.containsKey("knowsLeader")  && (boolean) poolMember.get("knowsLeader")) {
 			reference = poolObject.getLeader().getScreenname();
 		}
-		
-		
-		User userObject = userRepository.findById(user);
+
+
+		int finalUser_id = user_id;
+		User userObject = userRepository.findById(user_id).orElseThrow(()-> new ResourceNotFoundException("User","user_id", finalUser_id));
 		
 		if (userObject == null) {
 			System.out.println("User does not exits");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		
-		PoolMembership userPool = poolMembershipService.findByUser(user);
+		PoolMembership userPool = poolMembershipService.findByUser(user_id);
 		
 		if (userPool != null) {
 			System.out.println("User is already a member of the one pool");
@@ -137,7 +141,7 @@ public class PoolMembershipController {
 			referenceId = referenceUser.getId();
 		}
 		
-		PoolMembership newPoolMembership = new PoolMembership(pool, user, referenceId, false, false);
+		PoolMembership newPoolMembership = new PoolMembership(pool, user_id, referenceId, false, false);
 		
 		try {
 			poolMembershipService.save(newPoolMembership);
@@ -167,10 +171,12 @@ public class PoolMembershipController {
 	@GetMapping(value="/confirm-pool-join")
     public @ResponseBody ResponseEntity confirmUserAccount(@RequestParam("token")String confirmationToken)
     {
+    	System.out.println("Confirm Token:" + confirmationToken);
         ConfirmationToken token = confirmationTokenRepository.findByConfirmationtoken(confirmationToken);
         PoolMembership poolMembership;
         if(token != null)
         {
+        	System.out.println(token);
             User user = token.getUser();
             poolMembership = poolMembershipService.findByUser(user.getId());
             poolMembership.setVerified(true);
@@ -230,7 +236,7 @@ public class PoolMembershipController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		
-		User userObject = userRepository.findById(userId);
+		User userObject = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","Id", userId));
 		
 		if (userObject == null) {
 			System.out.println("User does not exits");

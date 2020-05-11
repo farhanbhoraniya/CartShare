@@ -1,5 +1,6 @@
 package com.cmpe275.CartShare.contollers;
 
+import com.cmpe275.CartShare.exception.ResourceNotFoundException;
 import com.cmpe275.CartShare.model.Order;
 import com.cmpe275.CartShare.model.OrderItems;
 import com.cmpe275.CartShare.model.Store;
@@ -51,7 +52,7 @@ public class MyOrdersController {
     @GetMapping("/user/{userId}/orders")
     public ResponseEntity<List<JSONObject>> getUserOrders(@PathVariable int userId) {
     	
-    	User user = userService.findById(userId);
+    	User user = userService.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));;
     	if(user == null) {
     		System.out.println("User does not exists");
     		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

@@ -2,6 +2,7 @@ package com.cmpe275.CartShare.service;
 
 import com.cmpe275.CartShare.dao.CartItemRepository;
 import com.cmpe275.CartShare.dao.CartRepository;
+import com.cmpe275.CartShare.exception.ResourceNotFoundException;
 import com.cmpe275.CartShare.model.Cart;
 import com.cmpe275.CartShare.model.CartItem;
 
@@ -37,7 +38,7 @@ public class CartService {
    // }
 
     public Cart createNewCart(int userid){
-        User user = userService.findById(userid);
+        User user = userService.findById(userid).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userid));
         Cart newCart = new Cart(user);
         //create new cart for the user
         cartRepository.save(newCart);

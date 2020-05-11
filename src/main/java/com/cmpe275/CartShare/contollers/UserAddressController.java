@@ -1,5 +1,6 @@
 package com.cmpe275.CartShare.contollers;
 
+import com.cmpe275.CartShare.exception.ResourceNotFoundException;
 import java.util.Optional;
 
 import org.json.simple.JSONObject;
@@ -36,7 +37,7 @@ public class UserAddressController {
 		
 		int userId = (int)addressObject.get("user");
 		
-		User userObject = userService.findById(userId);
+		User userObject = userService.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User", "id", userId));
 		
 		if (userObject == null) {
 			System.out.println("User does not exists");
@@ -79,7 +80,7 @@ public class UserAddressController {
 	@GetMapping("/user/{userId}/address")
 	public ResponseEntity<UserAddress> getUserAddress(@PathVariable int userId) {
 		
-		User userObject = userService.findById(userId);
+		User userObject = userService.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User", "id", userId));;
 		
 		if (userObject == null) {
 			System.out.println("User does not exists");

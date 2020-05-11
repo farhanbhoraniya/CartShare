@@ -3,18 +3,13 @@ package com.cmpe275.CartShare.model;
 import java.sql.Date;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "confirmation_token")
 public class ConfirmationToken {
 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	@Column(name = "token_id")
 	private int id;
@@ -22,6 +17,7 @@ public class ConfirmationToken {
 	private String confirmationtoken;
 	private Date created;
 
+//	@Transient
 	@OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
 	@JoinColumn(nullable = false, name = "user", referencedColumnName = "id")
 	private User user;
@@ -64,5 +60,15 @@ public class ConfirmationToken {
 
 	public void setCreated(Date created) {
 		this.created = created;
+	}
+
+	@Override
+	public String toString() {
+		return "ConfirmationToken{" +
+				"id=" + id +
+				", confirmationtoken='" + confirmationtoken + '\'' +
+				", created=" + created +
+				", user=" + user +
+				'}';
 	}
 }
