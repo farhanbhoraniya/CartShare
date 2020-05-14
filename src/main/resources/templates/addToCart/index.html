@@ -48,33 +48,60 @@
 	<section class="content">
 		<div class="container-fluid">
 			<div class="block-header">
-				<!--            @if((Session::has("company_record_create_success")))-->
-				<!--            <div class="alert bg-green alert-dismissible" role="alert">-->
-				<!--                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>-->
-				<!--                {{ session("company_record_create_success") }}-->
-				<!--            </div>-->
-				<!--            @endif-->
-
-				<!--            @if((Session::has("company_record_update_success")))-->
-				<!--            <div class="alert bg-green alert-dismissible" role="alert">-->
-				<!--                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>-->
-				<!--                {{ session("company_record_update_success") }}-->
-				<!--            </div>-->
-				<!--            @endif-->
-
-				<!--            @if((Session::has("company_invalid_request")))-->
-				<!--            <div class="alert bg-red alert-dismissible" role="alert">-->
-				<!--                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>-->
-				<!--                {{ session("company_invalid_request") }}-->
-				<!--            </div>-->
-				<!--            @endif-->
+				<h2>Store List</h2>
 			</div>
-			<!-- Basic Examples -->
+			<div class="row clearfix">
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" th:each="store: ${stores}">
+                    <div class="card">
+                        <div class="header" style="display:flex">
+                        	<div style="width:250px">
+                        		<h2 th:text="${store.name}">
+                                
+                            	</h2>
+                            	
+                        	</div>
+                            
+                        </div>
+                        <div class="body">
+                        	<div>
+                        		<div th:text="${store.streetname}"  >
+                            	</div>
+                            	<div th:text="${store.streetnumber}"  >
+                            	</div>
+                            	<div th:text="${store.city}">
+                            	</div>
+                            	<div th:text="${store.state}">
+                            	</div>
+                            	<div th:text="${store.zip}">
+                            	</div>
+                            </div> 
+                        </div>
+                        
+                      	<div class="body" style="display:flex">
+                      		
+                      		<div> 
+                      			<a th:href="'/store/' + ${store.id} + '/getProducts'"
+                      				type="button" 
+                      				class="btn btn-primary waves-effect gotostore" 
+                      				
+                      				data-toggle="tooltip" 
+                      				data-placement="top" title="Add">
+		                        
+		                            Go To Store
+		                        </a>
+                      		</div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+			<!-- 
 			<div class="row clearfix">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 					<div class="card">
 						<div class="header">
-							<h2>Store List</h2>
+							
 						</div>
 
 						<div class="body">
@@ -124,7 +151,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			<!-- #END# Basic Examples -->
 		</div>
 	</section>
