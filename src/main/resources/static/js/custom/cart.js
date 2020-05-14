@@ -1,15 +1,33 @@
 $(document).ready(function(e){
-	$.fn.addItemInCart = function(){
+	$(".addItem").click(function(){
+		var id = $(this).attr("data-sku");
+		
+		var val = $("#"+id).val();
+		$("#"+id).val(parseInt(val)+1);
+	
+		callAPI($(this), parseInt(val)+1);
+	});
+	
+	$(".removeItem").click(function(){
+		var id = $(this).attr("data-sku");
+		
+		var val = $("#"+id).val();
+		$("#"+id).val(parseInt(val)-1);
+	
+		callAPI($(this), parseInt(val)-1);
+	});
+	
+	function callAPI(selector, qty){
 		var data = {
-				product_sku: $("#addItem").attr("data-sku"),
-				store_id: parseInt($("#addItem").attr("data-storeid")),
-				price: parseFloat($("#addItem").attr("data-price")),
+				product_sku: selector.attr("data-sku"),
+				store_id: parseInt(selector.attr("data-storeid")),
+				price: parseFloat(selector.attr("data-price")),
 				//price: 35,
-				user_id: parseInt($("#addItem").attr("data-userid")),
-				quantity: parseInt($("#qty").val())
-		}
-		//call to create Pool API
-		 $.ajax({
+				user_id: parseInt(selector.attr("data-userid")),
+				quantity: qty//parseInt($(this).val())
+		};
+		
+		$.ajax({
 			url: "/addItemToCart",
 			type: "POST",
 			contentType: "application/json",
