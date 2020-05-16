@@ -21,6 +21,7 @@ import javax.persistence.Query;
 public class CartService {
     @Autowired
     CartRepository cartRepository;
+    
     @Autowired
     CartItemRepository cartItemRepository;
 
@@ -49,6 +50,8 @@ public class CartService {
     public CartItem saveCartItem(CartItem ci) {
         return cartItemRepository.save(ci);
     }
+    
+    
 
     public void removeCartItem(int cartItemID){
         cartItemRepository.deleteById(cartItemID);

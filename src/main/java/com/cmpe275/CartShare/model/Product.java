@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "products")
@@ -22,6 +23,9 @@ public class Product {
     private String brand;
     private String unit;
     private double price;
+    
+    @Transient
+    private int noOfItems = 0; //to display on UI
 
     public Product() {}
     public Product(String sku, int storeid, String name, String description, String imageurl, String brand, String unit, double price) {
@@ -98,6 +102,14 @@ public class Product {
     public void setPrice(double price) {
         this.price = price;
     }
+    
+    public int getNoOfItems() {
+        return noOfItems;
+    }
+
+    public void setNoOfItems(int no) {
+        this.noOfItems = no;
+    }
 
     @Override
     public String toString() {
@@ -109,7 +121,8 @@ public class Product {
                 ", imageurl='" + imageurl + '\'' +
                 ", brand='" + brand + '\'' +
                 ", unit='" + unit + '\'' +
-                ", price=" + price +
+                ", price=" + price + '\''+
+                ", noOfItems=" + noOfItems + '\''+
                 '}';
     }
 }
