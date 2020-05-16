@@ -163,10 +163,12 @@ public class CartContoller {
             obj.put("desc", item.getProduct().getDescription());
             obj.put("sku", item.getProduct().getSku());
             obj.put("price", item.getPrice());
+            obj.put("per_item_price", item.getProduct().getPrice());
             obj.put("qty", item.getQuantity());
             obj.put("storeId", item.getProduct().getStoreid());
             obj.put("unit", item.getProduct().getUnit());
             obj.put("cart_item_id", item.getId());
+            obj.put("imageurl", item.getProduct().getImageurl());
             
             array.add(obj);
             

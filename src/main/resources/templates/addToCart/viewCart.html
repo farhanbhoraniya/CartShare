@@ -101,42 +101,65 @@
 									class="table table-bordered table-striped table-hover js-basic-example dataTable">
 									<thead>
 										<tr>
-											<th>SKU</th>
+											<th>Image</th>
 											<th>Name</th>
 											<th>Description</th>
 											
 											<th>Unit</th>
-											<th>Price</th>
+											
 											<th>Qty</th>
+											<th>Price</th>
 											<th>#</th>
 										</tr>
 									</thead>
 									<tfoot>
 										<tr>
-											<th>SKU</th>
+											<th>Image</th>
 											<th>Name</th>
 											<th>Description</th>
 											
 											<th>Unit</th>
 											<th>Price</th>
 											<th>Qty</th>
+											<th>Price</th>
 											<th>#</th>
 										</tr>
 									</tfoot>
 									<tbody>
 										<tr th:each="item: ${items}">
 										
-											<td th:text="${item.sku}" />
+											<td>
+												<img alt="" th:src="${item.imageurl}" width="100px" height="100px"  />
+											</td>
 											<td th:text="${item.name}" />
 											<td th:text="${item.desc}" />
 											<td th:text="${item.unit}" />
-											<td th:text="${item.price}" />
 											
-											<td style="width:10%">
-												
-					                            <input style="width:60%" type="number" id="qty" class="form-control" name="number" th:value="${item.qty}" required/>
-					                                       
+											
+											<td style="width:22%">
+												<button
+				                      				type="button" 
+				                      				class="btn btn-danger waves-effect removeItem"
+				                      				th:data-sku="${item.sku}"
+	                      							th:data-storeid="${item.storeId}"
+	                      							th:data-price="${item.per_item_price}"
+				                      				data-toggle="tooltip" 
+				                      				data-placement="top" title="Add">
+						                            <i class="material-icons">remove</i>
+						                        </button>
+					                            <input disabled style="width:30%" type="number" th:id="${item.sku}" class="form-control" name="number" th:value="${item.qty}" required/>
+					                            <button
+					                      			type="button" 
+					                      			class="btn btn-primary waves-effect addItem"
+					                      			th:data-sku="${item.sku}"
+	                      							th:data-storeid="${item.storeId}"
+	                      							th:data-price="${item.per_item_price}"
+					                      			data-toggle="tooltip" 
+					                      			data-placement="top" title="Add">
+							                        <i class="material-icons">add</i>
+							                    </button>           
                             				</td>
+                            				<td th:text="${item.price}" />
                             				<td>
 		                                       <button type="button" class="btn btn-danger waves-effect store_delete_btn" th:data-id="${item.cart_item_id}" 
 		                                       		data-toggle="tooltip" data-placement="top" title="Delete">
@@ -198,6 +221,7 @@
     <script th:src="@{/js/js/pages/ui/modals.js}"></script>
     <script th:src="@{/js/plugins/jquery-datatable/jquery.dataTables.js}"></script>
 	<script th:src="@{/js/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js}"></script>
+	<script th:src="@{/js/custom/cart.js}"></script>
     <script>
 	    $('.js-basic-example').DataTable({
 	        responsive: true
@@ -227,7 +251,7 @@
 	        });
 	    });
 	    
-	    $.fn.getOrderDetailsforPickUp = func 
+	    
 	</script>
     
 </body>
