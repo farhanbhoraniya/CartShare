@@ -36,7 +36,7 @@ public class OrderItems {
         //this.store=store;
         this.product = product;
         this.order = order;
-        this.qty = qty;
+        this.qty = quantity;
         this.price = price;
     }
 

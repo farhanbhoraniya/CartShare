@@ -13,5 +13,6 @@ public interface OrderItemsRepository extends JpaRepository<OrderItems, Integer>
 	public OrderItems saveAndFlush(OrderItems orderItem);
 	public List<OrderItems> findByOrder(Order order);
 	public List<OrderItems> findOrderItemsByOrderId(int order_id);
+    
 
 }

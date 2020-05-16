@@ -5,6 +5,9 @@ import com.cmpe275.CartShare.exception.ResourceNotFoundException;
 import com.cmpe275.CartShare.model.*;
 import com.cmpe275.CartShare.security.UserPrincipal;
 import com.cmpe275.CartShare.service.*;
+
+import net.minidev.json.JSONArray;
+
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -23,6 +28,9 @@ public class OrderController {
 
     @Autowired
     UserService userService;
+    
+    @Autowired
+    LinkedOrderService linkedOrderService;
 
     @Autowired
     CartService cartService;
@@ -51,13 +59,15 @@ public class OrderController {
 //      org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //      System.out.println(principal);
 //      User currentUserObject = userService.findByEmail(principal.getUsername());
+        
+        int user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
 
-        if (!requestBody.containsKey("selfPick")) {
-            System.out.println("Invalid or missing paramters");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-
-        User currentUserObject = userService.findById(46).orElseThrow(() -> new ResourceNotFoundException("User", "Id", 46));
+//        if (!requestBody.containsKey("selfPick")) {
+//            System.out.println("Invalid or missing paramters");
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        }
+        
+        User currentUserObject = userService.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("User", "Id", user_id));
         Cart cart = cartService.findCartByUserId(currentUserObject.getId());
         Pool pool = poolService.findByLeader(currentUserObject);
 
@@ -104,27 +114,93 @@ public class OrderController {
 
     }
 
-    @GetMapping("/order/pool_pending/{numberOfRecords}")
-    public ModelAndView getStoreProducts(ModelAndView modelAndView,
-                                         @PathVariable int numberOfRecords) {
+    @PostMapping("/order/addLinkedOrders")
+    public ResponseEntity<String> addLinkedOrders(@RequestBody JSONObject requestBody) {
+        
+        int numberOfRecords = Integer.parseInt((String)requestBody.get("nooforders"));
+        int storeid = Integer.parseInt((String)requestBody.get("storeid"));
+        
         int userId = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         User currentUser = userService.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
 
         Pool pool = findPoolByUser(currentUser);
+        List<Order> parentOrder = orderService.findByBuyerId(userId);
 
         if (null != pool) {
+            //List<OrderItems> orderItems = orderItemsService.getOrderItemsByStoreid(storeid);
+            //List<OrderItems> filteredOrderItems = orderItems.stream()
+//                                                    .filter(item -> item.getOrder().getBuyerid().getId() != userId && item.getOrder().getStatus().equals("PLACED"))
+//                                                    .sorted(Comparator.comparing(i -> i.getOrder().getDate()))
+//                                                    .limit(numberOfRecords)
+//                                                    .collect(Collectors.toList());
             List<Order> poolOrders = orderService.getOrdersByPool(pool);
             List<Order> filteredPoolOrders =
                     poolOrders.stream().filter(order ->
                             order.getBuyerid().getId() != userId && order.getStatus().equals("PLACED"))
                             .sorted(Comparator.comparing(Order::getDate))
-                            .limit(numberOfRecords).collect(Collectors.toList());
+                            .collect(Collectors.toList());
+            //.limit(numberOfRecords)
             System.out.println(filteredPoolOrders);
-
+            
+            LinkedOrders lOrders;
+            for(Order parent: parentOrder) {
+                int count = 0;
+                for(Order order: filteredPoolOrders) {
+                    List<OrderItems> filteredOrderItems = orderItemsService.getOrderItemsByOrderId(order.getId());
+                    if(filteredOrderItems.get(0).getProduct().getStoreid() == storeid && count < numberOfRecords) {
+                        
+                        linkedOrderService.save(new LinkedOrders(parent.getId(), order));
+                        
+                        count++;
+                    }
+                }
+            }
         }
+        return ResponseEntity.status(HttpStatus.OK).body("Success");
+    }
+    
+    @GetMapping("/order/pool_pending/{store_id}")
+    public ModelAndView getAllStorePoolProducts(ModelAndView modelAndView,
+                                         @PathVariable int store_id) {
+        int userId = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        User currentUser = userService.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
 
-        //modelAndView.addObject("items", array);
-        modelAndView.setViewName("addToCart/viewCart");
+        Pool pool = findPoolByUser(currentUser);
+        Map<Integer, JSONArray> map = new HashMap<>();
+        if (null != pool) {
+            List<Order> poolOrders = orderService.getOrdersByPool(pool);
+            List<Order> filteredPoolOrders =
+                    poolOrders.stream().filter(order ->
+                            order.getBuyerid().getId() != userId 
+                            && order.getStatus().equals("PLACED"))
+                            .sorted(Comparator.comparing(Order::getDate))
+                            .collect(Collectors.toList());
+                            //.limit(numberOfRecords)
+            System.out.println(filteredPoolOrders);
+            
+            for(Order order: filteredPoolOrders) {
+                List<OrderItems> filteredOrderItems = orderItemsService.getOrderItemsByOrderId(order.getId());
+                System.out.println("filtered: "+filteredOrderItems);
+                if(filteredOrderItems.get(0).getProduct().getStoreid() == store_id) {
+                    JSONArray array = new JSONArray();
+                    for(OrderItems items: filteredOrderItems) {
+                        JSONObject obj = new JSONObject();
+                        obj.put("id", items.getId());
+                        obj.put("orderid", items.getOrder().getId());
+                        obj.put("quantity", items.getQty());
+                        obj.put("name", items.getProduct().getName());
+                        obj.put("sku", items.getProduct().getSku());
+                        
+                        array.add(obj);
+                    }
+                    map.put(order.getId(), array);
+                }
+            }
+        }
+        System.out.println("Lala: "+map);
+        modelAndView.addObject("items", map);
+        modelAndView.addObject("storeid", store_id);
+        modelAndView.setViewName("addToCart/orderList");
         return modelAndView;
     }
 

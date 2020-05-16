@@ -182,7 +182,7 @@
 								</table>
 							</div>
 							
-							<a type="button" onclick="$.fn.placeOrder()" class="btn btn-primary m-t-15 waves-effect">Place Order</a>
+							<a type="button" id="pickOrder" class="btn btn-primary m-t-15 waves-effect">Place Order</a>
 							<a type="button" th:href="@{/userStoreList}" class="btn btn-primary m-t-15 waves-effect">Browse Products</a>
 						</div>
 					</div>
@@ -196,10 +196,11 @@
                             <h4 class="modal-title" id="smallModalLabel">Order Pick Up</h4>
                         </div>
                         <div class="modal-body">
+                        	Your order has been placed successfully.
                             Would you like to pick up your and pool members order in next 2 days? 
                         </div>
                         <div class="modal-footer">
-                            <button id="pickOrder" type="button" class="btn btn-link waves-effect">Yes</button>
+                            <a th:href="'/order/pool_pending/'+${storeId}" id="pickOrderConfirm" type="button" class="btn btn-link waves-effect">Yes</a>
                             <button id="notpickOrder" type="button" class="btn btn-link waves-effect" data-dismiss="modal">No</button>
                         </div>
                     </div>

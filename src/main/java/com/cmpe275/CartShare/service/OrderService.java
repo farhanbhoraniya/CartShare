@@ -39,6 +39,10 @@ public class OrderService {
         return orderRepository.findByPool(pool);
     }
 
+
+    public List<Order> findByBuyerId(int userId) {
+        return orderRepository.findByBuyerId(userId);
+
     public Order getOrderByOrderId(int orderId)
     {
         return orderRepository.findById(orderId);
@@ -47,6 +51,7 @@ public class OrderService {
     public List<Order> getOrdersPendingDelivery(User user)
     {
         return orderRepository.findOrderByStatusAndPickedby(Order.ORDER_PICKED_UP, user);
+
     }
 
 }
