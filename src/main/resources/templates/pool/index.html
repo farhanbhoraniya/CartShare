@@ -75,11 +75,39 @@
                 <div class="card">
                     <div class="header">
                         <h2>
-                            Pool List
+                            Pool Management
                         </h2>
                     </div>
 
                     <div class="body">
+
+                        <div class="row clearfix">
+                            <div class="col-md-6 m-l-20 m-t-10">
+                                <div class="card">
+                                    <div class="body">
+                                        <span style="font-size: 16px; font-weight: bold">Joined Pool:</span>
+                                        <span style="font-size: 16px"></span>
+                                        <br>
+
+                                        <h4>Pool Members:</h4>
+                                        <ul>
+                                            <li>Abc</li>
+                                            <li>XYZ</li>
+                                        </ul>
+<!--                                        <span th:text="${address.getStreetname()}"></span>-->
+<!--                                        <span th:text="${address.getStreetno()}"></span>,<br>-->
+<!--                                        <span th:text="${address.getCity()}"></span>,-->
+<!--                                        <span th:text="${address.getState()}"></span> - -->
+<!--                                        <span th:text="${address.getZip()}"></span>-->
+                                    </div>
+                                </div>
+
+<!--                                <h4>Current Status <span class="label" th:classappend="${order.getStatus().equals('DELIVERED') ? 'label-success' : 'label-info'}" th:text="${order.getStatus()}"></span></h4>-->
+                                <hr>
+
+<!--                                <button th:if="${order.getStatus().equals('PICKED_UP')}" class="btn btn-success" id="deliver_btn" th:data-order-id="${order.getId()}">Mark As Delivered</button>-->
+                            </div>
+                        </div>
 
                         <div class="table-responsive">
 

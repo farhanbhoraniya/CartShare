@@ -68,7 +68,6 @@ public class CartShareOAuth2UserService extends DefaultOAuth2UserService {
                         user.getProvider() + " account. Please use your " + user.getProvider() +
                         " account to login.");
             }
-            user = updateExistingUser(user, oAuth2UserInfo);
         } else {
             user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
         }
@@ -97,12 +96,6 @@ public class CartShareOAuth2UserService extends DefaultOAuth2UserService {
 
         mailAsyncComponent.sendMail(result.getEmail(), confirmationToken);
         return result;
-    }
-
-    private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
-        existingUser.setScreenname(oAuth2UserInfo.getName());
-        //existingUser.setImageUrl(oAuth2UserInfo.getImageUrl());
-        return userRepository.save(existingUser);
     }
 
 }
