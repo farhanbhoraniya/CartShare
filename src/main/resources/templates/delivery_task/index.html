@@ -87,6 +87,7 @@
                                 <thead>
                                 <tr>
                                     <th>Order Id</th>
+                                    <th>NickName</th>
                                     <th>Order DateTime</th>
                                     <th>Number of items</th>
                                     <th>Delivery Address</th>
@@ -97,6 +98,7 @@
                                 <tfoot>
                                 <tr>
                                     <th>Order Id</th>
+                                    <th>NickName</th>
                                     <th>Order DateTime</th>
                                     <th>Number of items</th>
                                     <th>Delivery Address</th>
@@ -105,24 +107,19 @@
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                <!--                                <tr th:each="store: ${stores}">-->
-                                <!--                                    <td th:text="${store.id}" />-->
-                                <!--                                    <td th:text="${store.name}" />-->
-                                <!--                                    <td th:text="${store.streetname}" />-->
-                                <!--                                    <td th:text="${store.city}" />-->
-                                <!--                                    <td th:text="${store.state}" />-->
-                                <!--                                    <td>-->
-                                <!--                                        <a th:href="'/store/' + ${store.id} + '/edit'" type="button" class="btn btn-primary waves-effect" data-toggle="tooltip" data-placement="top" title="Edit">-->
-                                <!--                                            <i class="material-icons">create</i>-->
-                                <!--                                        </a>-->
-                                <!--                                        <a th:href="'/store/' + ${store.id} + '/view'" type="button" class="btn btn-success waves-effect" data-toggle="tooltip" data-placement="top" title="View">-->
-                                <!--                                            <i class="material-icons">remove_red_eye</i>-->
-                                <!--                                        </a>-->
-                                <!--                                        <button type="button" class="btn btn-danger waves-effect store_delete_btn" th:data-id="${store.id}" data-toggle="tooltip" data-placement="top" title="Delete">-->
-                                <!--                                            <i class="material-icons">delete</i>-->
-                                <!--                                        </button>-->
-                                <!--                                    </td>-->
-                                <!--                                </tr>-->
+                                    <tr th:each="order: ${deliveryOrders}">
+                                        <td th:text="${order.getId()}" />
+                                        <td th:text="${order.getBuyerid().getNickname()}" />
+                                        <td th:text="${order.getDate()}" />
+                                        <td th:text="${order.getOrderItems().size()}" />
+                                        <td th:text="${order.getStatus()}" />
+                                        <td th:text="${order.getStatus()}" />
+                                        <td>
+                                            <a th:href="'/delivery/order/' + ${order.getId()} " type="button" class="btn btn-primary waves-effect" data-toggle="tooltip" data-placement="top" title="View">
+                                                <i class="material-icons">remove_red_eye</i>
+                                            </a>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -150,7 +147,7 @@
 <!-- Custom Js -->
 <script th:src="@{/js/js/admin.js}"></script>
 <script th:src="@{/js/js/pages/forms/basic-form-elements.js}"></script>
-
+<script th:src="@{/js/js/pages/ui/tooltips-popovers.js}"></script>
 <!-- Demo Js -->
 <script th:src="@{/js/js/demo.js}"></script>
 <!--<script th:src="@{/js/custom/storeDetails.js}"></script>-->

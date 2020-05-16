@@ -6,12 +6,14 @@ import com.cmpe275.CartShare.dao.LinkedOrdersRepository;
 import com.cmpe275.CartShare.model.*;
 import com.cmpe275.CartShare.service.OrderItemsService;
 import com.cmpe275.CartShare.service.OrderService;
+import com.cmpe275.CartShare.service.UserService;
 import net.minidev.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ public class PickupController {
     @Autowired
     OrderService orderService;
 
+    @Autowired
+    UserService userService;
 
 
 //    public ModelAndView pickupListView(ModelAndView modelAndView) {
@@ -88,6 +92,7 @@ public class PickupController {
 //            }
 //
 //        }
+        modelAndView.addObject("orderId", order_id);
         modelAndView.addObject("pooledOrderList", pooledOrderList);
         modelAndView.addObject("orderItems", orderItems);
         modelAndView.setViewName("pickup/view");
@@ -116,5 +121,35 @@ public class PickupController {
         modelAndView.addObject("selfPickUpOpenOrders", selfPickUpOpenOrders);
         modelAndView.setViewName("pickup/index");
         return modelAndView;
+    }
+
+    @PostMapping("/pickup/checkout/{order_id}")
+    public JSONObject checkoutOrder(@PathVariable(name="order_id") Integer order_id)
+    {
+        Integer user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        User user = userService.findById(user_id).get();
+        List<LinkedOrders> pooledOrderList = linkedOrdersRepository.findAllByParent_id(order_id);
+
+        //Updating self pick order
+        Order selfOrder = orderService.getOrderByOrderId(order_id);
+        selfOrder.setStatus(Order.ORDER_SELF_PICKED);
+        selfOrder.setPickedby(user);
+        orderService.save(selfOrder);
+
+        //Updating all order statuses and pickup information
+        for (LinkedOrders pooledOrder: pooledOrderList) {
+            Order order = pooledOrder.getPool_order();
+            order.setStatus(Order.ORDER_PICKED_UP);
+            order.setPickedby(user);
+            orderService.save(order);
+        }
+
+        //TODO: Send Delivery notification
+
+        JSONObject response = new JSONObject();
+        response.put("status", "success");
+        response.put("message","Order checked out successfully.");
+
+        return response;
     }
 }
