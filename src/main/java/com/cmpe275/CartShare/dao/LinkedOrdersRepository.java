@@ -13,6 +13,4 @@ public interface LinkedOrdersRepository extends JpaRepository<LinkedOrders, Inte
 
     @Query(value="Select * from linkedOrders where parent_id = ?1", nativeQuery = true)
     public List<LinkedOrders> findAllByParent_id(int parentid);
-
-    public void persist(LinkedOrders linkedOrders);
 }
