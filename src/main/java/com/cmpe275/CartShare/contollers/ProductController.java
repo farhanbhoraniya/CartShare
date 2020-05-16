@@ -185,9 +185,12 @@ public class ProductController {
             products = productService.findByStore(storeId);
         }
         int user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        
         Cart cart= (Cart) cartService.findCartByUserId(user_id);
+        
         if(cart == null) {
             modelAndView.addObject("products", products);
+            modelAndView.addObject("userId", user_id);
             modelAndView.setViewName("addToCart/products");
             return  modelAndView;
         }
@@ -198,6 +201,7 @@ public class ProductController {
             }
         }
         modelAndView.addObject("products", products);
+        modelAndView.addObject("userId", user_id);
         modelAndView.setViewName("addToCart/products");
         return  modelAndView;
     }
