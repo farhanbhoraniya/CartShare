@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -37,6 +38,18 @@ public class Order {
 
     @Column(name = "selfpick")
     private boolean selfpick;
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"order"})
+    private List<OrderItems> orderItems;
+
+    public List<OrderItems> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItems> orderItems) {
+        this.orderItems = orderItems;
+    }
 
     public Order() {
     }
@@ -117,16 +130,4 @@ public class Order {
         this.selfpick = selfPick;
     }
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", pool=" + pool +
-                ", date=" + date +
-                ", status='" + status + '\'' +
-                ", pickedby=" + pickedby +
-                ", buyer=" + buyer +
-                ", selfpick=" + selfpick +
-                '}';
-    }
 }

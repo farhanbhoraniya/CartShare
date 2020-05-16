@@ -25,4 +25,9 @@ public class OrderItemsService {
 	public List<OrderItems> getOrderItems(Order order) {
 		return orderItemsRepository.findByOrder(order);
 	}
+
+	public List<OrderItems> getOrderItemsByOrderId(int order_id)
+	{
+		return orderItemsRepository.findOrderItemsByOrderId(order_id);
+	}
 }

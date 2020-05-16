@@ -1,5 +1,6 @@
 package com.cmpe275.CartShare.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 
 @Entity
@@ -8,55 +9,59 @@ public class OrderItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    
-    @OneToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @JsonIgnoreProperties({"orderItems"})
     private Order order;
-    
+
     @OneToOne
     @JoinColumns({
-        @JoinColumn(
-            name = "product_sku",
-            referencedColumnName = "sku"),
-        @JoinColumn(
-            name = "store_id",
-            referencedColumnName = "storeid")
+            @JoinColumn(
+                    name = "product_sku",
+                    referencedColumnName = "sku"),
+            @JoinColumn(
+                    name = "store_id",
+                    referencedColumnName = "storeid")
     })
-    
+
     private Product product;
-    
+
     private int qty;
     private double price;
     
     public OrderItems() {
     }
     public OrderItems(Product product, Order order, int quantity, double price) {
-       
         //this.store=store;
-        this.product=product;
-        this.order=order;
-        this.qty=qty;
-        this.price=price;
+        this.product = product;
+        this.order = order;
+        this.qty = qty;
+        this.price = price;
     }
 
     public int getId() {
         return id;
     }
 
-    public Order getOrder() {
-		return order;
-	}
-	public void setOrder(Order order) {
-		this.order = order;
-	}
-	public int getQty() {
-		return qty;
-	}
-	public void setQty(int qty) {
-		this.qty = qty;
-	}
-	public void setId(int id) {
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public int getQty() {
+        return qty;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
     }
 
     public Product getProduct() {
