@@ -69,7 +69,23 @@ public class DeliveryController {
         response.put("status", "success");
         response.put("message", "Order delivered successfully");
 
-        //TODO: Trigger Email notification
+        //TODO: Trigger Email notifications
+        return response;
+    }
+
+    @PostMapping("/delivery/incomplete/{order_id}")
+    public JSONObject orderDeliveryIncomplete(@PathVariable(name="order_id") int orderId){
+
+        Integer user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        Order order = orderService.getOrderByOrderId(orderId);
+        order.setStatus(Order.ORDER_PICKED_UP);
+        orderService.save(order);
+
+        JSONObject response = new JSONObject();
+        response.put("status", "success");
+        response.put("message", "Order status updated successfully");
+
+        //TODO: Trigger Email notifications
         return response;
     }
 
