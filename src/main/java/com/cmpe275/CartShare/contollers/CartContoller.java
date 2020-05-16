@@ -21,6 +21,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +54,7 @@ public class CartContoller {
     }
 
     @PostMapping("/updateItemInCart")
-    public @ResponseBody ResponseEntity<String> addOrUpdateItemToCart(@RequestBody JSONObject cartItem) {
+    public @ResponseBody ResponseEntity<CartItem> addOrUpdateItemToCart(@RequestBody JSONObject cartItem) {
         if (! (cartItem.containsKey("store_id") && cartItem.containsKey("product_sku")
                 && cartItem.containsKey("user_id") && cartItem.containsKey("quantity") && cartItem.containsKey("price"))) {
             System.out.println("Invalid or missing parameters");
@@ -80,16 +82,16 @@ public class CartContoller {
             CartItem ci = new CartItem(store, product, cart, quantity, (double)quantity*price);
             if(quantity == 0) {
                 cartItemService.delete(ci);
-                return ResponseEntity.status(HttpStatus.OK).body("Item Updated Sucessfully");
+                return ResponseEntity.status(HttpStatus.OK).body(ci);
             }
 
             
             cartItemService.saveOrUpdateCartItem(ci);
-            return ResponseEntity.status(HttpStatus.OK).body("Item Updated Sucessfully");
+            return ResponseEntity.status(HttpStatus.OK).body(ci);
         }
         catch (Exception e){
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in Adding Items");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
         
     }
@@ -157,6 +159,7 @@ public class CartContoller {
         items = (ArrayList<CartItem>)cartService.findByCartId(cart);
         
         JSONArray array = new JSONArray();
+        double subtotal=0.0;
         for(CartItem item: items) {
             JSONObject obj = new JSONObject();
             obj.put("name", item.getProduct().getName());
@@ -169,13 +172,31 @@ public class CartContoller {
             obj.put("unit", item.getProduct().getUnit());
             obj.put("cart_item_id", item.getId());
             obj.put("imageurl", item.getProduct().getImageurl());
-            
+            subtotal += item.getPrice();
             array.add(obj);
-            
         }
         
+        
+        BigDecimal bd1 = new BigDecimal(subtotal).setScale(2, RoundingMode.HALF_UP);
+        subtotal = bd1.doubleValue();
+        
+        double tax = subtotal*(9.25/100);
+        bd1 = new BigDecimal(tax).setScale(2, RoundingMode.HALF_UP);
+        tax = bd1.doubleValue();
+        
+        double con = subtotal*(0.5/100);
+        bd1 = new BigDecimal(con).setScale(2, RoundingMode.HALF_UP);
+        con = bd1.doubleValue();
+        
+        double total = subtotal+tax+con;
+        bd1 = new BigDecimal(total).setScale(2, RoundingMode.HALF_UP);
+        total = bd1.doubleValue();
 
         modelAndView.addObject("items", array);
+        modelAndView.addObject("subtotal", subtotal);
+        modelAndView.addObject("tax", tax);
+        modelAndView.addObject("con", con);
+        modelAndView.addObject("total", total);
         modelAndView.setViewName("addToCart/viewCart");
         return  modelAndView;
     }
