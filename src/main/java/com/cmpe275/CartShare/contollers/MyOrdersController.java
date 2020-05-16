@@ -1,10 +1,8 @@
 package com.cmpe275.CartShare.contollers;
 
 import com.cmpe275.CartShare.exception.ResourceNotFoundException;
-import com.cmpe275.CartShare.model.Order;
-import com.cmpe275.CartShare.model.OrderItems;
-import com.cmpe275.CartShare.model.Store;
-import com.cmpe275.CartShare.model.User;
+import com.cmpe275.CartShare.model.*;
+import com.cmpe275.CartShare.security.UserPrincipal;
 import com.cmpe275.CartShare.service.OrderItemsService;
 import com.cmpe275.CartShare.service.OrderService;
 import com.cmpe275.CartShare.service.StoreService;
@@ -14,6 +12,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class MyOrdersController {
@@ -40,14 +40,24 @@ public class MyOrdersController {
     @GetMapping("/myOrders")
     public ModelAndView getOrdersView(ModelAndView modelAndView) {
 
+		Integer user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        User user = userService.findById(user_id).get();
 
-//        User user = userService.findById(userId);
-//        List<Order> orders = orderService.getSelfPickOrders(true, user);
-//
+        List<Order> orders = orderService.getUserOrders(user);
+
         modelAndView.setViewName("myOrders/index");
-//        modelAndView.addObject("orders", orders);
+        modelAndView.addObject("orders", orders);
         return modelAndView;
     }
+
+    @GetMapping("/myOrder/{order_id}/view")
+	public ModelAndView getOrderDetails(ModelAndView modelAndView, @PathVariable(name="order_id") int orderId){
+
+    	Order order = orderService.getOrderByOrderId(orderId);
+		modelAndView.addObject("order", order);
+		modelAndView.setViewName("myOrders/view");
+		return modelAndView;
+	}
     
     @GetMapping("/user/{userId}/orders")
     public ResponseEntity<List<JSONObject>> getUserOrders(@PathVariable int userId) {
