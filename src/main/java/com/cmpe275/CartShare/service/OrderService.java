@@ -39,8 +39,4 @@ public class OrderService {
         return orderRepository.findByPool(pool);
     }
 
-    public List<Order> findByBuyerId(int userId) {
-        return orderRepository.findByBuyerId(userId);
-    }
-
 }
