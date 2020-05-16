@@ -5,6 +5,8 @@ import com.cmpe275.CartShare.model.CartItem;
 import com.cmpe275.CartShare.model.Pool;
 import com.cmpe275.CartShare.model.Product;
 import com.cmpe275.CartShare.model.Store;
+import com.cmpe275.CartShare.security.UserPrincipal;
+import com.cmpe275.CartShare.service.CartItemService;
 import com.cmpe275.CartShare.service.CartService;
 import com.cmpe275.CartShare.service.ProductService;
 import com.cmpe275.CartShare.service.StoreService;
@@ -15,6 +17,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,6 +29,9 @@ public class CartContoller {
 
     @Autowired
     CartService cartService;
+    
+    @Autowired
+    CartItemService cartItemService;
     
     @Autowired
     ProductService productService;
@@ -45,21 +51,22 @@ public class CartContoller {
 //        return ResponseEntity.status(HttpStatus.OK).body(cartItems);
     }
 
-    @PostMapping("/addItemToCart")
-    public @ResponseBody ResponseEntity<String> addItemToCart(@RequestBody JSONObject cartItem) {
-
+    @PostMapping("/updateItemInCart")
+    public @ResponseBody ResponseEntity<String> addOrUpdateItemToCart(@RequestBody JSONObject cartItem) {
         if (! (cartItem.containsKey("store_id") && cartItem.containsKey("product_sku")
                 && cartItem.containsKey("user_id") && cartItem.containsKey("quantity") && cartItem.containsKey("price"))) {
             System.out.println("Invalid or missing parameters");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-
+        
+        
         int store_id = (int) cartItem.get("store_id");
         String product_sku = (String) cartItem.get("product_sku");
-        int user_id = (int) cartItem.get("user_id");
+        int user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        System.out.println("User ID: "+user_id);
         int quantity = (int) cartItem.get("quantity");
         double price = Double.parseDouble(cartItem.get("price").toString());
-
+        
         try{
             Cart cart= (Cart) cartService.findCartByUserId(user_id);
 
@@ -70,17 +77,59 @@ public class CartContoller {
 
             Store store = storeService.findById(store_id);
             Product product = productService.findProductInStore(store_id, product_sku);
+            CartItem ci = new CartItem(store, product, cart, quantity, (double)quantity*price);
+            if(quantity == 0) {
+                cartItemService.delete(ci);
+                return ResponseEntity.status(HttpStatus.OK).body("Item Updated Sucessfully");
+            }
 
-            CartItem ci = new CartItem(store, product, cart, quantity, quantity*price);
-            cartService.saveCartItem(ci);
-            return ResponseEntity.status(HttpStatus.OK).body("Item Added Successfully");
+            
+            cartItemService.saveOrUpdateCartItem(ci);
+            return ResponseEntity.status(HttpStatus.OK).body("Item Updated Sucessfully");
         }
         catch (Exception e){
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Item Add Unsuccessful");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in Adding Items");
         }
+        
     }
     
+//    @PostMapping("/addItemToCart")
+//    public @ResponseBody ResponseEntity<String> addItemToCart(@RequestBody JSONObject cartItem) {
+//
+//        if (! (cartItem.containsKey("store_id") && cartItem.containsKey("product_sku")
+//                && cartItem.containsKey("user_id") && cartItem.containsKey("quantity") && cartItem.containsKey("price"))) {
+//            System.out.println("Invalid or missing parameters");
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        }
+//
+//        int store_id = (int) cartItem.get("store_id");
+//        String product_sku = (String) cartItem.get("product_sku");
+//        int user_id = (int) cartItem.get("user_id");
+//        int quantity = (int) cartItem.get("quantity");
+//        double price = Double.parseDouble(cartItem.get("price").toString());
+//
+//        try{
+//            Cart cart= (Cart) cartService.findCartByUserId(user_id);
+//
+//            if(cart==null){
+//                cart=cartService.createNewCart(user_id);
+//            }
+//
+//
+//            Store store = storeService.findById(store_id);
+//            Product product = productService.findProductInStore(store_id, product_sku);
+//
+//            CartItem ci = new CartItem(store, product, cart, quantity, quantity*price);
+//            cartService.saveCartItem(ci);
+//            return ResponseEntity.status(HttpStatus.OK).body("Item Added Successfully");
+//        }
+//        catch (Exception e){
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Item Add Unsuccessful");
+//        }
+//    }
+//    
     @DeleteMapping("/removeItemFromCart/{cartItem}")
     public @ResponseBody ResponseEntity<String> removeItemFromCart(@PathVariable String cartItem) {
         int cartItemId = Integer.parseInt(cartItem);
@@ -96,10 +145,11 @@ public class CartContoller {
     
     
     
-    @GetMapping("/getOrdersFromCart/{userId}")
+    @GetMapping("/getOrdersFromCart/{user_id}")
     public ModelAndView getStoreProducts(ModelAndView modelAndView, 
-                                                    @PathVariable int userId) {
+                                                    @PathVariable int user_id) {
 
+        int userId = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         List<CartItem> items = new ArrayList<CartItem>();
         
         Cart cart= (Cart) cartService.findCartByUserId(userId);
@@ -121,8 +171,8 @@ public class CartContoller {
             array.add(obj);
             
         }
-        System.out.print("cartItem: "+ array);
-        System.out.print("I: "+items.get(0).getCart().getId());
+        
+
         modelAndView.addObject("items", array);
         modelAndView.setViewName("addToCart/viewCart");
         return  modelAndView;

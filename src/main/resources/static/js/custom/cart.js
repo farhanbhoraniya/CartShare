@@ -3,21 +3,21 @@ $(document).ready(function(e){
 		var id = $(this).attr("data-sku");
 		
 		var val = $("#"+id).val();
-		$("#"+id).val(parseInt(val)+1);
+		
 	
-		callAPI($(this), parseInt(val)+1);
+		callAPI($(this), parseInt(val)+1, "Item Added to Cart", id, parseInt(val)+1);
 	});
 	
 	$(".removeItem").click(function(){
 		var id = $(this).attr("data-sku");
 		
 		var val = $("#"+id).val();
-		$("#"+id).val(parseInt(val)-1);
+		
 	
-		callAPI($(this), parseInt(val)-1);
+		callAPI($(this), parseInt(val)-1, "Item Removed from Cart", id, parseInt(val)-1);
 	});
 	
-	function callAPI(selector, qty){
+	function callAPI(selector, qty, message, id, val){
 		var data = {
 				product_sku: selector.attr("data-sku"),
 				store_id: parseInt(selector.attr("data-storeid")),
@@ -28,13 +28,13 @@ $(document).ready(function(e){
 		};
 		
 		$.ajax({
-			url: "/addItemToCart",
+			url: "/updateItemInCart",
 			type: "POST",
 			contentType: "application/json",
 			data: JSON.stringify(data),
 			success: function (res) {
-
-				showNotification("Item added to Cart",'bg-green','bottom','right');
+				$("#"+id).val(val);
+				showNotification(message,'bg-green','bottom','right');
             },
 			 error: function(res){
 				 showNotification("Error Adding Item. Please try again.",'bg-red','bottom','right');

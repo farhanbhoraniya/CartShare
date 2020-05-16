@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,14 +19,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cmpe275.CartShare.model.Cart;
+import com.cmpe275.CartShare.model.CartItem;
 import com.cmpe275.CartShare.model.Product;
 import com.cmpe275.CartShare.model.Store;
+import com.cmpe275.CartShare.security.UserPrincipal;
+import com.cmpe275.CartShare.service.CartItemService;
+import com.cmpe275.CartShare.service.CartService;
 import com.cmpe275.CartShare.service.ProductService;
 import com.cmpe275.CartShare.service.StoreService;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 public class ProductController {
+    
+    @Autowired
+    CartService cartService;
+    
+    @Autowired
+    CartItemService cartServiceItem;
 
     @Autowired
     ProductService productService;
@@ -172,7 +184,19 @@ public class ProductController {
         if(store != null) {
             products = productService.findByStore(storeId);
         }
-        System.out.print("Products: "+ products);
+        int user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        Cart cart= (Cart) cartService.findCartByUserId(user_id);
+        if(cart == null) {
+            modelAndView.addObject("products", products);
+            modelAndView.setViewName("addToCart/products");
+            return  modelAndView;
+        }
+        for(Product product: products) {
+            CartItem c = cartServiceItem.findCartItem(product, cart);
+            if(c != null) {
+                product.setNoOfItems(c.getQuantity());
+            }
+        }
         modelAndView.addObject("products", products);
         modelAndView.setViewName("addToCart/products");
         return  modelAndView;
