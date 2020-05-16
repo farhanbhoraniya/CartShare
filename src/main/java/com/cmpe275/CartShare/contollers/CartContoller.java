@@ -160,6 +160,7 @@ public class CartContoller {
         
         JSONArray array = new JSONArray();
         double subtotal=0.0;
+        int storeId = 0;
         for(CartItem item: items) {
             JSONObject obj = new JSONObject();
             obj.put("name", item.getProduct().getName());
@@ -173,6 +174,7 @@ public class CartContoller {
             obj.put("cart_item_id", item.getId());
             obj.put("imageurl", item.getProduct().getImageurl());
             subtotal += item.getPrice();
+            storeId = item.getProduct().getStoreid();
             array.add(obj);
         }
         
@@ -197,6 +199,7 @@ public class CartContoller {
         modelAndView.addObject("tax", tax);
         modelAndView.addObject("con", con);
         modelAndView.addObject("total", total);
+        modelAndView.addObject("storeId", storeId);
         modelAndView.setViewName("addToCart/viewCart");
         return  modelAndView;
     }
