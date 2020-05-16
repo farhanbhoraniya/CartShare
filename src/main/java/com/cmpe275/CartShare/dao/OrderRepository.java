@@ -26,6 +26,9 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query(value = "Select * from orders where buyer_id = ?1 and selfpick = 1 and status='placed'", nativeQuery = true)
     public List<Order> findByBuyerIdAndSelfpick(int buyerid);
 
+
     public List<Order> findByBuyerId(int userId);
+  
+    List<Order> findOrderByStatusAndPickedby(String status, User pickedByUser);
 
 }

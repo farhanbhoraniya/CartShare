@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<div th:insert="partials/header :: header"></div>
+
+<body class="theme-red">
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="preloader">
+            <div class="spinner-layer pl-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <p>Please wait...</p>
+    </div>
+</div>
+<!-- #END# Page Loader -->
+<!-- Overlay For Sidebars -->
+<div class="overlay"></div>
+<!-- #END# Overlay For Sidebars -->
+<!-- Search Bar -->
+<div class="search-bar">
+    <div class="search-icon">
+        <i class="material-icons">search</i>
+    </div>
+    <input type="text" placeholder="START TYPING...">
+    <div class="close-search">
+        <i class="material-icons">close</i>
+    </div>
+</div>
+<!-- #END# Search Bar -->
+
+<!-- Top Bar -->
+<div th:insert="userPartials/top_nav :: topnav"></div>
+<!-- #Top Bar -->
+<section>
+    <div th:insert="userPartials/left_nav :: leftnav"></div>
+</section>
+
+<!-- Content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <div class="alert bg-green alert-dismissible" role="alert" id="success_alert_msg" style="display: none">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <span id="success_alert_msg_txt"></span>
+            </div>
+            <div class="alert bg-red alert-dismissible" role="alert" id="error_alert_msg" style="display: none">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <span id="error_alert_msg_txt"></span>
+            </div>
+
+            <!--            @if((Session::has("company_record_update_success")))-->
+            <!--            <div class="alert bg-green alert-dismissible" role="alert">-->
+            <!--                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>-->
+            <!--                {{ session("company_record_update_success") }}-->
+            <!--            </div>-->
+            <!--            @endif-->
+
+            <!--            @if((Session::has("company_invalid_request")))-->
+            <!--            <div class="alert bg-red alert-dismissible" role="alert">-->
+            <!--                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>-->
+            <!--                {{ session("company_invalid_request") }}-->
+            <!--            </div>-->
+            <!--            @endif-->
+        </div>
+        <!-- Basic Examples -->
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Order Delivery Details
+                        </h2>
+                    </div>
+
+                    <div class="row clearfix">
+                        <div class="col-md-6 m-l-20 m-t-10">
+                            <div class="card">
+                                <div class="body">
+                                    <span style="font-size: 16px; font-weight: bold">Pooler NickName:</span>
+                                    <span style="font-size: 16px" th:text="${order.getBuyerid().getNickname()}"></span>
+                                    <br>
+
+                                    <h4>Address</h4>
+                                    <span th:text="${address.getStreetname()}"></span>,<br>
+                                    <span th:text="${address.getStreetno()}"></span>,<br>
+                                    <span th:text="${address.getCity()}"></span>,
+                                    <span th:text="${address.getState()}"></span> -
+                                    <span th:text="${address.getZip()}"></span>
+                                </div>
+                            </div>
+
+                            <h4>Current Status <span class="label" th:classappend="${order.getStatus().equals('DELIVERED') ? 'label-success' : 'label-info'}" th:text="${order.getStatus()}"></span></h4>
+                            <hr>
+
+                            <button th:if="${order.getStatus().equals('PICKED_UP')}" class="btn btn-success" id="deliver_btn" th:data-order-id="${order.getId()}">Mark As Delivered</button>
+                        </div>
+                    </div>
+
+                    <div class="body" id="order_checkout_view" th:data-order-id="${order_id}">
+                        <h4>Order Details</h4>
+                        <div class="table-responsive">
+
+                            <table id="order_list_table" class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Description</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Description</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <tr th:each="orderItem: ${order.getOrderItems()}">
+                                    <td th:text="${orderItem.getProduct().getName()}"></td>
+                                    <td th:text="${orderItem.getProduct().getDescription()}"></td>
+                                    <td th:text="${orderItem.getQty()}"></td>
+                                    <td th:text="${orderItem.getPrice()}"></td>
+                                    <td th:text="${orderItem.getQty() * orderItem.getPrice()}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Basic Examples -->
+    </div>
+</section>
+<!-- Content End -->
+
+<div th:insert="partials/scripts :: scripts"></div>
+
+<!-- Jquery DataTable Plugin Js -->
+<script th:src="@{/js/plugins/jquery-datatable/jquery.dataTables.js}"></script>
+<script th:src="@{/js/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js}"></script>
+
+<script type="text/javascript">
+
+    $("#deliver_btn").click(function(){
+
+        var order_id = $(this).attr('data-order-id');
+        var update_btn = $(this);
+        update_btn.attr('disabled', true);
+
+        $.ajax(
+            {
+                url: '/delivery/complete/' + order_id,
+                type: 'POST',
+                data : {},
+                success: function (response) {
+
+                    update_btn.attr('disabled', false);
+                    update_btn.remove();
+                    console.log(response);
+                    if(response.status == 'success')
+                    {
+                        showNotification(response.message,'bg-green','bottom','right');
+                        location.reload();
+                    }
+                    else
+                    {
+                        update_btn.attr('disabled', false);
+                        showNotification("Something went wrong. Please try again",'bg-red','bottom','right');
+                    }
+                },
+                error: function(response){
+                    update_btn.attr('disabled', false);
+                    showNotification("Something went wrong. Please try again",'bg-red','bottom','right');
+                }
+            });
+    });
+
+</script>
+</body>
+</html>

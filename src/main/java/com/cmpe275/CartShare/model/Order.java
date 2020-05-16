@@ -10,6 +10,12 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 public class Order {
+
+    public static String ORDER_PLACED = "PLACED";
+    public static String ORDER_SELF_PICKED = "SELF_PICKED";
+    public static String ORDER_PICKED_UP = "PICKED_UP";
+    public static String ORDER_DELIVERED = "DELIVERED";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

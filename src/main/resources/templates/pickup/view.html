@@ -47,12 +47,14 @@
 <section class="content">
     <div class="container-fluid">
         <div class="block-header">
-            <!--            @if((Session::has("company_record_create_success")))-->
-            <!--            <div class="alert bg-green alert-dismissible" role="alert">-->
-            <!--                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>-->
-            <!--                {{ session("company_record_create_success") }}-->
-            <!--            </div>-->
-            <!--            @endif-->
+        <div class="alert bg-green alert-dismissible" role="alert" id="success_alert_msg" style="display: none">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <span id="success_alert_msg_txt"></span>
+        </div>
+            <div class="alert bg-red alert-dismissible" role="alert" id="error_alert_msg" style="display: none">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <span id="error_alert_msg_txt"></span>
+            </div>
 
             <!--            @if((Session::has("company_record_update_success")))-->
             <!--            <div class="alert bg-green alert-dismissible" role="alert">-->
@@ -78,7 +80,7 @@
                         </h2>
                     </div>
 
-                    <div class="body">
+                    <div class="body" id="order_checkout_view" th:data-order-id="${order_id}">
 
                         <div id="qrcode" th:data-id="${order_id}"></div>
                         <hr>
@@ -193,6 +195,8 @@
                             </div>
                         </div>
                         <!-- #END# Multiple Items To Be Open -->
+
+                        <a href="/pickupList" class="btn btn-primary">Back</a>
                     </div>
                 </div>
             </div>
@@ -222,6 +226,37 @@
         colorLight : "#ffffff",
         correctLevel : QRCode.CorrectLevel.H
     });
+
+    $(document).ready(function(){
+
+        var order_id = $('#order_checkout_view').attr('data-order-id');
+
+        $.ajax(
+            {
+                url: '/pickup/checkout/' + order_id,
+                type: 'POST',
+                data : {},
+                success: function (response) {
+
+                    console.log(response);
+                    if(response.status == 'success')
+                    {
+                        $('#success_alert_msg_txt').text(response.message);
+                        $('#success_alert_msg').show();
+                    }
+                    else
+                    {
+                        $('#error_alert_msg_txt').text('Something went wrong. Please refresh this page again');
+                        $('#error_alert_msg').show();
+                    }
+                },
+                error: function(response){
+                    $('#error_alert_msg_txt').text('Something went wrong. Please refresh this page again');
+                    $('#error_alert_msg').show();
+                }
+            });
+    });
+
 </script>
 </body>
 </html>
