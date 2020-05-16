@@ -14,20 +14,20 @@ import com.cmpe275.CartShare.model.OrderItems;
 @Service
 public class OrderItemsService {
 
-	@Autowired
-	OrderItemsRepository orderItemsRepository;
-	
-	@Transactional
-	public OrderItems save(OrderItems orderItem) {
-		return orderItemsRepository.save(orderItem);
-	}
-	
-	public List<OrderItems> getOrderItems(Order order) {
-		return orderItemsRepository.findByOrder(order);
-	}
+    @Autowired
+    OrderItemsRepository orderItemsRepository;
 
-	public List<OrderItems> getOrderItemsByOrderId(int order_id)
-	{
-		return orderItemsRepository.findOrderItemsByOrderId(order_id);
-	}
+    @Transactional
+    public OrderItems save(OrderItems orderItem) {
+        return orderItemsRepository.save(orderItem);
+    }
+
+    public List<OrderItems> getOrderItems(Order order) {
+        return orderItemsRepository.findByOrder(order);
+    }
+
+    public List<OrderItems> getOrderItemsByOrderId(int order_id)
+    {
+        return orderItemsRepository.findOrderItemsByOrderId(order_id);
+    }
 }

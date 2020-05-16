@@ -3,7 +3,7 @@ package com.cmpe275.CartShare.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "linkedorders")
+@Table(name = "linked_orders")
 public class LinkedOrders {
 
     @Id
@@ -13,7 +13,7 @@ public class LinkedOrders {
     private int parent_id;
 
     //represents the order linked to the parent order
-    @OneToOne()
+    @ManyToOne()
     @JoinColumn(name="pool_order", referencedColumnName = "id")
     private Order pool_order;
 
