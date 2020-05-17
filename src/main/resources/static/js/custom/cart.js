@@ -4,7 +4,7 @@ $(document).ready(function(e){
 		
 		var val = $("#"+id).val();
 		
-		callAPI($(this), parseInt(val)+1, "Item Added to Cart", id, parseInt(val)+1,"inc");
+		callAPI($(this), parseInt(val)+1, "Item Added to Cart", id, parseInt(val)+1,"inc",false);
 	});
 	
 	$(".removeItem").click(function(){
@@ -13,16 +13,17 @@ $(document).ready(function(e){
 		var val = $("#"+id).val();
 		
 		if(val > 0)
-			callAPI($(this), parseInt(val)-1, "Item Removed from Cart", id, parseInt(val)-1,"dsc");
+			callAPI($(this), parseInt(val)-1, "Item Removed from Cart", id, parseInt(val)-1,"dsc",false);
 	});
 	
-	function callAPI(selector, qty, message, id, val, rate){
+	function callAPI(selector, qty, message, id, val, rate, delPrevItems){
 		var data = {
 				product_sku: selector.attr("data-sku"),
 				store_id: parseInt(selector.attr("data-storeid")),
 				price: parseFloat(selector.attr("data-price")),
 				user_id: parseInt(selector.attr("data-userid")),
-				quantity: qty
+				quantity: qty,
+				delPrevItems: delPrevItems
 		};
 		
 		$.ajax({
@@ -39,7 +40,15 @@ $(document).ready(function(e){
 				}
             },
 			 error: function(res){
-				 showNotification("Error Adding Item. Please try again.",'bg-red','bottom','right');
+				 if(res != null){
+					 $("#confirmationModal").modal('show');
+					 $("#confirmDel").on("click",function(){
+						 $("#confirmationModal").modal('hide');
+						 callAPI(selector, qty, message, id, val, rate, true);
+					 });
+				 }else{
+					 showNotification("Error Adding Item. Please try again.",'bg-red','bottom','right');
+				 }
 			 },
             failure: function (res) {
             	console.log(res);
@@ -50,10 +59,11 @@ $(document).ready(function(e){
 	
 	function calculateAndUpdateRow(classSel,res, price, rate){
 		if(classSel !== null){
-			$("."+classSel).text(res.price);
+			$("."+classSel).text('$'+res.price);
 		}
 		
 		var subtot = $("#subtotal").text();
+		subtot = subtot.replace("$", "");
 		if(rate === "inc"){
 			subtot = parseFloat(subtot) + price; 
 		}else{
@@ -67,10 +77,10 @@ $(document).ready(function(e){
 	
 		var total = subtot + tax + con;
 		
-		$("#subtotal").text(subtot.toFixed(2));
-		$("#tax").text(tax.toFixed(2));
-		$("#con").text(con.toFixed(2));
-		$("#total").text(total.toFixed(2));
+		$("#subtotal").text('$'+subtot.toFixed(2));
+		$("#tax").text('$'+tax.toFixed(2));
+		$("#con").text('$'+con.toFixed(2));
+		$("#total").text('$'+total.toFixed(2));
 		
 	}
 	

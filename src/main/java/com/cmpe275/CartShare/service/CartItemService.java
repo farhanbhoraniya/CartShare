@@ -74,4 +74,22 @@ public class CartItemService {
             return null;
         }
     }
+
+    public List<CartItem> findByCart(int id) {
+        return cartItemRepostiory.findByCartId(id);
+    }
+
+    @Transactional
+    public void deleteByCart(Cart cart) {
+        Query query = entityManager.createQuery(
+                "DELETE from CartItem"
+                        + " WHERE cart = :cartid"
+                        );
+        query.setParameter("cartid", cart);
+        query.executeUpdate();
+    }
+
+//    public List<CartItem> findByCart(int id) {
+//        return cartItemRepostiory.findByCartId(id);
+//    }
 }
