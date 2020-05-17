@@ -98,6 +98,12 @@ public class OrderController {
         if (selfPick) {
             pickedBy = currentUserObject;
         }
+        else{
+            //not a selfPick, decrease rating by one
+            int newRating = currentUserObject.getRating()-1;
+            currentUserObject.setRating(newRating);
+            userService.save(currentUserObject);
+            }
         User buyer = currentUserObject;
 
         Order order = new Order(pool, date, status, buyer, pickedBy, selfPick);

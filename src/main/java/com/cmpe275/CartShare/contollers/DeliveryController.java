@@ -65,6 +65,18 @@ public class DeliveryController {
         order.setStatus(Order.ORDER_DELIVERED);
         orderService.save(order);
 
+        //increase credit
+        User deliveredBy = order.getPickedby();
+        User orderedBy = order.getBuyerid();
+        if(deliveredBy!=null && orderedBy!=null && deliveredBy.getId()!=orderedBy.getId()){
+            System.out.println("delivered by :"+deliveredBy.getScreenname());
+            System.out.println("delivered by rating:"+deliveredBy.getRating());
+            int newRating = deliveredBy.getRating()+1;
+            deliveredBy.setRating(newRating);
+            userService.save(deliveredBy);
+
+        }
+
         JSONObject response = new JSONObject();
         response.put("status", "success");
         response.put("message", "Order delivered successfully");
@@ -80,6 +92,14 @@ public class DeliveryController {
         Order order = orderService.getOrderByOrderId(orderId);
         order.setStatus(Order.ORDER_PICKED_UP);
         orderService.save(order);
+        //decrease ratings
+        User deliveredBy = order.getPickedby();
+        User orderedBy = order.getBuyerid();
+        if(deliveredBy!=null && orderedBy!=null && deliveredBy.getId()!=orderedBy.getId()){
+            int newRating = deliveredBy.getRating()-1;
+            deliveredBy.setRating(newRating);
+            userService.save(deliveredBy);
+        }
 
         JSONObject response = new JSONObject();
         response.put("status", "success");
