@@ -9,5 +9,6 @@ public interface UserAddressRepository extends JpaRepository<UserAddress, Intege
 	
 	public UserAddress save(UserAddress userAddress);
 	public UserAddress findByuser(User user);
+   
 
 }
