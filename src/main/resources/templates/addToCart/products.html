@@ -154,7 +154,24 @@
             <div>
                 <a th:href="'../../getOrdersFromCart/'+${userId}" type="button" class="btn btn-primary m-t-15 waves-effect">View Cart</a>
             </div>
-            
+            <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="smallModalLabel">Replace Cart Items</h4>
+                        </div>
+                        <div class="modal-body">
+                        	You have added items in the cart from a different store.
+                        	Would you like to remove existing items from cart and add new items? 
+                        </div>
+                        <div class="modal-footer">
+                        <!-- th:href="'/order/pool_pending/'+${storeId}" -->
+                            <a id="confirmDel" type="button" class="btn btn-link waves-effect">Yes</a>
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- #END# Input -->
         </div>
     </section>

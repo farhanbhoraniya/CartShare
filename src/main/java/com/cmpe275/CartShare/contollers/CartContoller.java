@@ -41,18 +41,6 @@ public class CartContoller {
     @Autowired
     StoreService storeService;
     
-    
-    /*
-     * gets cart for user_id,isActive
-     * else return new
-     * */
-    @GetMapping("/getCart/{user_id}")
-    public @ResponseBody ResponseEntity<List<CartItem>> getCart(@PathVariable int user_id) {
-        return null;
-//        List<CartItem> cartItems = cartService.findCartByUserId(user_id);
-//        return ResponseEntity.status(HttpStatus.OK).body(cartItems);
-    }
-
     @PostMapping("/updateItemInCart")
     public @ResponseBody ResponseEntity<CartItem> addOrUpdateItemToCart(@RequestBody JSONObject cartItem) {
         if (! (cartItem.containsKey("store_id") && cartItem.containsKey("product_sku")
@@ -61,31 +49,45 @@ public class CartContoller {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         
-        
         int store_id = (int) cartItem.get("store_id");
         String product_sku = (String) cartItem.get("product_sku");
         int user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        System.out.println("User ID: "+user_id);
+        
         int quantity = (int) cartItem.get("quantity");
         double price = Double.parseDouble(cartItem.get("price").toString());
+        
+        
         
         try{
             Cart cart= (Cart) cartService.findCartByUserId(user_id);
 
             if(cart==null){
-                cart=cartService.createNewCart(user_id);
+                cart=cartService.createNewCart(user_id); 
             }
-
+            else {
+                boolean delPrevItems = (boolean) cartItem.get("delPrevItems");
+                if(delPrevItems) {
+                    cartItemService.deleteByCart(cart);
+                }else {
+                //check if the cart contains items from another store
+                    List<CartItem> cartItems = cartItemService.findByCart(cart.getId());
+                    if(cartItems.size() > 0) {
+                        if(cartItems.get(0).getProduct().getStoreid() != store_id) {
+                            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(cartItems.get(0));
+                        }
+                    }
+                }
+            }
 
             Store store = storeService.findById(store_id);
             Product product = productService.findProductInStore(store_id, product_sku);
+            
             CartItem ci = new CartItem(store, product, cart, quantity, (double)quantity*price);
             if(quantity == 0) {
                 cartItemService.delete(ci);
                 return ResponseEntity.status(HttpStatus.OK).body(ci);
             }
 
-            
             cartItemService.saveOrUpdateCartItem(ci);
             return ResponseEntity.status(HttpStatus.OK).body(ci);
         }
@@ -96,42 +98,6 @@ public class CartContoller {
         
     }
     
-//    @PostMapping("/addItemToCart")
-//    public @ResponseBody ResponseEntity<String> addItemToCart(@RequestBody JSONObject cartItem) {
-//
-//        if (! (cartItem.containsKey("store_id") && cartItem.containsKey("product_sku")
-//                && cartItem.containsKey("user_id") && cartItem.containsKey("quantity") && cartItem.containsKey("price"))) {
-//            System.out.println("Invalid or missing parameters");
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-//        }
-//
-//        int store_id = (int) cartItem.get("store_id");
-//        String product_sku = (String) cartItem.get("product_sku");
-//        int user_id = (int) cartItem.get("user_id");
-//        int quantity = (int) cartItem.get("quantity");
-//        double price = Double.parseDouble(cartItem.get("price").toString());
-//
-//        try{
-//            Cart cart= (Cart) cartService.findCartByUserId(user_id);
-//
-//            if(cart==null){
-//                cart=cartService.createNewCart(user_id);
-//            }
-//
-//
-//            Store store = storeService.findById(store_id);
-//            Product product = productService.findProductInStore(store_id, product_sku);
-//
-//            CartItem ci = new CartItem(store, product, cart, quantity, quantity*price);
-//            cartService.saveCartItem(ci);
-//            return ResponseEntity.status(HttpStatus.OK).body("Item Added Successfully");
-//        }
-//        catch (Exception e){
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Item Add Unsuccessful");
-//        }
-//    }
-//    
     @DeleteMapping("/removeItemFromCart/{cartItem}")
     public @ResponseBody ResponseEntity<String> removeItemFromCart(@PathVariable String cartItem) {
         int cartItemId = Integer.parseInt(cartItem);
