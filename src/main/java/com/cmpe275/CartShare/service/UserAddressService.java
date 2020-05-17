@@ -23,4 +23,14 @@ public class UserAddressService {
 	public UserAddress findByUser(User user) {
 		return userAddressRepository.findByuser(user);
 	}
+
+    public UserAddress update(UserAddress userAddress, String streetname, String streetno, String city, String state, String zip) {
+        
+        userAddress.setCity(city); 
+        userAddress.setState(state);
+        userAddress.setZip(zip);
+        userAddress.setStreetname(streetname);
+        userAddress.setStreetno(streetno);
+        return save(userAddress);
+    }
 }
