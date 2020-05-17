@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -142,13 +143,13 @@ public class OrderController {
             //.limit(numberOfRecords)
             System.out.println(filteredPoolOrders);
             
-            LinkedOrders lOrders;
+            
             for(Order parent: parentOrder) {
                 int count = 0;
                 for(Order order: filteredPoolOrders) {
                     List<OrderItems> filteredOrderItems = orderItemsService.getOrderItemsByOrderId(order.getId());
                     if(filteredOrderItems.get(0).getProduct().getStoreid() == storeid && count < numberOfRecords) {
-                        
+                       
                         linkedOrderService.save(new LinkedOrders(parent.getId(), order));
                         
                         count++;
