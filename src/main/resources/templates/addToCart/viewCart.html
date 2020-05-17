@@ -117,15 +117,15 @@
 									<tbody>
 										<tr th:each="item: ${items}">
 										
-											<td>
+											<td style="width:15%">
 												<img alt="" th:src="${item.imageurl}" width="100px" height="100px"  />
 											</td>
-											<td th:text="${item.name}" />
+											<td style="width:15%" th:text="${item.name}" />
 											<td th:text="${item.desc}" />
-											<td th:text="${item.unit}" />
+											<td style="width:10%" th:text="${item.unit}" />
 											
 											
-											<td style="width:15%">
+											<td style="width:16%">
 												<button
 				                      				type="button" 
 				                      				class="btn btn-danger waves-effect removeItem"
@@ -150,9 +150,9 @@
 							                        <i class="material-icons">add</i>
 							                    </button>           
                             				</td>
-                            				<td th:class="${item.sku}" th:text="'$'+${item.price}">	</td>
-                            				<td>
-		                                       <button type="button" class="btn btn-danger waves-effect store_delete_btn" 
+                            				<td style="width:6%" th:class="${item.sku}" th:text="'$'+${item.price}">	</td>
+                            				<td style="width:8%">
+		                                       <button type="button" class="btn bg-purple waves-effect store_delete_btn" 
 		                                       th:data-id="${item.cart_item_id}" 
 		                                       th:data-price="${item.price}"
 		                                       		data-toggle="tooltip" data-placement="top" title="Delete">
@@ -161,22 +161,26 @@
                                     		</td>
 										</tr>
 										<tr>
-										<td colspan="5">SubTotal</td>
+										<td colspan="4"></td>
+										<td style="float:right"><b>SubTotal</b></td>
 										<td id="subtotal" th:text="'$'+${subtotal}"></td>	
 										<td></td>		
 									</tr>
 									<tr>
-										<td colspan="5" >Tax</td>
+										<td colspan="4"></td>
+										<td style="float:right"><b>Tax</b></td>
 										<td id="tax" th:text="'$'+${tax}"></td>
 										<td></td>		
 									</tr>
 									<tr>
-										<td colspan="5" >Convenience Fee</td>
+										<td colspan="4"></td>
+										<td style="float:right"><b>Convenience Fee</b></td>
 										<td id="con" th:text="'$'+${con}"></td>
 										<td></td>		
 									</tr>
 									<tr>
-										<td colspan="5" >Total</td>
+										<td colspan="4"></td>
+										<td style="float:right"><b>Total</b></td>
 										<td id="total" th:text="'$'+${total}"></td>
 										<td></td>		
 									</tr>
