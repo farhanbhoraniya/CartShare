@@ -26,7 +26,7 @@ $(document).ready(function(e){
 	});
 	
 	$("#no").on("click",function(){
-		windows.href = "/userStoreDetails";
+		location.href = "/myOrders";
 	});
 	
 });

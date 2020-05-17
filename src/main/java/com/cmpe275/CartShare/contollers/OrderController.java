@@ -63,10 +63,10 @@ public class OrderController {
         
         int user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
 
-//        if (!requestBody.containsKey("selfPick")) {
-//            System.out.println("Invalid or missing paramters");
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-//        }
+        if (!requestBody.containsKey("selfPick")) {
+            System.out.println("Invalid or missing paramters");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
         
         User currentUserObject = userService.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("User", "Id", user_id));
         Cart cart = cartService.findCartByUserId(currentUserObject.getId());

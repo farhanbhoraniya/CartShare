@@ -12,8 +12,8 @@ $(document).ready(function(e){
 		
 		var val = $("#"+id).val();
 		
-	
-		callAPI($(this), parseInt(val)-1, "Item Removed from Cart", id, parseInt(val)-1,"dsc");
+		if(val > 0)
+			callAPI($(this), parseInt(val)-1, "Item Removed from Cart", id, parseInt(val)-1,"dsc");
 	});
 	
 	function callAPI(selector, qty, message, id, val, rate){
@@ -21,9 +21,8 @@ $(document).ready(function(e){
 				product_sku: selector.attr("data-sku"),
 				store_id: parseInt(selector.attr("data-storeid")),
 				price: parseFloat(selector.attr("data-price")),
-				//price: 35,
 				user_id: parseInt(selector.attr("data-userid")),
-				quantity: qty//parseInt($(this).val())
+				quantity: qty
 		};
 		
 		$.ajax({

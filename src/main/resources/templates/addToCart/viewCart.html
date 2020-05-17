@@ -197,28 +197,33 @@
                         </div>
                         <div class="modal-body">
                         	Your order has been placed successfully.
-                            Would you like to pick up your and pool members order in next 2 days? 
+                            Would you like to pick up fellow pool members order in next 2 days? 
                         </div>
                         <div class="modal-footer">
+                        <!-- th:href="'/order/pool_pending/'+${storeId}" -->
                             <a th:href="'/order/pool_pending/'+${storeId}" id="pickOrderConfirm" type="button" class="btn btn-link waves-effect">Yes</a>
                             <button id="notpickOrder" type="button" class="btn btn-link waves-effect" data-dismiss="modal">No</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="noOfOrders" tabindex="-1" role="dialog">
+            <div class="modal fade" id="selfPickup" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-sm" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title" id="smallModalLabel">Order Pickup</h4>
                         </div>
                         <div class="modal-body">
-                           How many orders would you like to pick up? 
-                           <input style="width:60%" type="number" id="num" class="form-control" name="number" value="1" required/>
-                           
+                           Do you want to self pickup or let fellow poolers deliver your order?
+                           <div class="demo-radio-button">
+                                <input name="self" value="Self" type="radio" id="radio_1" class="with-gap" checked />
+                                <label for="radio_1">Self Pickup</label>
+                                <input name="self" value="Fellow" type="radio" class="with-gap" id="radio_2" />
+                                <label for="radio_2">Fellow Poolers Pickup</label>
+                           </div>
                         </div>
                         <div class="modal-footer">
-                            <button onClick="$.fn.getOrderDetailsforPickUp()" id="pickOrder" type="button" class="btn btn-link waves-effect">Submit</button>
+                            <button id="submitSelf" type="button" class="btn btn-link waves-effect">Submit</button>
                         </div>
                     </div>
                 </div>
