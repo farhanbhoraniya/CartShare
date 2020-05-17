@@ -26,6 +26,10 @@ public class OrderService {
         return newOrder;
     }
 
+    public Order findByOrderId(int id) {
+    	return orderRepository.findById(id);
+    }
+    
     public List<Order> getUserOrders(User user) {
         List<Order> orders = orderRepository.findByBuyer(user);
         return orders;

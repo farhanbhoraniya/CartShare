@@ -10,9 +10,12 @@ import com.cmpe275.CartShare.security.CurrentUser;
 import com.cmpe275.CartShare.security.UserPrincipal;
 import com.cmpe275.CartShare.service.SecurityService;
 import com.cmpe275.CartShare.service.UserService;
+
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -93,6 +96,38 @@ public class UserController {
         System.out.println(registrationId);
     }
 
+    @PostMapping("/message/{toUser}")
+    public void sendMessage(@PathVariable int toUser, @RequestBody org.json.simple.JSONObject messageBody) {
+    	int user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+//    	int user_id = 21;
+    	System.out.println(messageBody);
+    	if (!messageBody.containsKey("message")) {
+    		System.out.println("Not able to send message. Invalid request body");
+    		return;
+    	}
+    	
+    	User user = userService.findById(user_id).get();
+    	
+    	String subject = "New message from " + user.getScreenname();
+    	String message = (String)messageBody.get("message");
+//    	String message = "Hello";
+    	Optional<User> toUserOptional = userService.findById(toUser);
+    	
+    	if (toUserOptional.isEmpty()) {
+    		System.out.println("User does not exists");
+    		return;
+    	}
+    	
+    	User toUserObject = toUserOptional.get();
+    	try {
+    		mailAsyncComponent.sendMessage(toUserObject.getEmail(), subject, message);
+    	} catch(Exception e) {
+    		System.out.println("Internal server error while sending the message");
+    	}
+    	
+    	return;
+    }
+    
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
     public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {

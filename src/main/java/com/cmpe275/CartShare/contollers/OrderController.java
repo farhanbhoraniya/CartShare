@@ -1,5 +1,6 @@
 package com.cmpe275.CartShare.contollers;
 
+import com.cmpe275.CartShare.async.MailAsyncComponent;
 import com.cmpe275.CartShare.dao.CartItemRepository;
 import com.cmpe275.CartShare.exception.ResourceNotFoundException;
 import com.cmpe275.CartShare.model.*;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,13 +55,20 @@ public class OrderController {
 
     @Autowired
     OrderItemsService orderItemsService;
+    
+    @Autowired
+    MailAsyncComponent mailAsyncComponent;
 
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<Order> getOrder(@PathVariable int orderId) {
+    	Order order = orderService.findByOrderId(orderId);
+    	// JUST FOR TESTING OF THE EMAIL
+    	mailAsyncComponent.sendOwnOrderMail(order);
+    	return ResponseEntity.status(HttpStatus.OK).body(order);
+    }
+    
     @PostMapping("/order/place")
     public ResponseEntity<Order> placeOrder(@RequestBody JSONObject requestBody) {
-        // TODO: GET CURRENT LOGIN USER
-//      org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//      System.out.println(principal);
-//      User currentUserObject = userService.findByEmail(principal.getUsername());
         
         int user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
 
@@ -101,11 +110,12 @@ public class OrderController {
 
         for (CartItem cartItem : cartItems) {
             OrderItems orderItem = new OrderItems(cartItem.getProduct(), newOrder, cartItem.getQuantity(), cartItem.getPrice());
+            
             System.out.println("Moving item");
             orderItemsService.save(orderItem);
             cartItemService.delete(cartItem);
         }
-
+        newOrder = orderService.findByOrderId(newOrder.getId());
         System.out.println("Items moved to the order items table");
 
 //		cartItemService.deleteAll(cartItems);

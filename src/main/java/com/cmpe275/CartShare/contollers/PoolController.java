@@ -91,7 +91,7 @@ public class PoolController {
     @GetMapping("/pools")
     public @ResponseBody
     ResponseEntity<List<Pool>> getAllPools() {
-
+    	
         List<Pool> pools = poolService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(pools);
     }

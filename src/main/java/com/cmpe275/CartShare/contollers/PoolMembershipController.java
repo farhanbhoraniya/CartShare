@@ -7,6 +7,7 @@ import com.cmpe275.CartShare.exception.ResourceNotFoundException;
 import com.cmpe275.CartShare.security.UserPrincipal;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -50,6 +51,9 @@ public class PoolMembershipController {
 	
 	@Autowired
 	EmailServiceImpl emailService;
+	
+	@Autowired
+	Environment env;
 	
 	@PostMapping("/pool/join")
 	public @ResponseBody ResponseEntity<PoolMembership> joinPool(@RequestBody JSONObject poolMember) {
@@ -155,7 +159,8 @@ public class PoolMembershipController {
 
         try {
             String ip = InetAddress.getLoopbackAddress().getHostAddress();
-            String confirmationURL = "http://" + ip + ":9000/confirm-pool-join?token=" + confirmationToken.getConfirmationtoken(); 
+            String port = env.getProperty("server.port");
+            String confirmationURL = "http://" + ip + ":" + port + "/confirm-pool-join?token=" + confirmationToken.getConfirmationtoken(); 
             String subject = "Pool join member";
             String body = "User " + userObject.getScreenname() + " has given you reference to join pool " + poolObject.getName() 
             + ". To confirm user reference click " + confirmationURL;
@@ -194,7 +199,8 @@ public class PoolMembershipController {
         
         try {
             String ip = InetAddress.getLoopbackAddress().getHostAddress();
-            String confirmationURL = "http://" + ip + ":9000/leader-approval?token=" + confirmationTokenApproval.getConfirmationtoken(); 
+            String port = env.getProperty("server.port");
+            String confirmationURL = "http://" + ip + ":" + port + "/leader-approval?token=" + confirmationTokenApproval.getConfirmationtoken(); 
             String subject = "Pool join member approval";
             String body = "Reference verified. Please approve the membership of the User " + token.getUser().getScreenname() + " for pool " + pool.getName() 
             + ". To approve click " + confirmationURL;
