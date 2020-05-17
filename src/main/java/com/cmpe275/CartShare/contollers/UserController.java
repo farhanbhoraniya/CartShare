@@ -113,7 +113,7 @@ public class UserController {
 //    	String message = "Hello";
     	Optional<User> toUserOptional = userService.findById(toUser);
     	
-    	if (toUserOptional.isEmpty()) {
+    	if (!toUserOptional.isPresent()) {
     		System.out.println("User does not exists");
     		return;
     	}
