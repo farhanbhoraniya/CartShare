@@ -5,8 +5,18 @@ $(document).ready(function(){
 	} 
 	
 	$("#pickOrder").on("click",function(){
+		
+		$("#selfPickup").modal('show');
+	});
+		
+	$("#submitSelf").on("click",function(){	
+		var radioValue = $("input[name='self']:checked").val();
+		var selfPick = false;
+		if(radioValue === "Self"){
+			selfPick = true;
+		}
 		var data = {
-			"selfPick": false
+			"selfPick": selfPick
 		};
 		$.ajax({
 			url: "/order/place",
@@ -17,13 +27,12 @@ $(document).ready(function(){
 				if(req.status === "PLACED"){
 					showNotification("Order Placed successfully",'bg-green','bottom','right');
 
-					//location.reload(true);
-
-					$("#pickUpOrderModal").modal('show');
-					//$("#pickUpOrderModal").modal('hide');
-					//$("#noOfOrders").modal('show');
-					
-
+					if(selfPick != false){
+						$("#selfPickup").modal('hide');
+						$("#pickUpOrderModal").modal('show');
+					}else{
+						location.href = "/myOrders";
+					}
 				}
 			},
 			error: function(req){
@@ -36,23 +45,8 @@ $(document).ready(function(){
 	});
 		
 	$("#notpickOrder").on("click",function(){
-		location.reload(true);
-	});
-	
-	$("#pickOrderConfirm").on("click",function(){
-		
+		location.href = "/myOrders";
 	});
 
 });
-
-	
-//	$.fn.getOrderDetailsforPickUp = function(){
-//		var data = $("#num").val();
-//		$.ajax({
-//			url: "",
-//			type: "GET",
-//			success: 
-//		});
-//	}
-//});
 
