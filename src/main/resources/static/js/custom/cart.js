@@ -50,10 +50,11 @@ $(document).ready(function(e){
 	
 	function calculateAndUpdateRow(classSel,res, price, rate){
 		if(classSel !== null){
-			$("."+classSel).text(res.price);
+			$("."+classSel).text('$'+res.price);
 		}
 		
 		var subtot = $("#subtotal").text();
+		subtot = subtot.replace("$", "");
 		if(rate === "inc"){
 			subtot = parseFloat(subtot) + price; 
 		}else{
@@ -67,10 +68,10 @@ $(document).ready(function(e){
 	
 		var total = subtot + tax + con;
 		
-		$("#subtotal").text(subtot.toFixed(2));
-		$("#tax").text(tax.toFixed(2));
-		$("#con").text(con.toFixed(2));
-		$("#total").text(total.toFixed(2));
+		$("#subtotal").text('$'+subtot.toFixed(2));
+		$("#tax").text('$'+tax.toFixed(2));
+		$("#con").text('$'+con.toFixed(2));
+		$("#total").text('$'+total.toFixed(2));
 		
 	}
 	
