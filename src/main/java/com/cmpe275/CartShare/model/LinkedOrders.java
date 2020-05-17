@@ -6,7 +6,9 @@ import javax.persistence.*;
 @Table(name = "linked_orders")
 public class LinkedOrders {
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @Column(name = "id")
     private int id;
 
     //represents the order of id of the parent order
