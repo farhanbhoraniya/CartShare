@@ -63,7 +63,14 @@ public class OrderController {
     public ResponseEntity<Order> getOrder(@PathVariable int orderId) {
     	Order order = orderService.findByOrderId(orderId);
     	// JUST FOR TESTING OF THE EMAIL
-    	mailAsyncComponent.sendOwnOrderMail(order);
+//    	Map<String, Object> model = new HashMap<String, Object>();
+//        model.put("status", order.getStatus());
+//        model.put("orderItems", order.getOrderItems());
+//        model.put("date", order.getDate());
+//        model.put("id", order.getId());
+//    	mailAsyncComponent.sendOrderMail(order.getBuyerid().getEmail(), "Order Placed", "ownOrderEmailTemplate", model);
+    	
+    	
     	return ResponseEntity.status(HttpStatus.OK).body(order);
     }
     
@@ -124,7 +131,13 @@ public class OrderController {
         newOrder = orderService.findByOrderId(newOrder.getId());
         System.out.println("Items moved to the order items table");
 
-//		cartItemService.deleteAll(cartItems);
+        // Model for the order placed
+//    	Map<String, Object> model = new HashMap<String, Object>();
+//        model.put("status", order.getStatus());
+//        model.put("orderItems", order.getOrderItems());
+//        model.put("date", order.getDate());
+//        model.put("id", order.getId());
+//    	mailAsyncComponent.sendOrderMail(order.getBuyerid().getEmail(), "Order Placed", "ownOrderEmailTemplate", model);
 
         System.out.println("Items removed from cart items");
         return ResponseEntity.status(HttpStatus.OK).body(newOrder);
@@ -159,7 +172,6 @@ public class OrderController {
             //.limit(numberOfRecords)
             System.out.println(filteredPoolOrders);
             
-            
             for(Order parent: parentOrder) {
                 int count = 0;
                 for(Order order: filteredPoolOrders) {
@@ -167,11 +179,23 @@ public class OrderController {
                     if(filteredOrderItems.get(0).getProduct().getStoreid() == storeid && count < numberOfRecords) {
                        
                         linkedOrderService.save(new LinkedOrders(parent.getId(), order));
-                        
+                    	
                         count++;
                     }
                 }
             }
+            
+//            try {
+//            	
+//            	Map<String, Object> model = new HashMap<String, Object>();
+//            	model.put("orders", List of orders with order items);
+//            	mailAsyncComponent.sendOrderMail(Email to send, "Orders to pick up", "ordersToPickUpEmailTemplate", model);
+//
+//            	
+//        	} catch(Exception e) {
+//        		System.out.println("Error while sending the email");
+//        	}
+            
         }
         return ResponseEntity.status(HttpStatus.OK).body("Success");
     }

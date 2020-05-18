@@ -13,10 +13,12 @@
     </style>
 </head>
  <body>
-     <p>Your order has been placed. Following are the order details</p>
+     <p>Your order has been Picked UP</p>
      <p th:text="'Order ID: ' + ${id}"></p>
      <p th:text="'Date: ' + ${date}"></p>
      <p th:text="'Status: ' + ${status}"></p>
+     <p th:text="'Picked By: ' + ${pickedBy}"></p>
+     
      <h3>Order Items</h3>
      <table>
         <tr>

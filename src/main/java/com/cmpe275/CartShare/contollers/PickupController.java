@@ -2,6 +2,7 @@ package com.cmpe275.CartShare.contollers;
 
 import com.cmpe275.CartShare.model.Order;
 import com.cmpe275.CartShare.security.UserPrincipal;
+import com.cmpe275.CartShare.async.MailAsyncComponent;
 import com.cmpe275.CartShare.dao.LinkedOrdersRepository;
 import com.cmpe275.CartShare.model.*;
 import com.cmpe275.CartShare.service.OrderItemsService;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class PickupController {
@@ -27,6 +30,10 @@ public class PickupController {
 
     @Autowired
     UserService userService;
+    
+
+    @Autowired
+    MailAsyncComponent mailAsyncComponent;
 
 
 //    public ModelAndView pickupListView(ModelAndView modelAndView) {
@@ -144,7 +151,36 @@ public class PickupController {
             orderService.save(order);
         }
 
-        //TODO: Send Delivery notification
+        //SENDS MAIL TO THE USER WHO HAS PLACED THE ORDER
+        // ############################
+        
+//        Order order = orderService.getOrderByOrderId(77);
+//    	Map<String, Object> model = new HashMap<String, Object>();
+//    	model.put("status", order.getStatus());
+//    	model.put("orderItems", order.getOrderItems());
+//    	model.put("date", order.getDate());
+//    	model.put("id", order.getId());
+//    	model.put("pickedBy", order.getPickedby().getScreenname());
+//    	mailAsyncComponent.sendOrderMail(order.getBuyerid().getEmail(), "Order Picked Up!!!", "orderPickedUpEmailTemplate", model);
+
+        // SENDS MAIL TO USER WHO PICKED UP ORDER, NEED TO ADD ADDRESS IN OBJECT
+        // ###############################
+//        List<LinkedOrders> pooledLinkedOrderList = linkedOrdersRepository.findAllByParent_id(63);
+//        List<Order> orderList = new ArrayList<Order>();
+//        for(LinkedOrders item: pooledLinkedOrderList) {
+//        	orderList.add(item.getPool_order());
+//        }
+//        //TODO: Send Delivery notification
+//	      try {
+//	    	System.out.println(pooledOrderList);
+//	    	Map<String, Object> model = new HashMap<String, Object>();
+//	    	model.put("orders", orderList);
+//	    	mailAsyncComponent.sendOrderMail("farhanbhoraniya@gmail.com", "Orders to pick up", "orderDeliveryDetailsEmailTemplate", model);
+//	
+//	    	
+//		} catch(Exception e) {
+//			System.out.println("Error while sending the email");
+//		}
 
         JSONObject response = new JSONObject();
         response.put("status", "success");

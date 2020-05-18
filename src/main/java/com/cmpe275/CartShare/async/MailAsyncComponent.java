@@ -50,12 +50,12 @@ public class MailAsyncComponent {
         mailSenderImpl.setPort(emailConfiguration.getPort());
         mailSenderImpl.setUsername(emailConfiguration.getUsername());
         mailSenderImpl.setPassword(emailConfiguration.getPassword());
-//        Properties props = mailSenderImpl.getJavaMailProperties();
-//        
-//        props.put("mail.transport.protocol", "smtp");
-//        props.put("mail.smtp.auth", "true");
-//        props.put("mail.smtp.starttls.enable", "true");
-//        props.put("mail.debug", "true");
+        Properties props = mailSenderImpl.getJavaMailProperties();
+        
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.debug", "false");
         return mailSenderImpl;
     }
 
@@ -96,32 +96,29 @@ public class MailAsyncComponent {
     }
     
     @Async
-    public void sendOwnOrderMail(Order order) {
-    	String email = order.getBuyerid().getEmail();
-    	Map<String, Object> model = new HashMap<String, Object>();
-        model.put("status", order.getStatus());
-        model.put("orderItems", order.getOrderItems());
-        model.put("date", order.getDate());
-        model.put("id", order.getId());
+    public void sendOrderMail(String to, String subject, String template, Map<String, Object> model) {
+//    	String email = order.getBuyerid().getEmail();
+//    	Map<String, Object> model = new HashMap<String, Object>();
+//        model.put("status", order.getStatus());
+//        model.put("orderItems", order.getOrderItems());
+//        model.put("date", order.getDate());
+//        model.put("id", order.getId());
 
-    	LOGGER.info("Sending mail to " + email);
+    	LOGGER.info("Sending mail to " + to);
 
     	Context context = new Context();
         context.setVariables(model);
         
-        String html = templateEngine.process("ownOrderEmailTemplate", context);
-        
-        
+        String html = templateEngine.process(template, context);
         
         try {
         	MimeMessage message = getJavaMailSender().createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message,
                     MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                     StandardCharsets.UTF_8.name());
-			helper.setTo(email);
-
+			helper.setTo(to);
 	        helper.setText(html, true);
-	        helper.setSubject("Order placed");
+	        helper.setSubject(subject);
 	        getJavaMailSender().send(message);
 		} catch (Exception e) {
 			System.out.println("Error while sending the email");
