@@ -1,17 +1,21 @@
 package com.cmpe275.CartShare.contollers;
 
+import com.cmpe275.CartShare.exception.ResourceNotFoundException;
 import com.cmpe275.CartShare.model.Cart;
 import com.cmpe275.CartShare.model.CartItem;
 import com.cmpe275.CartShare.model.Pool;
 import com.cmpe275.CartShare.model.PoolMembership;
 import com.cmpe275.CartShare.model.Product;
 import com.cmpe275.CartShare.model.Store;
+import com.cmpe275.CartShare.model.User;
 import com.cmpe275.CartShare.security.UserPrincipal;
 import com.cmpe275.CartShare.service.CartItemService;
 import com.cmpe275.CartShare.service.CartService;
 import com.cmpe275.CartShare.service.PoolMembershipService;
+import com.cmpe275.CartShare.service.PoolService;
 import com.cmpe275.CartShare.service.ProductService;
 import com.cmpe275.CartShare.service.StoreService;
+import com.cmpe275.CartShare.service.UserService;
 
 import net.minidev.json.JSONArray;
 
@@ -33,6 +37,12 @@ public class CartContoller {
 
     @Autowired
     CartService cartService;
+    
+    @Autowired
+    UserService userService;
+    
+    @Autowired
+    PoolService poolService;
     
     @Autowired
     CartItemService cartItemService;
@@ -57,18 +67,25 @@ public class CartContoller {
         int store_id = (int) cartItem.get("store_id");
         String product_sku = (String) cartItem.get("product_sku");
         int user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        
+        User currentUserObject = userService.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("User", "Id", user_id));
         int quantity = (int) cartItem.get("quantity");
         double price = Double.parseDouble(cartItem.get("price").toString());
         
         JSONObject obj = new JSONObject();
         try{
-            PoolMembership poolMembership = poolMembershipService.findByUser(user_id);
-            if(poolMembership == null){
-                obj.put("code", "300");
-                obj.put("message", "You need to be a member of a pool to add items in cart");
-                return ResponseEntity.status(HttpStatus.OK).body(obj.toString());
+            Pool pool = poolService.findByLeader(currentUserObject);
+
+            if (pool == null) {
+                PoolMembership poolMembership = poolMembershipService.findByUser(currentUserObject.getId());
+
+                if (poolMembership == null) {
+                    obj.put("code", "300");
+                    obj.put("message", "You need to be a member of a pool to add items in cart");
+                    return ResponseEntity.status(HttpStatus.OK).body(obj.toString());
+                }
+                pool = poolService.findById(poolMembership.getPool());
             }
+            
             Cart cart= (Cart) cartService.findCartByUserId(user_id);
 
             if(cart==null){
