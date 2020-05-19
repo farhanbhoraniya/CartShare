@@ -1,19 +1,20 @@
 package com.cmpe275.CartShare.model;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "pool_membership")
 public class PoolMembership {
 
-	// Table does not have id but JPA needs and id annotation
-	
-	private String pool;
 	@Id
-	private int user;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	private String pool;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user", referencedColumnName = "id")
+	private User user;
 	
 	private int reference;
 	private boolean verified;
@@ -21,7 +22,7 @@ public class PoolMembership {
 	
 	public PoolMembership() {}
 	
-	public PoolMembership(String pool, int user, int reference, boolean verified, boolean leaderapproved) {
+	public PoolMembership(String pool, User user, int reference, boolean verified, boolean leaderapproved) {
 		this.pool = pool;
 		this.user = user;
 		this.reference = reference;
@@ -37,11 +38,11 @@ public class PoolMembership {
 		this.pool = pool;
 	}
 	
-	public int getUser() {
+	public User getUser() {
 		return user;
 	}
 	
-	public void setUser(int user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 	
@@ -67,5 +68,13 @@ public class PoolMembership {
 
 	public void setLeaderapproved(boolean leaderapproved) {
 		this.leaderapproved = leaderapproved;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }

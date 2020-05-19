@@ -89,7 +89,7 @@ public class OrderController {
         Pool pool = poolService.findByLeader(currentUserObject);
 
         if (pool == null) {
-            PoolMembership poolMembership = poolMembershipService.findByUser(currentUserObject.getId());
+            PoolMembership poolMembership = poolMembershipService.findByUser(currentUserObject);
 
             if (poolMembership == null) {
                 System.out.println("User is not a member of any pool");
@@ -248,7 +248,7 @@ public class OrderController {
         Pool pool = poolService.findByLeader(currentUser);
 
         if (pool == null) {
-            PoolMembership poolMembership = poolMembershipService.findByUser(currentUser.getId());
+            PoolMembership poolMembership = poolMembershipService.findByUser(currentUser);
 
             if (poolMembership == null) {
                 System.out.println("User is not a member of any pool");

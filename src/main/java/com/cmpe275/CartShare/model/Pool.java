@@ -25,8 +25,11 @@ public class Pool {
 	@JoinColumn(name = "leader", referencedColumnName = "id")
 	private User leader;
 
+//	@Transient
+//	private List<User> members;
+
 	@Transient
-	private List<User> members;
+	private List<PoolMembership> members;
 	
 	public Pool() {}
 	
@@ -87,11 +90,11 @@ public class Pool {
 		this.leader = leader;
 	}
 	
-	public List<User> getMembers() {
+	public List<PoolMembership> getMembers() {
 		return members;
 	}
 
-	public void setMembers(List<User> members) {
+	public void setMembers(List<PoolMembership> members) {
 		this.members = members;
 	}
 
