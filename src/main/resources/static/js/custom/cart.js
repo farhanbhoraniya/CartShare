@@ -2,7 +2,7 @@ $(document).ready(function(e){
 	var selector, qty, message, id, val, rate, delPrevItems;
 	$(".addItem").click(function(){
 		var sku = $(this).attr("data-sku");
-		
+		var unit = $(this).attr("data-unit");
 		var inval = $("#"+sku).val();
 		selector = $(this);
 		qty = parseInt(inval)+1;
@@ -11,6 +11,9 @@ $(document).ready(function(e){
 		val = inval+1;
 		rate = "inc";
 		delPrevItems = false;
+		if(unit === 'Piece' && val > 1){
+			return;
+		}
 		callAPI();
 	});
 	
@@ -27,7 +30,7 @@ $(document).ready(function(e){
 		rate = "dsc";
 		delPrevItems = false;
 		
-		if(val > 0)
+		if(val >= 0)
 			callAPI();
 	});
 	
@@ -47,20 +50,26 @@ $(document).ready(function(e){
 			contentType: "application/json",
 			data: JSON.stringify(data),
 			success: function (res) {
-				$("#"+id).val(qty);
-				showNotification(message,'bg-green','bottom','right');
-				var pageURL = $(location).attr("href");
-				if (pageURL.indexOf("getOrdersFromCart") >= 0){
-					calculateAndUpdateRow(id, res, data.price, rate);
+				res = JSON.parse(res);
+				if(res.code == 300){
+					showNotification("You need to join a pool to add items in cart",'bg-red','bottom','right');
+				 }
+				 else if(res == 500){
+					 $("#confirmationModal").modal('show'); 
+				 }else{
+					 $("#"+id).val(qty);
+					 showNotification(message,'bg-green','bottom','right');
+					 var pageURL = $(location).attr("href");
+					 if (pageURL.indexOf("getOrdersFromCart") >= 0){
+						 calculateAndUpdateRow(id, res, data.price, rate);
+					 }
 				}
             },
 			 error: function(res){
-				 if(res != null){
-					 $("#confirmationModal").modal('show');
-					 
-				 }else{
+				 res = JSON.parse(res);
+				 
 					 showNotification("Error Adding Item. Please try again.",'bg-red','bottom','right');
-				 }
+				 
 			 },
             failure: function (res) {
             	console.log(res);

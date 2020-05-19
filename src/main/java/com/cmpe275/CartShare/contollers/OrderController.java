@@ -120,6 +120,9 @@ public class OrderController {
         System.out.println(newOrder.getId());
 
         List<CartItem> cartItems = cartItemRepository.findByCart(cart);
+        if(cartItems.size() == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
 
         for (CartItem cartItem : cartItems) {
             OrderItems orderItem = new OrderItems(cartItem.getProduct(), newOrder, cartItem.getQuantity(), cartItem.getPrice());
@@ -131,13 +134,7 @@ public class OrderController {
         newOrder = orderService.findByOrderId(newOrder.getId());
         System.out.println("Items moved to the order items table");
 
-        // Model for the order placed
-//    	Map<String, Object> model = new HashMap<String, Object>();
-//        model.put("status", order.getStatus());
-//        model.put("orderItems", order.getOrderItems());
-//        model.put("date", order.getDate());
-//        model.put("id", order.getId());
-//    	mailAsyncComponent.sendOrderMail(order.getBuyerid().getEmail(), "Order Placed", "ownOrderEmailTemplate", model);
+        
 
         System.out.println("Items removed from cart items");
         return ResponseEntity.status(HttpStatus.OK).body(newOrder);
@@ -176,6 +173,9 @@ public class OrderController {
                 int count = 0;
                 for(Order order: filteredPoolOrders) {
                     List<OrderItems> filteredOrderItems = orderItemsService.getOrderItemsByOrderId(order.getId());
+                    if(filteredOrderItems.size() == 0) {
+                        continue;
+                    }
                     if(filteredOrderItems.get(0).getProduct().getStoreid() == storeid && count < numberOfRecords) {
                        
                         linkedOrderService.save(new LinkedOrders(parent.getId(), order));
@@ -184,18 +184,14 @@ public class OrderController {
                     }
                 }
             }
-            
-//            try {
-//            	
-//            	Map<String, Object> model = new HashMap<String, Object>();
-//            	model.put("orders", List of orders with order items);
-//            	mailAsyncComponent.sendOrderMail(Email to send, "Orders to pick up", "ordersToPickUpEmailTemplate", model);
-//
-//            	
-//        	} catch(Exception e) {
-//        		System.out.println("Error while sending the email");
-//        	}
-            
+            String userEmail = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail();
+            try {
+                Map<String, Object> model = new HashMap<String, Object>();
+            	    model.put("orders", parentOrder);
+            	    mailAsyncComponent.sendOrderMail(userEmail, "Orders to pick up", "ordersToPickUpEmailTemplate", model);
+        	    } catch(Exception e) {
+        	        System.out.println("Error while sending the email");
+        	    }
         }
         return ResponseEntity.status(HttpStatus.OK).body("Success");
     }
@@ -222,6 +218,9 @@ public class OrderController {
             for(Order order: filteredPoolOrders) {
                 List<OrderItems> filteredOrderItems = orderItemsService.getOrderItemsByOrderId(order.getId());
                 System.out.println("filtered: "+filteredOrderItems);
+                if(filteredOrderItems.size() == 0) {
+                    continue;
+                }
                 if(filteredOrderItems.get(0).getProduct().getStoreid() == store_id) {
                     JSONArray array = new JSONArray();
                     for(OrderItems items: filteredOrderItems) {

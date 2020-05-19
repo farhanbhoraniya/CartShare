@@ -219,7 +219,7 @@
                         <div class="modal-header">
                             <h4 class="modal-title" id="smallModalLabel">Order Pickup</h4>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body" id="creditBody">
                            Do you want to self pickup or let fellow poolers deliver your order?
                            <div class="demo-radio-button">
                                 <input name="self" value="Self" type="radio" id="radio_1" class="with-gap" checked />
@@ -230,6 +230,23 @@
                         </div>
                         <div class="modal-footer">
                             <button id="submitSelf" type="button" class="btn btn-link waves-effect">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="selfPickupConfirmation" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="smallModalLabel">Confirm</h4>
+                        </div>
+                        <div class="modal-body" id="creditConfirmBody">
+                           
+                           
+                        </div>
+                        <div class="modal-footer">
+                            <button id="submitSelfYes" type="button" class="btn btn-link waves-effect">Yes</button>
+                            <button id="submitSelfNo" type="button" class="btn btn-link waves-effect" data-dismiss="modal">No</button>
                         </div>
                     </div>
                 </div>
@@ -248,11 +265,7 @@
     <script>
 	    $('.js-basic-example').DataTable({
 	        responsive: true
-	    });
-	
-	    
-	    
+	    });   
 	</script>
-    
-</body>
+	</body>
 </html>

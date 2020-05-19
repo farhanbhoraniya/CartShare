@@ -116,7 +116,7 @@
                             	<label for="state" class="col-sm-2 control-label">State</label>
                                 <div class="col-sm-10">
                                     <div class="form-line">
-                                        <input type="text" class="form-control" id="state" name="state" placeholder="State" th:value="${userInfo.state}">
+                                        <input type="text" class="form-control" id="state" name="state" placeholder="State" th:value="${poolLeader}">
                                     </div>
                                 </div>
                             </div>
@@ -129,6 +129,7 @@
                                 </div>
                             </div>
                             <button id="update" type="button" onclick="$.fn.updateProfile()" th:data-id="${userInfo.id}" class="btn btn-primary m-t-15 waves-effect">Update Profile Information</button>
+                        	<button id="delete" class="btn btn-danger m-t-15 waves-effect" type="button" th:if="${poolLeader == 'true'}">Delete Pool</button>
                         </form>
                     </div>
                 </div>
