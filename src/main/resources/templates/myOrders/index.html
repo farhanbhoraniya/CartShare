@@ -107,7 +107,7 @@
                                 <tbody>
                                 <tr th:each="order: ${orders}">
                                     <td th:text="${order.getId()}" />
-                                    <td th:text="${order.getOrderItems().get(0).getProduct().storeid}" />
+                                    <td th:text="${order.getOrderItems().size()} > 0 ? ${order.getOrderItems().get(0).getProduct().storeid} : '-' " />
                                     <td th:text="${order.getOrderItems().size()}" />
                                     <td th:text="${order.getStatus()}" />
                                     <td th:text="${order.getStatus()}" />
