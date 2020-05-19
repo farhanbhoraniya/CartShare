@@ -104,14 +104,7 @@ public class UserAddressController {
             userAddress = new UserAddress(user.get(), null, null, null, null, null);
             userAddressService.save(userAddress);
         }
-        boolean poolLeader = false;
-        Pool pool = poolService.findByLeader(userObject);
-        System.out.print(pool);
-        if(pool != null) {
-            poolLeader = true;
-        }
         modelAndView.addObject("userInfo", userAddress);
-        modelAndView.addObject("poolLeader", poolLeader);
         modelAndView.setViewName("user/profile");
         return modelAndView;
     }
