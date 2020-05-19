@@ -76,7 +76,7 @@ public class CartContoller {
             Pool pool = poolService.findByLeader(currentUserObject);
 
             if (pool == null) {
-                PoolMembership poolMembership = poolMembershipService.findByUser(currentUserObject.getId());
+                PoolMembership poolMembership = poolMembershipService.findByUser(currentUserObject);
 
                 if (poolMembership == null) {
                     obj.put("code", "300");

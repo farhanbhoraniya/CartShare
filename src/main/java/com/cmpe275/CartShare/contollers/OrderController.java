@@ -90,7 +90,7 @@ public class OrderController {
         Pool pool = poolService.findByLeader(currentUserObject);
 
         if (pool == null) {
-            PoolMembership poolMembership = poolMembershipService.findByUser(currentUserObject.getId());
+            PoolMembership poolMembership = poolMembershipService.findByUser(currentUserObject);
 
             if (poolMembership == null) {
                 System.out.println("User is not a member of any pool");
@@ -135,8 +135,6 @@ public class OrderController {
         newOrder = orderService.findByOrderId(newOrder.getId());
         System.out.println("Items moved to the order items table");
 
-        
-
         System.out.println("Items removed from cart items");
         return ResponseEntity.status(HttpStatus.OK).body(newOrder);
 
@@ -146,6 +144,9 @@ public class OrderController {
     public ResponseEntity<String> addLinkedOrders(@RequestBody JSONObject requestBody) {
         
         int numberOfRecords = Integer.parseInt((String)requestBody.get("nooforders"));
+        if(numberOfRecords == 0) {
+            return ResponseEntity.status(HttpStatus.OK).body("Success");
+        }
         int storeid = Integer.parseInt((String)requestBody.get("storeid"));
         
         int userId = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
@@ -201,7 +202,7 @@ public class OrderController {
                                          @PathVariable int store_id) {
         int userId = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         User currentUser = userService.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
-
+        int size = 0;
         Pool pool = findPoolByUser(currentUser);
         Map<Integer, JSONArray> map = new HashMap<>();
         if (null != pool) {
@@ -214,10 +215,14 @@ public class OrderController {
                             .collect(Collectors.toList());
                             //.limit(numberOfRecords)
             System.out.println(filteredPoolOrders);
+            size = filteredPoolOrders.size();
             
             for(Order order: filteredPoolOrders) {
                 List<OrderItems> filteredOrderItems = orderItemsService.getOrderItemsByOrderId(order.getId());
                 System.out.println("filtered: "+filteredOrderItems);
+                if(filteredOrderItems.size() == 0) {
+                    continue;
+                }
                 if(filteredOrderItems.size() == 0) {
                     continue;
                 }
@@ -240,6 +245,7 @@ public class OrderController {
         System.out.println("Lala: "+map);
         modelAndView.addObject("items", map);
         modelAndView.addObject("storeid", store_id);
+        modelAndView.addObject("size", size);
         modelAndView.setViewName("addToCart/orderList");
         return modelAndView;
     }
@@ -248,7 +254,7 @@ public class OrderController {
         Pool pool = poolService.findByLeader(currentUser);
 
         if (pool == null) {
-            PoolMembership poolMembership = poolMembershipService.findByUser(currentUser.getId());
+            PoolMembership poolMembership = poolMembershipService.findByUser(currentUser);
 
             if (poolMembership == null) {
                 System.out.println("User is not a member of any pool");

@@ -110,7 +110,7 @@ public class PoolMembershipController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		
-		PoolMembership userPool = poolMembershipService.findByUser(user_id);
+		PoolMembership userPool = poolMembershipService.findByUser(userObject);
 		
 		if (userPool != null) {
 			System.out.println("User is already a member of the one pool");
@@ -131,7 +131,7 @@ public class PoolMembershipController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		
-		PoolMembership referenceMembershipCheck = poolMembershipService.membershipCheck(pool, referenceUser.getId());
+		PoolMembership referenceMembershipCheck = poolMembershipService.membershipCheck(pool, referenceUser);
 		
 		if (referenceMembershipCheck == null && referenceUser.getId() != poolObject.getLeader().getId()) {
 			System.out.println("Reference user is neither member not leader of the pool");
@@ -145,7 +145,7 @@ public class PoolMembershipController {
 			referenceId = referenceUser.getId();
 		}
 		
-		PoolMembership newPoolMembership = new PoolMembership(pool, user_id, referenceId, false, false);
+		PoolMembership newPoolMembership = new PoolMembership(pool, userObject, referenceId, false, false);
 		
 		try {
 			poolMembershipService.save(newPoolMembership);
@@ -183,7 +183,7 @@ public class PoolMembershipController {
         {
         	System.out.println(token);
             User user = token.getUser();
-            poolMembership = poolMembershipService.findByUser(user.getId());
+            poolMembership = poolMembershipService.findByUser(user);
             poolMembership.setVerified(true);
             poolMembershipService.save(poolMembership);
             confirmationTokenRepository.delete(token);
@@ -221,7 +221,7 @@ public class PoolMembershipController {
         if(token != null)
         {
             User user = token.getUser();
-            poolMembership = poolMembershipService.findByUser(user.getId());
+            poolMembership = poolMembershipService.findByUser(user);
             poolMembership.setLeaderapproved(true);
             poolMembershipService.save(poolMembership);
             confirmationTokenRepository.delete(token);
@@ -254,7 +254,7 @@ public class PoolMembershipController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		
-		PoolMembership referenceMembershipCheck = poolMembershipService.membershipCheck(poolId, userId);
+		PoolMembership referenceMembershipCheck = poolMembershipService.membershipCheck(poolId, userObject);
 		
 		if (referenceMembershipCheck == null) {
 			System.out.println("User is not a member of the pool");
@@ -262,12 +262,71 @@ public class PoolMembershipController {
 		}
 		
 		try {
-			poolMembershipService.delete(userId);
+			poolMembershipService.delete(userObject);
 		} catch (Exception e) {
 			System.out.println("Error while deleting the membership");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 		
 		return ResponseEntity.status(HttpStatus.OK).body(referenceMembershipCheck);
+	}
+
+	@DeleteMapping("/poolmembership/reference/{request_id}/reject")
+	public JSONObject rejectSupport(@PathVariable(name="request_id") int request_id)
+	{
+		JSONObject response = new JSONObject();
+		try{
+			poolMembershipService.deleteById(request_id);
+			response.put("status", true);
+			response.put("message", "Request rejected successfully");
+
+		}catch (Exception e)
+		{
+			response.put("status", true);
+			response.put("message", "Error rejecting request. Please try again.");
+		}
+		return response;
+	}
+
+	@PostMapping("/poolmembership/reference/{request_id}/approve")
+	public JSONObject approveSupport(@PathVariable(name="request_id") int request_id)
+	{
+		JSONObject response = new JSONObject();
+		try{
+
+			PoolMembership poolMembership = poolMembershipService.findById(request_id);
+			poolMembership.setVerified(true);
+			poolMembershipService.save(poolMembership);
+
+			response.put("status", true);
+			response.put("message", "Request approved successfully");
+
+		}catch (Exception e)
+		{
+			response.put("status", true);
+			response.put("message", "Error approving request. Please try again.");
+		}
+		return response;
+	}
+
+	@PostMapping("/poolmembership/leader/{request_id}/approve")
+	public JSONObject approvalByLeader(@PathVariable(name="request_id") int request_id)
+	{
+		JSONObject response = new JSONObject();
+		try{
+
+			PoolMembership poolMembership = poolMembershipService.findById(request_id);
+			poolMembership.setLeaderapproved(true);
+			poolMembershipService.save(poolMembership);
+
+			response.put("status", true);
+			response.put("message", "Request approved successfully");
+
+		}catch (Exception e)
+		{
+			response.put("status", true);
+			response.put("message", "Error approving request. Please try again.");
+		}
+		return response;
 	}
 }

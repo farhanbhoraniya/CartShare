@@ -26,22 +26,23 @@ public class PoolService {
     @Autowired
     UserRepository userRepository;
 
-    private List<User> getMembers(String pool) {
+    private List<PoolMembership> getMembers(String pool) {
         List<PoolMembership> poolMemberships = poolMembershipRepository.findByPool(pool);
-        List<User> poolMembers = new ArrayList<User>();
-
-        for (PoolMembership poolMembership : poolMemberships) {
-            Optional<User> optionalUser = userRepository.findById(poolMembership.getUser());
-            optionalUser.ifPresent(poolMembers::add);
-        }
-        return poolMembers;
+        return poolMemberships;
+//        List<User> poolMembers = new ArrayList<User>();
+//
+//        for (PoolMembership poolMembership : poolMemberships) {
+//            Optional<User> optionalUser = userRepository.findById(poolMembership.getUser());
+//            optionalUser.ifPresent(poolMembers::add);
+//        }
+//        return poolMembers;
     }
 
     public Pool findByName(String name) {
         Pool pool = poolRepository.findByName(name);
         if(pool != null)
         {
-            List<User> poolMembers = getMembers(pool.getId());
+            List<PoolMembership> poolMembers = getMembers(pool.getId());
             pool.setMembers(poolMembers);
         }
         return pool;
@@ -55,7 +56,7 @@ public class PoolService {
         Pool pool = poolRepository.findById(id);
         if(pool != null)
         {
-            List<User> poolMembers = getMembers(pool.getId());
+            List<PoolMembership> poolMembers = getMembers(pool.getId());
             pool.setMembers(poolMembers);
         }
         return pool;
@@ -65,7 +66,7 @@ public class PoolService {
         List<Pool> pools = poolRepository.findByZip(zip);
         for (int i = 0; i < pools.size(); i++) {
 
-            List<User> poolMembers = getMembers(pools.get(i).getId());
+            List<PoolMembership> poolMembers = getMembers(pools.get(i).getId());
             pools.get(i).setMembers(poolMembers);
         }
 
@@ -76,7 +77,7 @@ public class PoolService {
         List<Pool> pools = poolRepository.findByNeighborhood(neighborhood);
         for (int i = 0; i < pools.size(); i++) {
 
-            List<User> poolMembers = getMembers(pools.get(i).getId());
+            List<PoolMembership> poolMembers = getMembers(pools.get(i).getId());
             pools.get(i).setMembers(poolMembers);
         }
 
@@ -87,7 +88,7 @@ public class PoolService {
         List<Pool> pools = poolRepository.findAll();
         for (int i = 0; i < pools.size(); i++) {
 
-            List<User> poolMembers = getMembers(pools.get(i).getId());
+            List<PoolMembership> poolMembers = getMembers(pools.get(i).getId());
             pools.get(i).setMembers(poolMembers);
         }
         return pools;

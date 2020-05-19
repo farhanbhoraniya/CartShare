@@ -103,7 +103,15 @@
                                                 <span class="badge bg-green">Leader</span>
                                             </li>
                                             <li th:each="userPoolMember: ${userPool.getMembers()}">
-                                                <span th:text="${userPoolMember.getScreenname()}"></span>
+                                                <span th:text="${userPoolMember.getUser().getScreenname()}"></span>
+                                                <span th:if="${userPoolMember.isVerified() == false}" class="badge bg-blue">Pending Reference Support</span>
+                                                <span th:if="${userPoolMember.isVerified() && userPoolMember.isLeaderapproved() == false}" class="badge bg-orange">Pending Leader Approval</span>
+                                                <span th:if="${userPoolMember.isVerified() == false && userPoolMember.getReference() == user.getId()}">
+                                                    <button th:data-request-id="${userPoolMember.getId()}" data-type="ref_support" class="btn btn-success ref_support">Support</button>
+                                                    <button th:data-request-id="${userPoolMember.getId()}" data-type="ref_reject" class="btn btn-danger ref_reject">Reject</button>
+                                                </span>
+                                                <span th:if="${userPoolMember.isVerified() && userPoolMember.isLeaderapproved() == false && userPool.getLeader().getId() == user.getId()}">
+                                                    <button th:data-request-id="${userPoolMember.getId()}" class="btn btn-success leaderApprove">Approve</button></span>
 <!--                                                <span th:if="${userPoolMember}" class="badge bg-">Leader</span>-->
                                             </li>
                                         </ul>
@@ -332,6 +340,96 @@
                 deleteBtn.attr('disabled', false);
 
                 showNotification("Error Creating Pool. Please try again.",'bg-red','bottom','right');
+            }
+        });
+    });
+
+    $('.ref_support').click(function(){
+
+        var request_id = $(this).attr('data-request-id');
+
+        $.ajax({
+            url: "/poolmembership/reference/" + request_id + "/approve",
+            type: "POST",
+            contentType: "application/json",
+            success: function (res) {
+
+                if(res.status)
+                {
+                    showNotification(res.message,'bg-green','bottom','right');
+                }
+                else
+                {
+                    showNotification(res.message,'bg-red','bottom','right');
+                }
+
+                window.location = "/poolList";
+            },
+            error: function(res){
+                showNotification("Error updating request. Please try again.",'bg-red','bottom','right');
+            },
+            failure: function (res) {
+                showNotification("Error updating request. Please try again.",'bg-red','bottom','right');
+            }
+        });
+    });
+
+    $('.ref_reject').click(function(){
+
+        var request_id = $(this).attr('data-request-id');
+
+        $.ajax({
+            url: "/poolmembership/reference/" + request_id + "/reject",
+            type: "DELETE",
+            contentType: "application/json",
+            success: function (res) {
+
+                if(res.status)
+                {
+                    showNotification(res.message,'bg-green','bottom','right');
+                }
+                else
+                {
+                    showNotification(res.message,'bg-red','bottom','right');
+                }
+
+                window.location = "/poolList";
+            },
+            error: function(res){
+                showNotification("Error updating request. Please try again.",'bg-red','bottom','right');
+            },
+            failure: function (res) {
+                showNotification("Error updating request. Please try again.",'bg-red','bottom','right');
+            }
+        });
+    });
+
+    $('.leaderApprove').click(function(){
+
+        var request_id = $(this).attr('data-request-id');
+
+        $.ajax({
+            url: "/poolmembership/leader/" + request_id + "/approve",
+            type: "POST",
+            contentType: "application/json",
+            success: function (res) {
+
+                if(res.status)
+                {
+                    showNotification(res.message,'bg-green','bottom','right');
+                }
+                else
+                {
+                    showNotification(res.message,'bg-red','bottom','right');
+                }
+
+                window.location = "/poolList";
+            },
+            error: function(res){
+                showNotification("Error updating request. Please try again.",'bg-red','bottom','right');
+            },
+            failure: function (res) {
+                showNotification("Error updating request. Please try again.",'bg-red','bottom','right');
             }
         });
     });

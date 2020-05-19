@@ -58,7 +58,7 @@ public class UserService {
         Pool pool = poolRepository.findByLeader(user);
         if(pool == null)
         {
-            PoolMembership poolMembership = poolMembershipRepository.findByUser(user.getId());
+            PoolMembership poolMembership = poolMembershipRepository.findByUser(user);
             if(poolMembership != null)
             {
                 pool = poolRepository.findById(poolMembership.getPool());

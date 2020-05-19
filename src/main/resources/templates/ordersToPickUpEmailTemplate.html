@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Spring boot eamil teplate with Thymeleaf</title>
+    <title>Spring boot email template with Thymeleaf</title>
     <style>
         table, th, td {
           border: 1px solid black;
         }
-        
         th, td {
           padding: 10px;
         }
@@ -35,7 +34,6 @@
           <td th:text="${item.price}"></td>
         </tr>
       </table>
-      
      <p>Thank you for picking up other orders. Following are the order details</p>
      <div th:each="order: ${orders}">
         <h2>Order</h2>

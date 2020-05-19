@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.cmpe275.CartShare.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,16 +16,21 @@ public class PoolMembershipService {
 
 	@Autowired
 	PoolMembershipRepository poolMembershipRepository;
-	
+
+
 	public List<PoolMembership> findByPool(String pool) {
 		return poolMembershipRepository.findByPool(pool);
 	}
-	
-	public PoolMembership findByUser(int user) {
+
+	public PoolMembership findById(int id) {
+		return poolMembershipRepository.findById(id);
+	}
+
+	public PoolMembership findByUser(User user) {
 		return poolMembershipRepository.findByUser(user);
 	}
 	
-	public PoolMembership membershipCheck(String pool, int user) {
+	public PoolMembership membershipCheck(String pool, User user) {
 		return poolMembershipRepository.findByPoolAndUser(pool, user);
 	}
 	
@@ -34,7 +40,12 @@ public class PoolMembershipService {
 	}
 	
 	@Transactional
-	public void delete(int user) {
+	public void delete(User user) {
 		poolMembershipRepository.deleteByUser(user);
+	}
+
+	@Transactional
+	public void deleteById(int id){
+		poolMembershipRepository.deleteById(id);
 	}
 }
