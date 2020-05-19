@@ -122,8 +122,8 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input id="nooforders" th:data-store-id="${storeid}" name="name" type="number" class="form-control" placeholder="How many orders do you want to Pickup?" required/>
-                                        	
+                                            <input th:if="${size != 0}" id="nooforders" th:data-store-id="${storeid}" name="name" type="number" class="form-control" placeholder="How many orders do you want to Pickup?" required/>
+                                        	<span th:unless="${size != 0}">No Orders from Pool Members. Click Submit</span>
                                         </div>
                                     </div>
                                 </div>

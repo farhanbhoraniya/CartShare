@@ -74,7 +74,6 @@ public class DeliveryController {
             int newRating = deliveredBy.getRating()+1;
             deliveredBy.setRating(newRating);
             userService.save(deliveredBy);
-
         }
 
         JSONObject response = new JSONObject();

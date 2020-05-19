@@ -125,15 +125,15 @@ $(document).ready(function(e){
             contentType: "application/json",
             success: function (res) {
             	calculateAndUpdateRow(null,null,price,"dsc");
-                showNotification("Store deleted successfully",'bg-green','bottom','right');
+                showNotification("Item deleted successfully",'bg-green','bottom','right');
                 store_row.slideUp('slow').remove();
             },
             error: function(res){
-                showNotification("Cannot Deleting Store. Store already linked to products",'bg-red','bottom','right');
+                showNotification("Cannot Delete Item.",'bg-red','bottom','right');
             },
             failure: function (res) {
                 console.log(res);
-                showNotification("Error Deleting Store.",'bg-red','bottom','right');
+                showNotification("Error Deleting Item.",'bg-red','bottom','right');
             }
         });
     });
