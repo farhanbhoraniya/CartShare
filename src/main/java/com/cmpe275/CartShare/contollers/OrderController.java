@@ -102,6 +102,8 @@ public class OrderController {
         Date date = new Date();
         String status = "PLACED";
         User pickedBy = null;
+        String totalAmount = (String) requestBody.getOrDefault("totalBill", null);
+        
         boolean selfPick = (boolean) requestBody.get("selfPick");
         if (selfPick) {
             pickedBy = currentUserObject;
