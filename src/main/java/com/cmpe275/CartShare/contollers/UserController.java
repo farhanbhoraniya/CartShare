@@ -13,6 +13,7 @@ import com.cmpe275.CartShare.service.UserService;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -91,7 +92,24 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(newUser);
     }*/
-
+    @GetMapping("/order/getCredit")
+    public ResponseEntity<String> getCredit() {
+        JSONObject obj = new JSONObject();
+        try {
+            int user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        
+            Optional<User> user = userService.findById(user_id);
+            int rating = user.get().getRating();
+            System.out.println(rating);
+            obj.put("status", "Success");
+            obj.put("credit", -7);
+        }catch(Exception e) {
+            obj.put("status", "Failure");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(obj.toString());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(obj.toString());
+    }
+    
     @PostMapping("/oauth2/callback/{registrationId}")
     public void callback(@PathVariable String registrationId) {
         System.out.println(registrationId);

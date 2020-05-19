@@ -3,11 +3,13 @@ package com.cmpe275.CartShare.contollers;
 import com.cmpe275.CartShare.model.Cart;
 import com.cmpe275.CartShare.model.CartItem;
 import com.cmpe275.CartShare.model.Pool;
+import com.cmpe275.CartShare.model.PoolMembership;
 import com.cmpe275.CartShare.model.Product;
 import com.cmpe275.CartShare.model.Store;
 import com.cmpe275.CartShare.security.UserPrincipal;
 import com.cmpe275.CartShare.service.CartItemService;
 import com.cmpe275.CartShare.service.CartService;
+import com.cmpe275.CartShare.service.PoolMembershipService;
 import com.cmpe275.CartShare.service.ProductService;
 import com.cmpe275.CartShare.service.StoreService;
 
@@ -41,8 +43,11 @@ public class CartContoller {
     @Autowired
     StoreService storeService;
     
+    @Autowired
+    PoolMembershipService poolMembershipService;
+    
     @PostMapping("/updateItemInCart")
-    public @ResponseBody ResponseEntity<CartItem> addOrUpdateItemToCart(@RequestBody JSONObject cartItem) {
+    public @ResponseBody ResponseEntity<String> addOrUpdateItemToCart(@RequestBody JSONObject cartItem) {
         if (! (cartItem.containsKey("store_id") && cartItem.containsKey("product_sku")
                 && cartItem.containsKey("user_id") && cartItem.containsKey("quantity") && cartItem.containsKey("price"))) {
             System.out.println("Invalid or missing parameters");
@@ -56,9 +61,14 @@ public class CartContoller {
         int quantity = (int) cartItem.get("quantity");
         double price = Double.parseDouble(cartItem.get("price").toString());
         
-        
-        
+        JSONObject obj = new JSONObject();
         try{
+            PoolMembership poolMembership = poolMembershipService.findByUser(user_id);
+            if(poolMembership == null){
+                obj.put("code", "300");
+                obj.put("message", "You need to be a member of a pool to add items in cart");
+                return ResponseEntity.status(HttpStatus.OK).body(obj.toString());
+            }
             Cart cart= (Cart) cartService.findCartByUserId(user_id);
 
             if(cart==null){
@@ -73,7 +83,9 @@ public class CartContoller {
                     List<CartItem> cartItems = cartItemService.findByCart(cart.getId());
                     if(cartItems.size() > 0) {
                         if(cartItems.get(0).getProduct().getStoreid() != store_id) {
-                            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(cartItems.get(0));
+                            obj.put("code", "500");
+                            obj.put("message", "Override Cart?");
+                            return ResponseEntity.status(HttpStatus.OK).body(obj.toString());
                         }
                     }
                 }
@@ -85,11 +97,16 @@ public class CartContoller {
             CartItem ci = new CartItem(store, product, cart, quantity, (double)quantity*price);
             if(quantity == 0) {
                 cartItemService.delete(ci);
-                return ResponseEntity.status(HttpStatus.OK).body(ci);
+                obj.put("code", "200");
+                obj.put("message", "Item Deleted from Cart");
+                return ResponseEntity.status(HttpStatus.OK).body(obj.toString());
             }
 
             cartItemService.saveOrUpdateCartItem(ci);
-            return ResponseEntity.status(HttpStatus.OK).body(ci);
+            obj.put("code", "200");
+            obj.put("message", "Cart Updated");
+            obj.put("price",ci.getPrice());
+            return ResponseEntity.status(HttpStatus.OK).body(obj.toString());
         }
         catch (Exception e){
             e.printStackTrace();
