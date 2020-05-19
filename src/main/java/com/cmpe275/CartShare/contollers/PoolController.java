@@ -5,6 +5,7 @@ import com.cmpe275.CartShare.exception.ResourceNotFoundException;
 import com.cmpe275.CartShare.model.Pool;
 import com.cmpe275.CartShare.model.PoolMembership;
 import com.cmpe275.CartShare.model.User;
+import com.cmpe275.CartShare.security.UserPrincipal;
 import com.cmpe275.CartShare.service.PoolService;
 import com.cmpe275.CartShare.service.UserService;
 import org.json.simple.JSONObject;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -35,17 +37,20 @@ public class PoolController {
     ResponseEntity<Pool> createPool(@RequestBody JSONObject poolObject) {
 
         if (!(poolObject.containsKey("id") && poolObject.containsKey("name") && poolObject.containsKey("neighborhood") && poolObject.containsKey("description")
-                && poolObject.containsKey("zip") && poolObject.containsKey("leader"))) {
+                && poolObject.containsKey("zip"))) {
             System.out.println("Invalid or missing parameters");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+
+        Integer user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
 
         String id = (String) poolObject.get("id");
         String name = (String) poolObject.get("name");
         String neighborhood = (String) poolObject.get("neighborhood");
         String description = (String) poolObject.get("description");
         String zip = (String) poolObject.get("zip");
-        int leader = (int) poolObject.get("leader");
+
+        int leader = user_id;
 
         Pool temp = poolService.findByName(name);
 
@@ -189,8 +194,14 @@ public class PoolController {
     @GetMapping("/poolList")
     public ModelAndView getPoolsList(ModelAndView modelAndView) {
         List<Pool> pools = poolService.findAll();
+
+        Integer user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        User user = userService.findById(user_id).get();
+        Pool userPoolInfo = userService.findUserPool(user);
+
         modelAndView.setViewName("pool/index");
         modelAndView.addObject("pools", pools);
+        modelAndView.addObject("userPool", userPoolInfo);
         System.out.println("Pools: " + pools.toString());
         return modelAndView;
     }

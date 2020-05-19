@@ -39,8 +39,11 @@ public class PoolService {
 
     public Pool findByName(String name) {
         Pool pool = poolRepository.findByName(name);
-        List<User> poolMembers = getMembers(pool.getId());
-        pool.setMembers(poolMembers);
+        if(pool != null)
+        {
+            List<User> poolMembers = getMembers(pool.getId());
+            pool.setMembers(poolMembers);
+        }
         return pool;
     }
 
@@ -50,8 +53,11 @@ public class PoolService {
 
     public Pool findById(String id) {
         Pool pool = poolRepository.findById(id);
-        List<User> poolMembers = getMembers(pool.getId());
-        pool.setMembers(poolMembers);
+        if(pool != null)
+        {
+            List<User> poolMembers = getMembers(pool.getId());
+            pool.setMembers(poolMembers);
+        }
         return pool;
     }
 
