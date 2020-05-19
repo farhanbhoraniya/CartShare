@@ -1,6 +1,9 @@
 package com.cmpe275.CartShare.service;
 
+import com.cmpe275.CartShare.dao.PoolMembershipRepository;
+import com.cmpe275.CartShare.dao.PoolRepository;
 import com.cmpe275.CartShare.dao.UserRepository;
+import com.cmpe275.CartShare.model.Pool;
 import com.cmpe275.CartShare.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,6 +16,12 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    @Autowired
+    PoolRepository poolRepository;
+
+    @Autowired
+    PoolMembershipRepository poolMembershipRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -39,5 +48,22 @@ public class UserService {
 
     public Boolean userExists(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    public Pool findUserPool(User user)
+    {
+        Pool pool = poolRepository.findByLeader(user);
+        if(pool == null)
+        {
+            String poolId = poolMembershipRepository.findByUser(user.getId()).getPool();
+            pool = poolRepository.findById(poolId);
+        }
+
+        if(pool != null)
+        {
+            pool.setMembers(pool.getMembers());
+        }
+
+        return pool;
     }
 }

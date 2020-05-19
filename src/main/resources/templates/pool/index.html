@@ -86,19 +86,17 @@
                                 <div class="card">
                                     <div class="body">
                                         <span style="font-size: 16px; font-weight: bold">Joined Pool:</span>
-                                        <span style="font-size: 16px"></span>
+                                        <span style="font-size: 16px" th:text="${userPool.getName()}"></span>
                                         <br>
 
                                         <h4>Pool Members:</h4>
-                                        <ul>
-                                            <li>Abc</li>
-                                            <li>XYZ</li>
+                                        <ul style="list-style-type: none">
+                                            <li>
+                                                <span th:text="${userPool.getLeader().getScreenname()}"></span>
+                                                <span class="badge bg-green">Leader</span>
+                                            </li>
+                                            <li th:each="userPoolMember: ${userPool.getMembers()}" th:text="${userPoolMember.getScreenname()}"></li>
                                         </ul>
-<!--                                        <span th:text="${address.getStreetname()}"></span>-->
-<!--                                        <span th:text="${address.getStreetno()}"></span>,<br>-->
-<!--                                        <span th:text="${address.getCity()}"></span>,-->
-<!--                                        <span th:text="${address.getState()}"></span> - -->
-<!--                                        <span th:text="${address.getZip()}"></span>-->
                                     </div>
                                 </div>
 
