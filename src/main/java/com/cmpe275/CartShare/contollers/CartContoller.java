@@ -147,9 +147,9 @@ public class CartContoller {
     
     
     
-    @GetMapping("/getOrdersFromCart/{user_id}")
-    public ModelAndView getStoreProducts(ModelAndView modelAndView, 
-                                                    @PathVariable int user_id) {
+    @GetMapping("/getOrdersFromCart")
+    public ModelAndView getStoreProducts(ModelAndView modelAndView 
+                                                    ) {
 
         int userId = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         List<CartItem> items = new ArrayList<CartItem>();

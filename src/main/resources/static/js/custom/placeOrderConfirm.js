@@ -3,6 +3,7 @@ $(document).ready(function(){
 	$.fn.placeOrder = function(){
 		//$("#pickUpOrderModal").modal('show');
 	} 
+	var totalBill = $("#total").text();
 	var concredit = 0;
 	$("#pickOrder").on("click",function(){
 		$("#selfPickup").modal('show');
@@ -45,7 +46,8 @@ $(document).ready(function(){
 		$("#selfPickupConfirmation").modal('hide');
 		$(".loader").show();
 		var data = {
-				"selfPick": false
+				"selfPick": false,
+				"totalBill": totalBill
 			};
 			$.ajax({
 				url: "/order/place",
@@ -95,7 +97,8 @@ $(document).ready(function(){
 		}
 		$("#selfPickup").modal('hide');
 		var data = {
-			"selfPick": selfPick
+			"selfPick": selfPick,
+			"totalBill": totalBill
 		};
 		$.ajax({
 			url: "/order/place",
