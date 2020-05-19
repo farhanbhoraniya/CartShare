@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<div th:insert="partials/header :: header"></div>
+
+<body class="theme-red">
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="preloader">
+            <div class="spinner-layer pl-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <p>Please wait...</p>
+    </div>
+</div>
+<!-- #END# Page Loader -->
+<!-- Overlay For Sidebars -->
+<div class="overlay"></div>
+<!-- #END# Overlay For Sidebars -->
+<!-- Search Bar -->
+<div class="search-bar">
+    <div class="search-icon">
+        <i class="material-icons">search</i>
+    </div>
+    <input type="text" placeholder="START TYPING...">
+    <div class="close-search">
+        <i class="material-icons">close</i>
+    </div>
+</div>
+<!-- #END# Search Bar -->
+
+<!-- Top Bar -->
+<div th:insert="userPartials/top_nav :: topnav"></div>
+<!-- #Top Bar -->
+<section>
+    <div th:insert="userPartials/left_nav :: leftnav"></div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>USER PROFILE</h2>
+        </div>
+        <!-- Input -->
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="body">
+
+                        <h2 class="card-inside-title">Chat Details</h2>
+                        <form class="form-horizontal">
+                        	<div class="row clearfix">
+                                <div class="col-md-12">
+                                    <select  id="chatID" class="form-control show-tick" multiple>
+                                        <option th:each="pooler:${poolers}" th:value="${pooler.email}" th:text="${pooler.screenname}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+	                            <div class="col-sm-12">
+	                                <div class="form-group">
+	                                    <div class="form-line">
+	                                        <input type="text" id="subject" class="form-control" placeholder="SUBJECT" required/>
+	                                    </div>
+	                                </div>
+	                            </div>
+                        	</div>
+                            <div class="row clearfix">
+	                            <div class="col-sm-12">
+	                                <div class="form-group">
+	                                    <div class="form-line">
+	                                        <textarea rows="4" id="message" class="form-control no-resize" placeholder="Message Content..."></textarea>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+                            <button id="sendMail" type="button" class="btn btn-primary m-t-15 waves-effect">Send Chat</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Input -->
+    </div>
+</section>
+
+<div th:insert="partials/scripts :: scripts"></div>
+
+<!--&lt;!&ndash; Jquery Core Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/jquery/jquery.min.js}"></script>-->
+
+<!--&lt;!&ndash; Bootstrap Core Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/bootstrap/js/bootstrap.js}"></script>-->
+
+<!--&lt;!&ndash; Select Plugin Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/bootstrap-select/js/bootstrap-select.js}"></script>-->
+
+<!--&lt;!&ndash; Slimscroll Plugin Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/jquery-slimscroll/jquery.slimscroll.js}"></script>-->
+
+<!--&lt;!&ndash; Waves Effect Plugin Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/node-waves/waves.js}"></script>-->
+
+<!--&lt;!&ndash; Autosize Plugin Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/autosize/autosize.js}"></script>-->
+
+<!--&lt;!&ndash; Moment Plugin Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/momentjs/moment.js}"></script>-->
+
+<!--&lt;!&ndash; Bootstrap Material Datetime Picker Plugin Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js}"></script>-->
+
+<!--&lt;!&ndash; Bootstrap Datepicker Plugin Js &ndash;&gt;-->
+<!--<script th:src="@{/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>-->
+
+<!-- Custom Js -->
+<!--<script th:src="@{/js/js/admin.js}"></script>-->
+<!--<script th:src="@{/js/js/pages/forms/basic-form-elements.js}"></script>-->
+
+<!--<script src="/js/plugins/bootstrap-notify/bootstrap-notify.js"></script>-->
+
+<!-- Demo Js -->
+<script th:src="@{/js/js/demo.js}"></script>
+
+
+<!-- Jquery Validation Plugin Css -->
+<script src="/js/plugins/jquery-validation/jquery.validate.js"></script>
+<script th:src="@{/js/custom/chat.js}"></script>
+
+</body>
+</html>
