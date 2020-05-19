@@ -54,7 +54,7 @@ $(document).ready(function(e){
 				if(res.code == 300){
 					showNotification("You need to join a pool to add items in cart",'bg-red','bottom','right');
 				 }
-				 else if(res == 500){
+				 else if(res.code == 500){
 					 $("#confirmationModal").modal('show'); 
 				 }else{
 					 $("#"+id).val(qty);
