@@ -120,6 +120,9 @@ public class OrderController {
         System.out.println(newOrder.getId());
 
         List<CartItem> cartItems = cartItemRepository.findByCart(cart);
+        if(cartItems.size() == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
 
         for (CartItem cartItem : cartItems) {
             OrderItems orderItem = new OrderItems(cartItem.getProduct(), newOrder, cartItem.getQuantity(), cartItem.getPrice());

@@ -2,7 +2,7 @@ $(document).ready(function(e){
 	var selector, qty, message, id, val, rate, delPrevItems;
 	$(".addItem").click(function(){
 		var sku = $(this).attr("data-sku");
-		
+		var unit = $(this).attr("data-unit");
 		var inval = $("#"+sku).val();
 		selector = $(this);
 		qty = parseInt(inval)+1;
@@ -11,6 +11,9 @@ $(document).ready(function(e){
 		val = inval+1;
 		rate = "inc";
 		delPrevItems = false;
+		if(unit === 'Piece' && val > 1){
+			return;
+		}
 		callAPI();
 	});
 	
@@ -27,7 +30,7 @@ $(document).ready(function(e){
 		rate = "dsc";
 		delPrevItems = false;
 		
-		if(val > 0)
+		if(val >= 0)
 			callAPI();
 	});
 	

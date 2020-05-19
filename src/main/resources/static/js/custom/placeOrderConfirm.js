@@ -62,10 +62,10 @@ $(document).ready(function(){
 					}
 				},
 				error: function(req){
-					console.log(req);
+					showNotification("Error in Placing Order. Add items in the cart/Join a Pool to process order",'bg-red','bottom','right');
 				},
 				failure: function(req){
-					console.log(req);
+					showNotification("Error in Placing Order.",'bg-red','bottom','right');
 				}
 			});
 	});
@@ -93,6 +93,7 @@ $(document).ready(function(){
 					"\nAre you sure you want to continue with Fellow Pooler Pickup?"));
 			return;
 		}
+		$("#selfPickup").modal('hide');
 		var data = {
 			"selfPick": selfPick
 		};
@@ -114,10 +115,10 @@ $(document).ready(function(){
 				}
 			},
 			error: function(req){
-				console.log(req);
+				showNotification("Error in Placing Order. Add items in the cart/Join a Pool to process order",'bg-red','bottom','right');
 			},
 			failure: function(req){
-				console.log(req);
+				showNotification("Error in Placing Order.",'bg-red','bottom','right');
 			}
 		});
 	});
