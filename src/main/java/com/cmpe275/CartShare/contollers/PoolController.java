@@ -66,7 +66,7 @@ public class PoolController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        PoolMembership userMembershipCheck = poolMembershipRepository.findByUser(user.getId());
+        PoolMembership userMembershipCheck = poolMembershipRepository.findByUser(user);
 
         if (userMembershipCheck != null) {
             System.out.println("User is already a member of pool");
@@ -199,7 +199,9 @@ public class PoolController {
         User user = userService.findById(user_id).get();
         Pool userPoolInfo = userService.findUserPool(user);
 
+
         modelAndView.setViewName("pool/index");
+        modelAndView.addObject("user", user);
         modelAndView.addObject("pools", pools);
         modelAndView.addObject("userPool", userPoolInfo);
         System.out.println("Pools: " + pools.toString());
