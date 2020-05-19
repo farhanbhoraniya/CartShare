@@ -37,17 +37,20 @@ public class PoolController {
     ResponseEntity<Pool> createPool(@RequestBody JSONObject poolObject) {
 
         if (!(poolObject.containsKey("id") && poolObject.containsKey("name") && poolObject.containsKey("neighborhood") && poolObject.containsKey("description")
-                && poolObject.containsKey("zip") && poolObject.containsKey("leader"))) {
+                && poolObject.containsKey("zip"))) {
             System.out.println("Invalid or missing parameters");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+
+        Integer user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
 
         String id = (String) poolObject.get("id");
         String name = (String) poolObject.get("name");
         String neighborhood = (String) poolObject.get("neighborhood");
         String description = (String) poolObject.get("description");
         String zip = (String) poolObject.get("zip");
-        int leader = (int) poolObject.get("leader");
+
+        int leader = user_id;
 
         Pool temp = poolService.findByName(name);
 

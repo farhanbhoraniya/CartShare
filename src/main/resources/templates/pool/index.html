@@ -81,12 +81,19 @@
 
                     <div class="body">
 
-                        <div class="row clearfix">
+                        <div id="userPoolInfo" th:if="${userPool != null}" class="row clearfix">
                             <div class="col-md-6 m-l-20 m-t-10">
                                 <div class="card">
                                     <div class="body">
-                                        <span style="font-size: 16px; font-weight: bold">Joined Pool:</span>
-                                        <span style="font-size: 16px" th:text="${userPool.getName()}"></span>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <span style="font-size: 16px; font-weight: bold">Joined Pool:</span>
+                                                <span style="font-size: 16px" th:text="${userPool.getName()}"></span>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button th:if="${userPool.getMembers().size() == 0}" id="poolDeleteBtn" th:data-pool-id="${userPool.getId()}" class="btn btn-danger waves-effect" data-toggle="tooltip" data-placement="top" title="Delete Pool"><i class="material-icons">delete</i></button>
+                                            </div>
+                                        </div>
                                         <br>
 
                                         <h4>Pool Members:</h4>
@@ -109,7 +116,7 @@
 
                         <div class="table-responsive">
 
-                            <a href="/order/pool_pending/2" type="button" class="btn btn-success waves-effect" data-toggle="tooltip" data-placement="top" title="Create">
+                            <a th:if="${userPool == null}" href="/createPool" type="button" class="btn btn-success waves-effect" data-toggle="tooltip" data-placement="top" title="Create">
                                 <i class="material-icons">add</i>
                             </a>
 
@@ -121,7 +128,7 @@
                                     <th>Neighborhood</th>
                                     <th>Description</th>
                                     <th>Zip</th>
-                                    <th class="nosort">Actions</th>
+                                    <th th:if="${userPool == null}" class="nosort">Actions</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -131,7 +138,7 @@
                                     <th>Neighborhood</th>
                                     <th>Description</th>
                                     <th>Zip</th>
-                                    <th class="nosort">Actions</th>
+                                    <th th:if="${userPool == null}" class="nosort">Actions</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
@@ -141,14 +148,10 @@
                                     <td th:text="${pool.neighborhood}" />
                                     <td th:text="${pool.description}" />
                                     <td th:text="${pool.zip}" />
-                                    <td>
+                                    <td th:if="${userPool == null}">
                                         <button th:data-pool-name="${pool.name}" th:data-id="${pool.id}" type="button" class="btn btn-primary waves-effect addPoolBtn" data-placement="top" title="Join" data-toggle="modal" data-target="#joinPoolModal">
                                             <i class="material-icons">add</i>
                                         </button>
-<!--                                        <a href="/company/${ store.id}}/view" type="button" class="btn btn-success waves-effect" data-toggle="tooltip" data-placement="top" title="Leave">-->
-<!--                                            <i class="material-icons">remove</i>-->
-<!--                                        </a>-->
-                                        
                                     </td>
                                 </tr>
                                 </tbody>
@@ -270,6 +273,37 @@
             failure: function (res) {
                 console.log(res);
                 showNotification("Error Joining pool. Please try again.",'bg-red','bottom','right');
+            }
+        });
+    });
+
+    //Delete Pool
+    $('#poolDeleteBtn').click(function(){
+
+        var poolId = $(this).attr('data-pool-id');
+        var deleteBtn = $(this);
+        deleteBtn.attr('disabled', true);
+
+        $.ajax({
+            url: "/pool/" + poolId,
+            type: "DELETE",
+            contentType: "application/json",
+            success: function (res) {
+
+                showNotification("Pool deleted successfully",'bg-green','bottom','right');
+                deleteBtn.attr('disabled', false);
+                $('#userPoolInfo').remove();
+                window.location = "/poolList";
+            },
+            error: function(res){
+                deleteBtn.attr('disabled', false);
+                showNotification("Error Deleting Pool. Please try again.",'bg-red','bottom','right');
+            },
+            failure: function (res) {
+                console.log(res);
+                deleteBtn.attr('disabled', false);
+
+                showNotification("Error Creating Pool. Please try again.",'bg-red','bottom','right');
             }
         });
     });
