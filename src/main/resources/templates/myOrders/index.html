@@ -38,7 +38,7 @@
 </div>
 <!-- #END# Search Bar -->
 
-<div th:insert="partials/top_nav :: topnav"></div>
+<div th:insert="userPartials/top_nav :: topnav"></div>
 
 <section>
     <div th:insert="userPartials/left_nav :: leftnav"></div>
@@ -109,7 +109,7 @@
                                     <td th:text="${order.getId()}" />
                                     <td th:text="${order.getOrderItems().size()} > 0 ? ${order.getOrderItems().get(0).getProduct().storeid} : '-' " />
                                     <td th:text="${order.getOrderItems().size()}" />
-                                    <td th:text="${order.getStatus()}" />
+                                    <td th:text="${order.getTotalamount()}" />
                                     <td th:text="${order.getStatus()}" />
                                     <td>
                                         <a th:href="'/myOrder/' + ${order.getId()} + '/view'" type="button" class="btn btn-primary waves-effect" data-toggle="tooltip" data-placement="top" title="View">

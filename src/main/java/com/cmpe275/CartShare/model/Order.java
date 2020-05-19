@@ -48,6 +48,8 @@ public class Order {
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"order"})
     private List<OrderItems> orderItems;
+    
+    private String totalamount;
 
     public List<OrderItems> getOrderItems() {
         return orderItems;
@@ -135,5 +137,13 @@ public class Order {
     public void setSelfPick(boolean selfPick) {
         this.selfpick = selfPick;
     }
+
+	public String getTotalamount() {
+		return totalamount;
+	}
+
+	public void setTotalamount(String totalamount) {
+		this.totalamount = totalamount;
+	}
 
 }

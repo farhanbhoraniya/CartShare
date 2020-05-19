@@ -6,52 +6,34 @@
         table, th, td {
           border: 1px solid black;
         }
-        <!DOCTYPE html>
-			<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
-				<head>
-				    <title>Spring boot email teplate with Thymeleaf</title>
-				    <style>
-				        table, th, td {
-				          border: 1px solid black;
-				        }
-				        
-				        th, td {
-				          padding: 10px;
-				        }
-				    </style>
-				</head>
-				 <body>
-				     <p>Your order has been placed. Following are the order details</p>
-				     <p th:text="'Order ID: ' + ${id}"></p>
-				     <p th:text="'Date: ' + ${date}"></p>
-				     <p th:text="'Status: ' + ${status}"></p>
-				     <h3>Order Items</h3>
-				     <table>
-				        <tr>
-				          <th>SKU</th>
-				          <th>Name</th>
-				          <th>Description</th>
-				          <th>Quantity</th>
-				          <th>Price</th>
-				        </tr>
-				        <tr th:each="item : ${orderItems}">
-				
-				          <td th:text="${item.product.sku}"></td>
-				          <td th:text="${item.product.name}"></td>
-				          <td th:text="${item.product.description}"></td>
-				          <td th:text="${item.qty}"></td>
-				          <td th:text="${item.price}"></td>
-				        </tr>
-				      </table>
-				
-				  </body>
-			</html>
         th, td {
           padding: 10px;
         }
     </style>
 </head>
  <body>
+     <p>Your order has been placed. Following are the order details</p>
+     <p th:text="'Order ID: ' + ${parentOrder.id}"></p>
+     <p th:text="'Date: ' + ${parentOrder.date}"></p>
+     <p th:text="'Status: ' + ${parentOrder.status}"></p>
+     <h3>Order Items</h3>
+     <table>
+        <tr>
+          <th>SKU</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Quantity</th>
+          <th>Price</th>
+        </tr>
+        <tr th:each="item : ${parentOrder.orderItems}">
+
+          <td th:text="${item.product.sku}"></td>
+          <td th:text="${item.product.name}"></td>
+          <td th:text="${item.product.description}"></td>
+          <td th:text="${item.qty}"></td>
+          <td th:text="${item.price}"></td>
+        </tr>
+      </table>
      <p>Thank you for picking up other orders. Following are the order details</p>
      <div th:each="order: ${orders}">
         <h2>Order</h2>

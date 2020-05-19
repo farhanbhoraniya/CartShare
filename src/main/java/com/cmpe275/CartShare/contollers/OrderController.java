@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @RestController
@@ -69,8 +70,8 @@ public class OrderController {
 //        model.put("date", order.getDate());
 //        model.put("id", order.getId());
 //    	mailAsyncComponent.sendOrderMail(order.getBuyerid().getEmail(), "Order Placed", "ownOrderEmailTemplate", model);
-    	
-    	
+
+
     	return ResponseEntity.status(HttpStatus.OK).body(order);
     }
     
@@ -101,6 +102,8 @@ public class OrderController {
         Date date = new Date();
         String status = "PLACED";
         User pickedBy = null;
+        String totalAmount = (String) requestBody.getOrDefault("totalBill", null);
+        
         boolean selfPick = (boolean) requestBody.get("selfPick");
         if (selfPick) {
             pickedBy = currentUserObject;
@@ -155,7 +158,7 @@ public class OrderController {
         List<Order> parentOrder = orderService.findByBuyerId(userId);
 
         if (null != pool) {
-            
+
             List<Order> poolOrders = orderService.getOrdersByPool(pool);
             List<Order> filteredPoolOrders =
                     poolOrders.stream().filter(order ->
@@ -165,29 +168,33 @@ public class OrderController {
             //.limit(numberOfRecords)
             System.out.println(filteredPoolOrders);
             
-            for(Order parent: parentOrder) {
+//            for(Order parent: parentOrder) {
+            if (parentOrder.size() != 0) {
                 int count = 0;
                 for(Order order: filteredPoolOrders) {
-                    List<OrderItems> filteredOrderItems = orderItemsService.getOrderItemsByOrderId(order.getId());
+//                    List<OrderItems> filteredOrderItems = orderItemsService.getOrderItemsByOrderId(order.getId());
+                	List<OrderItems> filteredOrderItems = order.getOrderItems();
                     if(filteredOrderItems.size() == 0) {
                         continue;
                     }
                     if(filteredOrderItems.get(0).getProduct().getStoreid() == storeid && count < numberOfRecords) {
                        
-                        linkedOrderService.save(new LinkedOrders(parent.getId(), order));
-                    	
+                        linkedOrderService.save(new LinkedOrders(parentOrder.get(parentOrder.size() - 1).getId(), order));
                         count++;
                     }
                 }
             }
-            String userEmail = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail();
+            String userEmail = currentUser.getEmail(); 
+            		
             try {
+        		List<Order> linkedOrders = filteredPoolOrders.stream().limit(numberOfRecords).collect(Collectors.toList());
                 Map<String, Object> model = new HashMap<String, Object>();
-            	    model.put("orders", parentOrder);
-            	    mailAsyncComponent.sendOrderMail(userEmail, "Orders to pick up", "ordersToPickUpEmailTemplate", model);
-        	    } catch(Exception e) {
-        	        System.out.println("Error while sending the email");
-        	    }
+                model.put("orders", linkedOrders);
+        	    model.put("parentOrder", parentOrder.get(parentOrder.size() - 1));
+        	    mailAsyncComponent.sendOrderMail(userEmail, "Orders to pick up", "ordersToPickUpEmailTemplate", model);
+    	    } catch(Exception e) {
+    	        System.out.println("Error while sending the email");
+    	    }
         }
         return ResponseEntity.status(HttpStatus.OK).body("Success");
     }
