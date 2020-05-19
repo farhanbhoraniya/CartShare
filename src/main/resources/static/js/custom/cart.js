@@ -1,22 +1,37 @@
 $(document).ready(function(e){
+	var selector, qty, message, id, val, rate, delPrevItems;
 	$(".addItem").click(function(){
-		var id = $(this).attr("data-sku");
+		var sku = $(this).attr("data-sku");
 		
-		var val = $("#"+id).val();
-		
-		callAPI($(this), parseInt(val)+1, "Item Added to Cart", id, parseInt(val)+1,"inc",false);
+		var inval = $("#"+sku).val();
+		selector = $(this);
+		qty = parseInt(inval)+1;
+		message = "Item Added to Cart";
+		id = sku;
+		val = inval+1;
+		rate = "inc";
+		delPrevItems = false;
+		callAPI();
 	});
 	
 	$(".removeItem").click(function(){
-		var id = $(this).attr("data-sku");
+		var sku = $(this).attr("data-sku");
 		
-		var val = $("#"+id).val();
+		var inval = $("#"+sku).val();
+		
+		selector = $(this);
+		qty = parseInt(inval)-1;
+		message = "Item Removed from Cart";
+		id = sku;
+		val = inval-1;
+		rate = "dsc";
+		delPrevItems = false;
 		
 		if(val > 0)
-			callAPI($(this), parseInt(val)-1, "Item Removed from Cart", id, parseInt(val)-1,"dsc",false);
+			callAPI();
 	});
 	
-	function callAPI(selector, qty, message, id, val, rate, delPrevItems){
+	function callAPI(){
 		var data = {
 				product_sku: selector.attr("data-sku"),
 				store_id: parseInt(selector.attr("data-storeid")),
@@ -32,7 +47,7 @@ $(document).ready(function(e){
 			contentType: "application/json",
 			data: JSON.stringify(data),
 			success: function (res) {
-				$("#"+id).val(val);
+				$("#"+id).val(qty);
 				showNotification(message,'bg-green','bottom','right');
 				var pageURL = $(location).attr("href");
 				if (pageURL.indexOf("getOrdersFromCart") >= 0){
@@ -42,10 +57,7 @@ $(document).ready(function(e){
 			 error: function(res){
 				 if(res != null){
 					 $("#confirmationModal").modal('show');
-					 $("#confirmDel").on("click",function(){
-						 $("#confirmationModal").modal('hide');
-						 callAPI(selector, qty, message, id, val, rate, true);
-					 });
+					 
 				 }else{
 					 showNotification("Error Adding Item. Please try again.",'bg-red','bottom','right');
 				 }
@@ -56,6 +68,14 @@ $(document).ready(function(e){
             }
 		 });
 	}
+	
+	$("#confirmDel").on("click",function(){
+		 $("#confirmationModal").modal('hide');
+		 if(delPrevItems == false){
+			 delPrevItems = true;
+			 callAPI();
+		 }
+	 });
 	
 	function calculateAndUpdateRow(classSel,res, price, rate){
 		if(classSel !== null){
