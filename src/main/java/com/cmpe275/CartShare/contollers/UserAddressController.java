@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cmpe275.CartShare.model.Pool;
 import com.cmpe275.CartShare.model.User;
 import com.cmpe275.CartShare.model.UserAddress;
 import com.cmpe275.CartShare.security.UserPrincipal;
+import com.cmpe275.CartShare.service.PoolService;
 import com.cmpe275.CartShare.service.UserAddressService;
 import com.cmpe275.CartShare.service.UserService;
 
@@ -29,6 +31,9 @@ public class UserAddressController {
 
     @Autowired
     UserService userService;
+    
+    @Autowired
+    PoolService poolService;
 
     @PostMapping("/useraddress/{id}")
     public ResponseEntity<UserAddress> createAddress(@PathVariable int id, @RequestBody JSONObject addressObject) {
