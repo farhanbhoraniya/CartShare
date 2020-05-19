@@ -116,16 +116,15 @@ public class MailAsyncComponent {
             MimeMessageHelper helper = new MimeMessageHelper(message,
                     MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                     StandardCharsets.UTF_8.name());
-			helper.setTo(to);
-	        helper.setText(html, true);
-	        helper.setSubject(subject);
-	        getJavaMailSender().send(message);
-		} catch (Exception e) {
-			System.out.println("Error while sending the email");
-			System.out.println(e);
-			return;
-		}
-        
+            helper.setTo(to);
+	            helper.setText(html, true);
+	            helper.setSubject(subject);
+	            getJavaMailSender().send(message);
+		       } catch (Exception e) {
+		           System.out.println("Error while sending the email");
+		           System.out.println(e);
+		           return;
+		       }
         
         LOGGER.info("Mail sent");
 

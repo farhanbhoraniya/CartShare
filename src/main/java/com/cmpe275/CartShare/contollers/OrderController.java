@@ -134,8 +134,6 @@ public class OrderController {
         newOrder = orderService.findByOrderId(newOrder.getId());
         System.out.println("Items moved to the order items table");
 
-        
-
         System.out.println("Items removed from cart items");
         return ResponseEntity.status(HttpStatus.OK).body(newOrder);
 
@@ -145,6 +143,9 @@ public class OrderController {
     public ResponseEntity<String> addLinkedOrders(@RequestBody JSONObject requestBody) {
         
         int numberOfRecords = Integer.parseInt((String)requestBody.get("nooforders"));
+        if(numberOfRecords == 0) {
+            return ResponseEntity.status(HttpStatus.OK).body("Success");
+        }
         int storeid = Integer.parseInt((String)requestBody.get("storeid"));
         
         int userId = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
@@ -154,12 +155,7 @@ public class OrderController {
         List<Order> parentOrder = orderService.findByBuyerId(userId);
 
         if (null != pool) {
-            //List<OrderItems> orderItems = orderItemsService.getOrderItemsByStoreid(storeid);
-            //List<OrderItems> filteredOrderItems = orderItems.stream()
-//                                                    .filter(item -> item.getOrder().getBuyerid().getId() != userId && item.getOrder().getStatus().equals("PLACED"))
-//                                                    .sorted(Comparator.comparing(i -> i.getOrder().getDate()))
-//                                                    .limit(numberOfRecords)
-//                                                    .collect(Collectors.toList());
+            
             List<Order> poolOrders = orderService.getOrdersByPool(pool);
             List<Order> filteredPoolOrders =
                     poolOrders.stream().filter(order ->
@@ -201,7 +197,7 @@ public class OrderController {
                                          @PathVariable int store_id) {
         int userId = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         User currentUser = userService.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
-
+        int size = 0;
         Pool pool = findPoolByUser(currentUser);
         Map<Integer, JSONArray> map = new HashMap<>();
         if (null != pool) {
@@ -214,10 +210,14 @@ public class OrderController {
                             .collect(Collectors.toList());
                             //.limit(numberOfRecords)
             System.out.println(filteredPoolOrders);
+            size = filteredPoolOrders.size();
             
             for(Order order: filteredPoolOrders) {
                 List<OrderItems> filteredOrderItems = orderItemsService.getOrderItemsByOrderId(order.getId());
                 System.out.println("filtered: "+filteredOrderItems);
+                if(filteredOrderItems.size() == 0) {
+                    continue;
+                }
                 if(filteredOrderItems.size() == 0) {
                     continue;
                 }
@@ -240,6 +240,7 @@ public class OrderController {
         System.out.println("Lala: "+map);
         modelAndView.addObject("items", map);
         modelAndView.addObject("storeid", store_id);
+        modelAndView.addObject("size", size);
         modelAndView.setViewName("addToCart/orderList");
         return modelAndView;
     }

@@ -1,7 +1,13 @@
 $(document).ready(function(e){
 	$("#sendMail").click(function(){
 		var nooforder = $("#nooforders").val();
+		if(nooforder === undefined){
+			nooforder = "0";
+		}
 		var storeid = $("#nooforders").attr("data-store-id");
+		if(storeid === undefined){
+			storeid = "not";
+		}
 		var data = {
 				nooforders: nooforder,
 				storeid: storeid
@@ -12,6 +18,7 @@ $(document).ready(function(e){
 			contentType: "application/json",
 			data: JSON.stringify(data),
 			success: function (res) {
+				
 				$("#pickupinfo").modal('show');
             },
 			 error: function(res){
