@@ -193,12 +193,12 @@ public class UserController {
                 .filter(pooler -> pooler.getId() != user_id)
                 .collect(Collectors.toList());
         modelAndView.addObject("poolers", filteredPoolUsers);
-        modelAndView.setViewName("chat/index");
+        modelAndView.setViewName("message/index");
         return modelAndView;
     }
     
-    @PostMapping("/sendChatEmail")
-    public @ResponseBody ResponseEntity<String> sendChatEmail(@RequestBody JSONObject chatEmail) {
+    @PostMapping("/pooler/sendChatEmail")
+    public @ResponseBody ResponseEntity<JSONObject> sendChatEmail(@RequestBody JSONObject chatEmail) {
         if (! (chatEmail.containsKey("to") && chatEmail.containsKey("subject")
                 && chatEmail.containsKey("message") )) {
             System.out.println("Invalid or missing parameters");
@@ -212,7 +212,10 @@ public class UserController {
         }catch(Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(null);
-        
+
+        JSONObject response = new JSONObject();
+        response.put("status", true);
+        response.put("message", "Message sent successfully");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
