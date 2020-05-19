@@ -34,7 +34,7 @@
 <body class="login-page">
     <div class="login-box">
         <div class="logo">
-            <a href="javascript:void(0);">Pooler's Cart</a>
+            <a href="javascript:void(0);">CartShare</a>
             
         </div>
         <div class="card">
@@ -73,9 +73,13 @@
                         <div class="col-xs-6">
                             <a th:href="@{/sign-up}">Register Now!</a>
                         </div>
-                        <!-- <div class="col-xs-6 align-right">
-                            <a href="forgot-password.html">Forgot Password?</a>
-                        </div> -->
+                    </div>
+                    OR
+                    <div class="input-group">
+                        <div class="col-md-12">
+                            <a href="/oauth2/authorize/google?redirect_uri=http://localhost:8000/login/oauth2/code/google" class="btn btn-block waves-effect btn-primary" style="color: white">Login via Google</a>
+<!--                            <a href="/fb_login" class="btn btn-block waves-effect btn-primary">Login via Facebook</a>-->
+                        </div>
                     </div>
                 </form>
             </div>
