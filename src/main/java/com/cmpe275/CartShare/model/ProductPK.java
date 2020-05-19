@@ -4,22 +4,22 @@ import java.io.Serializable;
 
 public class ProductPK implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	protected String sku;
-	protected int storeid;
-	
-	public ProductPK() {}
-	
-	public ProductPK(String sku, int storeid) {
-		this.sku = sku;
-		this.storeid = storeid;
-	}
+    private static final long serialVersionUID = 1L;
+    protected String sku;
+    protected int storeid;
 
-	@Override
-	public String toString() {
-		return "ProductPK{" +
-				"sku='" + sku + '\'' +
-				", storeid=" + storeid +
-				'}';
-	}
+    public ProductPK() {}
+
+    public ProductPK(String sku, int storeid) {
+        this.sku = sku;
+        this.storeid = storeid;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductPK{" +
+                "sku='" + sku + '\'' +
+                ", storeid=" + storeid +
+                '}';
+    }
 }
