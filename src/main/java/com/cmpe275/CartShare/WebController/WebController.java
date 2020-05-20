@@ -107,7 +107,7 @@ public class WebController {
 
     @GetMapping("/createPool")
     public String createPool(Model model) {
-        return "/pool/create"; //view
+        return "pool/create"; //view
     }
 
     @GetMapping("/joinPool")
