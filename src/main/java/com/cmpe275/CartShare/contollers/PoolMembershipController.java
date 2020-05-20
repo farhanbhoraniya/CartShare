@@ -158,9 +158,11 @@ public class PoolMembershipController {
         confirmationTokenRepository.save(confirmationToken);
 
         try {
-            String ip = InetAddress.getLoopbackAddress().getHostAddress();
-            String port = env.getProperty("server.port");
-            String confirmationURL = "http://" + ip + ":" + port + "/confirm-pool-join?token=" + confirmationToken.getConfirmationtoken(); 
+//            String ip = InetAddress.getLoopbackAddress().getHostAddress();
+//            String port = env.getProperty("server.port");
+//            String confirmationURL = "http://" + ip + ":" + port + "/confirm-pool-join?token=" + confirmationToken.getConfirmationtoken();
+        	String ip = env.getProperty("aws.server");
+        	String confirmationURL = "http://" + ip + "/confirm-pool-join?token=" + confirmationToken.getConfirmationtoken();
             String subject = "Pool join member";
             String body = "User " + userObject.getScreenname() + " has given you reference to join pool " + poolObject.getName() 
             + ". To confirm user reference click " + confirmationURL;
@@ -198,9 +200,11 @@ public class PoolMembershipController {
         confirmationTokenRepository.save(confirmationTokenApproval);
         
         try {
-            String ip = InetAddress.getLoopbackAddress().getHostAddress();
-            String port = env.getProperty("server.port");
-            String confirmationURL = "http://" + ip + ":" + port + "/leader-approval?token=" + confirmationTokenApproval.getConfirmationtoken(); 
+//            String ip = InetAddress.getLoopbackAddress().getHostAddress();
+//            String port = env.getProperty("server.port");
+//            String confirmationURL = "http://" + ip + ":" + port + "/leader-approval?token=" + confirmationTokenApproval.getConfirmationtoken();
+        	String ip = env.getProperty("aws.server");
+        	String confirmationURL = "http://" + ip + "/leader-approval?token=" + confirmationTokenApproval.getConfirmationtoken();
             String subject = "Pool join member approval";
             String body = "Reference verified. Please approve the membership of the User " + token.getUser().getScreenname() + " for pool " + pool.getName() 
             + ". To approve click " + confirmationURL;
