@@ -66,7 +66,7 @@ $(document).ready(function(){
 			data: json_data,
 			success: function(result){
 				console.log("Success");
-				window.location.href = "/login";
+				window.location.href = "/register/success";
 			},
 			error: function(result){
 				console.log("Error");
@@ -103,7 +103,7 @@ $(document).ready(function(){
 			success: function(result){
 				console.log("Success");
 				console.log(result);
-				window.location.href = "/dashboard";
+				window.location.href = "/register/success";
 			},
 			error: function(result){
 				console.log("Error");

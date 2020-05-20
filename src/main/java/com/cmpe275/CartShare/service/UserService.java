@@ -36,7 +36,7 @@ public class UserService {
 
     @Transactional
     public Optional<User> save(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setPassword(user.getPassword());
         userRepository.save(user);
         return userRepository.findByEmail(user.getEmail());
     }
