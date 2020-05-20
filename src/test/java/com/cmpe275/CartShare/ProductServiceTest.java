@@ -18,7 +18,7 @@ import com.cmpe275.CartShare.model.Product;
 import com.cmpe275.CartShare.service.ProductService;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = CartShareApplication.class)
 public class ProductServiceTest {
 
 	@Autowired

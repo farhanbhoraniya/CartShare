@@ -24,7 +24,7 @@ import com.cmpe275.CartShare.contollers.UserAddressController;
 import com.cmpe275.CartShare.contollers.UserController;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
+@SpringBootTest(classes = CartShareApplication.class)
 @AutoConfigureMockMvc
 class CartShareApplicationTests {
     

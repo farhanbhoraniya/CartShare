@@ -19,7 +19,7 @@ import com.cmpe275.CartShare.model.User;
 import com.cmpe275.CartShare.service.OrderService;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = CartShareApplication.class)
 public class OrderServiceTest {
 
 	@Autowired

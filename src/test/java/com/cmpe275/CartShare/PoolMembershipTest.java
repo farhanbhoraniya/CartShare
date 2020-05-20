@@ -16,7 +16,7 @@ import com.cmpe275.CartShare.model.User;
 import com.cmpe275.CartShare.service.PoolMembershipService;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = CartShareApplication.class)
 public class PoolMembershipTest {
 	
 	@Autowired
