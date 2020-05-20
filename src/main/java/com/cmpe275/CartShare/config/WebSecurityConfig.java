@@ -138,7 +138,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler)
                 .failureHandler(oAuth2AuthenticationFailureHandler)
-                .failureUrl("/test")
+                .failureUrl("/login")
                 .and()
                 .sessionManagement()
                 .sessionFixation().migrateSession()
