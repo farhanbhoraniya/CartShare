@@ -121,9 +121,32 @@ public class WebController {
     }
 
     @GetMapping("/admin/dashboard")
-    public ModelAndView getAdminDashboard(ModelAndView modelAndView) {
-        modelAndView.setViewName("dashboard/admin_dashboard");
-        return modelAndView;
+    public ModelAndView getAdminDashboard(HttpServletRequest request, HttpServletResponse response ,ModelAndView modelAndView) {
+
+        Integer user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        User user = userService.findById(user_id).get();
+
+        if(!user.getProvider().toString().equals("email") && (user.getScreenname() == null))
+        {
+            modelAndView.addObject("email", user.getEmail());
+            modelAndView.setViewName("user/socialRegistration");
+            return modelAndView;
+        }
+        else
+        {
+            if(user.isVerified())
+            {
+                modelAndView.setViewName("dashboard/admin_dashboard");
+                return modelAndView;
+            }
+            else
+            {
+                CookieUtils.deleteCookie(request, response, "JSESSIONID");
+                modelAndView.addObject("user_verified_error", "User is not verified");
+                modelAndView.setViewName("index");
+                return modelAndView;
+            }
+        }
     }
 
 
