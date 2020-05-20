@@ -14,7 +14,10 @@ $(document).ready(function(e){
 		if(unit === 'Piece' && val > 1){
 			return;
 		}
+		$(".addItem").attr('disabled', true);
+		$(".removeItem").attr('disabled', true);
 		callAPI();
+		
 	});
 	
 	$(".removeItem").click(function(){
@@ -30,8 +33,11 @@ $(document).ready(function(e){
 		rate = "dsc";
 		delPrevItems = false;
 		
-		if(val >= 0)
+		if(val >= 0){
+			$(".removeItem").attr('disabled', true);
+			$(".addItem").attr('disabled', true);
 			callAPI();
+		}
 	});
 	
 	function callAPI(){
@@ -52,17 +58,25 @@ $(document).ready(function(e){
 			success: function (res) {
 				res = JSON.parse(res);
 				if(res.code == 300){
+					$(".removeItem").attr('disabled', false);
+					$(".addItem").attr('disabled', false);
 					showNotification("You need to join a pool to add items in cart",'bg-red','bottom','right');
+					
 				 }
 				 else if(res.code == 500){
+					 $(".removeItem").attr('disabled', false);
+						$(".addItem").attr('disabled', false);
 					 $("#confirmationModal").modal('show'); 
 				 }else{
+					 
 					 $("#"+id).val(qty);
 					 showNotification(message,'bg-green','bottom','right');
 					 var pageURL = $(location).attr("href");
 					 if (pageURL.indexOf("getOrdersFromCart") >= 0){
 						 calculateAndUpdateRow(id, res, data.price, rate);
 					 }
+					 $(".removeItem").attr('disabled', false);
+						$(".addItem").attr('disabled', false);
 				}
             },
 			 error: function(res){
