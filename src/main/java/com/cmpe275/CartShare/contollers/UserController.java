@@ -223,4 +223,32 @@ public class UserController {
         response.put("message", "Message sent successfully");
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    @GetMapping("/pooler/getContributionInformation")
+    public ModelAndView getUserContributionInfo(ModelAndView modelAndView)
+    {
+        Integer user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        User user = userService.findById(user_id).get();
+
+        modelAndView.setViewName("user/contribution");
+        modelAndView.addObject("user", user);
+
+        String colour = "";
+        if(user.getRating() > -4)
+        {
+            colour = "bg-green";
+        }
+        else if(user.getRating() <= -4 && user.getRating() >= -5)
+        {
+            colour = "bg-yellow";
+        }
+        else if(user.getRating() <= -6)
+        {
+            colour = "bg-red";
+        }
+
+        modelAndView.addObject("color", colour);
+        return modelAndView;
+    }
+
 }
