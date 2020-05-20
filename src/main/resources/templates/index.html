@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -41,6 +42,22 @@
             <div class="body">
                 <form id="sign_in" method="POST" action="/login">
                     <div class="msg">Sign in to start your session</div>
+                    <div th:if="${conf_msg_success} != null " class="alert bg-green alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        Account Verified. You can now login
+                    </div>
+                    <div th:if="${register_msg_success} != null " class="alert bg-green alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        Registration Successful. A confirmation email has been sent on your email. Please verify before login.
+                    </div>
+                    <div th:if="${conf_msg_error} != null " class="alert bg-red alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        Invalid Token.
+                    </div>
+                    <div th:if="${user_verified_error} != null " class="alert bg-red alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        Your email is not verified. Please verify your email before login.
+                    </div>
                     <div class="input-group">
                     	<div class="g-signin2" data-onsuccess="onSignIn"></div>
                     </div>

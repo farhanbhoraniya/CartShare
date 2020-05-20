@@ -80,8 +80,8 @@ public class CartShareOAuth2UserService extends DefaultOAuth2UserService {
 
         user.setProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
         user.setProviderId(oAuth2UserInfo.getId());
-        user.setScreenname(oAuth2UserInfo.getName());
-        user.setNickname(oAuth2UserInfo.getName());
+//        user.setScreenname(oAuth2UserInfo.getName());
+//        user.setNickname(oAuth2UserInfo.getName());
         user.setEmail(oAuth2UserInfo.getEmail());
         if (oAuth2UserInfo.getEmail().endsWith("@sjsu.edu")) {
             user.setType("admin");

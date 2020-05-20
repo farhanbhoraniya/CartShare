@@ -1,9 +1,13 @@
 package com.cmpe275.CartShare.WebController;
 
 import com.cmpe275.CartShare.model.Store;
+import com.cmpe275.CartShare.model.User;
 import com.cmpe275.CartShare.security.UserPrincipal;
 import com.cmpe275.CartShare.service.StoreService;
+import com.cmpe275.CartShare.service.UserService;
+import com.cmpe275.CartShare.util.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -20,6 +26,9 @@ public class WebController {
 
     @Autowired
     StoreService storeService;
+
+    @Autowired
+    UserService userService;
 
     @GetMapping("/createStore")
     public String main(Model model) {
@@ -119,9 +128,32 @@ public class WebController {
 
 
     @GetMapping("/pooler/dashboard")
-    public ModelAndView getUserDashboard(ModelAndView modelAndView) {
-        modelAndView.setViewName("dashboard/user_dashboard");
-        return modelAndView;
+    public ModelAndView getUserDashboard(HttpServletRequest request, HttpServletResponse response , ModelAndView modelAndView) {
+
+        Integer user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        User user = userService.findById(user_id).get();
+
+        if(!user.getProvider().toString().equals("email") && (user.getScreenname() == null))
+        {
+            modelAndView.addObject("email", user.getEmail());
+            modelAndView.setViewName("user/socialRegistration");
+            return modelAndView;
+        }
+        else
+        {
+            if(user.isVerified())
+            {
+                modelAndView.setViewName("dashboard/user_dashboard");
+                return modelAndView;
+            }
+            else
+            {
+                CookieUtils.deleteCookie(request, response, "JSESSIONID");
+                modelAndView.addObject("user_verified_error", "User is not verified");
+                modelAndView.setViewName("index");
+                return modelAndView;
+            }
+        }
     }
 
     @GetMapping("/dashboard")
@@ -141,4 +173,12 @@ public class WebController {
         }
     }
 
+    @GetMapping("/register/success")
+    public ModelAndView registrationSuccessful(ModelAndView modelAndView, HttpServletRequest request, HttpServletResponse response)
+    {
+        CookieUtils.deleteCookie(request, response, "JSESSIONID");
+        modelAndView.setViewName("index");
+        modelAndView.addObject("register_msg_success", "Register Success");
+        return modelAndView;
+    }
 }
