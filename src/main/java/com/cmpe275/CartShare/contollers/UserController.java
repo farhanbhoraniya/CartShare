@@ -24,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -165,7 +166,7 @@ public class UserController {
 
     @GetMapping(value = "/confirm-account")
     public @ResponseBody
-    ResponseEntity<?> confirmUserAccount(@RequestParam("token") String confirmationToken) {
+    ModelAndView confirmUserAccount(ModelAndView modelAndView, @RequestParam("token") String confirmationToken) {
         ConfirmationToken token = confirmationTokenRepository.findByConfirmationtoken(confirmationToken);
 
         if (token != null) {
@@ -175,12 +176,16 @@ public class UserController {
             user.setVerified(true);
             verifiedUser = userService.save(user);
             if (verifiedUser.isPresent()) {
-                ResponseEntity.ok().body(user);
+
+                modelAndView.addObject("conf_msg_success", "Account Verified. You can now login");
+                modelAndView.setViewName("index");
+                return modelAndView;
             }
             confirmationTokenRepository.delete(token);
         }
-
-        return ResponseEntity.badRequest().body(new ApiResponse(false, "Token not valid."));
+        modelAndView.addObject("conf_msg_error", "Invalid Token.");
+        modelAndView.setViewName("index");
+        return modelAndView;
     }
     
     @GetMapping(value = "/chatWithPoolers")

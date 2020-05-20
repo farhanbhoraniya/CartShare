@@ -8,9 +8,11 @@ import com.cmpe275.CartShare.model.ConfirmationToken;
 import com.cmpe275.CartShare.model.User;
 import com.cmpe275.CartShare.payload.SignUpRequest;
 import com.cmpe275.CartShare.security.TokenProvider;
+import com.cmpe275.CartShare.security.UserPrincipal;
 import com.cmpe275.CartShare.service.UserService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -77,4 +79,32 @@ public class AuthController {
 
         mailAsyncComponent.sendMail(result.getEmail(), confirmationToken);
     }
+
+    @PostMapping("/register/social/update")
+    public void registerSocialUpdateUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+
+        if (userService.userNickNameExists(signUpRequest.getNickname())) {
+            throw new BadRequestException("Nickname already in use.");
+        }
+
+        if (userService.userScreenNameExists(signUpRequest.getScreenname())) {
+            throw new BadRequestException("Screen name already in use.");
+        }
+
+        Integer user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        User user = userService.findById(user_id).get();
+//        User user = new User();
+//        user.setEmail(signUpRequest.getEmail());
+        user.setNickname(signUpRequest.getNickname());
+        user.setScreenname(signUpRequest.getScreenname());
+        user.setPassword(signUpRequest.getPassword());
+//        user.setType(type);
+//        user.setProvider(AuthProvider.email);
+        User result = userService.save(user).orElseThrow(() -> new DataIntegrityViolationException("User not created"));
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(result);
+        confirmationTokenRepository.save(confirmationToken);
+        mailAsyncComponent.sendMail(result.getEmail(), confirmationToken);
+    }
+
 }

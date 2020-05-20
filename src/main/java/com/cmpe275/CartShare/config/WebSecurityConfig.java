@@ -102,6 +102,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/pooler/**").access("hasRole('USER')")
                 .antMatchers("./static/**",
                         "/register",
+                        "/register/social/update",
                         "/test",
                         "/confirm-account",
                         "/confirm-pool-join",

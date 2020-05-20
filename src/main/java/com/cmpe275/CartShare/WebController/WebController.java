@@ -1,8 +1,10 @@
 package com.cmpe275.CartShare.WebController;
 
 import com.cmpe275.CartShare.model.Store;
+import com.cmpe275.CartShare.model.User;
 import com.cmpe275.CartShare.security.UserPrincipal;
 import com.cmpe275.CartShare.service.StoreService;
+import com.cmpe275.CartShare.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,9 @@ public class WebController {
 
     @Autowired
     StoreService storeService;
+
+    @Autowired
+    UserService userService;
 
     @GetMapping("/createStore")
     public String main(Model model) {
@@ -120,7 +125,19 @@ public class WebController {
 
     @GetMapping("/pooler/dashboard")
     public ModelAndView getUserDashboard(ModelAndView modelAndView) {
-        modelAndView.setViewName("dashboard/user_dashboard");
+
+        Integer user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        User user = userService.findById(user_id).get();
+
+        if(!user.getProviderId().equals("email") && (user.getScreenname() == null))
+        {
+            modelAndView.addObject("email", user.getEmail());
+            modelAndView.setViewName("user/socialRegistration");
+        }
+        else
+        {
+            modelAndView.setViewName("dashboard/user_dashboard");
+        }
         return modelAndView;
     }
 
