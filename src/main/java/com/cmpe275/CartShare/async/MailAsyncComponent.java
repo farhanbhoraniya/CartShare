@@ -66,7 +66,7 @@ public class MailAsyncComponent {
 //        String port = env.getProperty("server.port");
         String ip = env.getProperty("aws.server");
 //        String confirmationURL = "http://" + ip + ":" + port + "/confirm-account?token=" + confirmationToken.getConfirmationtoken();
-        String confirmationURL = "http://" + ip + "/confirm-account?token=" + confirmationToken.getConfirmationtoken();
+        String confirmationURL = ip + "/confirm-account?token=" + confirmationToken.getConfirmationtoken();
         String subject = "Verify Email";
         String body = "To confirm account click " + confirmationURL;
 

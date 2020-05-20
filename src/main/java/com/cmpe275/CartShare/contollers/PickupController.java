@@ -7,6 +7,7 @@ import com.cmpe275.CartShare.dao.LinkedOrdersRepository;
 import com.cmpe275.CartShare.model.*;
 import com.cmpe275.CartShare.service.OrderItemsService;
 import com.cmpe275.CartShare.service.OrderService;
+import com.cmpe275.CartShare.service.UserAddressService;
 import com.cmpe275.CartShare.service.UserService;
 import net.minidev.json.JSONArray;
 import org.json.simple.JSONObject;
@@ -30,6 +31,9 @@ public class PickupController {
 
     @Autowired
     UserService userService;
+    
+    @Autowired
+    UserAddressService userAddressService;
     
 
     @Autowired
@@ -134,53 +138,56 @@ public class PickupController {
     public JSONObject checkoutOrder(@PathVariable(name="order_id") Integer order_id)
     {
         Integer user_id = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+//    	int user_id = 5;
         User user = userService.findById(user_id).get();
         List<LinkedOrders> pooledOrderList = linkedOrdersRepository.findAllByParent_id(order_id);
-
+        
         //Updating self pick order
         Order selfOrder = orderService.getOrderByOrderId(order_id);
         selfOrder.setStatus(Order.ORDER_SELF_PICKED);
         selfOrder.setPickedby(user);
         orderService.save(selfOrder);
 
+        List<JSONObject> orderList = new ArrayList<JSONObject>();
         //Updating all order statuses and pickup information
         for (LinkedOrders pooledOrder: pooledOrderList) {
             Order order = pooledOrder.getPool_order();
             order.setStatus(Order.ORDER_PICKED_UP);
             order.setPickedby(user);
+            
             orderService.save(order);
+            JSONObject temp = new JSONObject();
+            temp.put("id", order.getId());
+            temp.put("date", order.getDate());
+            temp.put("status", order.getStatus());
+            temp.put("buyerid", order.getBuyerid());
+            UserAddress address = userAddressService.findByUser(order.getBuyerid());
+            String addressString = address.getStreetno() + " " + address.getStreetname()+ " " 
+            						+ address.getCity() + " " + address.getState() + " " + address.getZip();
+            System.out.println(addressString);
+            temp.put("address", addressString);
+            temp.put("orderItems", order.getOrderItems());
+            System.out.println(temp);
+            orderList.add(temp);
+            Map<String, Object> model = new HashMap<String, Object>();
+        	model.put("status", order.getStatus());
+        	model.put("orderItems", order.getOrderItems());
+        	model.put("date", order.getDate());
+        	model.put("id", order.getId());
+        	model.put("pickedBy", order.getPickedby().getScreenname());
+        	mailAsyncComponent.sendOrderMail(order.getBuyerid().getEmail(), "Order Picked Up!!!", "orderPickedUpEmailTemplate", model);
         }
 
-        //SENDS MAIL TO THE USER WHO HAS PLACED THE ORDER
-        // ############################
-        
-//        Order order = orderService.getOrderByOrderId(77);
-//    	Map<String, Object> model = new HashMap<String, Object>();
-//    	model.put("status", order.getStatus());
-//    	model.put("orderItems", order.getOrderItems());
-//    	model.put("date", order.getDate());
-//    	model.put("id", order.getId());
-//    	model.put("pickedBy", order.getPickedby().getScreenname());
-//    	mailAsyncComponent.sendOrderMail(order.getBuyerid().getEmail(), "Order Picked Up!!!", "orderPickedUpEmailTemplate", model);
-
-        // SENDS MAIL TO USER WHO PICKED UP ORDER, NEED TO ADD ADDRESS IN OBJECT
-        // ###############################
-//        List<LinkedOrders> pooledLinkedOrderList = linkedOrdersRepository.findAllByParent_id(63);
-//        List<Order> orderList = new ArrayList<Order>();
-//        for(LinkedOrders item: pooledLinkedOrderList) {
-//        	orderList.add(item.getPool_order());
-//        }
-//        //TODO: Send Delivery notification
-//	      try {
-//	    	System.out.println(pooledOrderList);
-//	    	Map<String, Object> model = new HashMap<String, Object>();
-//	    	model.put("orders", orderList);
-//	    	mailAsyncComponent.sendOrderMail("farhanbhoraniya@gmail.com", "Orders to pick up", "orderDeliveryDetailsEmailTemplate", model);
-//	
-//	    	
-//		} catch(Exception e) {
-//			System.out.println("Error while sending the email");
-//		}
+	      try {
+	    	System.out.println(pooledOrderList);
+	    	Map<String, Object> model = new HashMap<String, Object>();
+	    	model.put("orders", orderList);
+	    	mailAsyncComponent.sendOrderMail(selfOrder.getBuyerid().getEmail(), "Orders to Deliver", "orderDeliveryDetailsEmailTemplate", model);
+	
+	    	
+		} catch(Exception e) {
+			System.out.println("Error while sending the email");
+		}
 
         JSONObject response = new JSONObject();
         response.put("status", "success");

@@ -138,7 +138,7 @@ public class OrderController {
         System.out.println("Items moved to the order items table");
 
         System.out.println("Items removed from cart items");
-        return ResponseEntity.status(HttpStatus.OK).body(newOrder);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
 
     }
 
