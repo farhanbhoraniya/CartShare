@@ -47,6 +47,14 @@ public class AuthController {
             throw new BadRequestException("Email address already in use.");
         }
 
+        if (userService.userNickNameExists(signUpRequest.getNickname())) {
+            throw new BadRequestException("Nickname already in use.");
+        }
+
+        if (userService.userScreenNameExists(signUpRequest.getScreenname())) {
+            throw new BadRequestException("Screen name already in use.");
+        }
+
         String type;
         if (signUpRequest.getEmail().endsWith("@sjsu.edu")) {
             type = "admin";

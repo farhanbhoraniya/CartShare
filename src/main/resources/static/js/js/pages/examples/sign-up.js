@@ -2,9 +2,6 @@ $(document).ready(function(){
 	$(function () {
 	    $('#sign_up').validate({
 	        rules: {
-	            'terms': {
-	                required: true
-	            },
 	            'confirm': {
 	                equalTo: '[name="password"]'
 	            }
@@ -49,15 +46,18 @@ $(document).ready(function(){
 			data: json_data,
 			success: function(result){
 				console.log("Success");
-				window.location.href = "/login"; 
+				window.location.href = "/login";
+			},
+			error: function(result){
+				console.log("Error");
+				console.log(result);
+				showNotification(result.responseJSON.message,'bg-red','bottom','right');
 			},
 			failure: function(result){
-				console.log("Failure");
+				// console.log("Failure");
+				// console.log(result);
+				showNotification(result.responseJSON.message,'bg-red','bottom','right');
 			}
 		});
-		//send ajax call to get verification code
-		//store verification code in session
-		//sessionStorage.code = "1234";
-		//
 	}
 });

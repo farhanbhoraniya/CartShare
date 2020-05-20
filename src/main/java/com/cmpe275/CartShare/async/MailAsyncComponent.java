@@ -82,6 +82,7 @@ public class MailAsyncComponent {
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(email);
+        mailMessage.setFrom("CartShare");
         mailMessage.setSubject(subject);
         mailMessage.setText(message);
         try {

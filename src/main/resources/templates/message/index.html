@@ -46,7 +46,7 @@
 <section class="content">
     <div class="container-fluid">
         <div class="block-header">
-            <h2>USER PROFILE</h2>
+<!--            <h2>Message a pooler</h2>-->
         </div>
         <!-- Input -->
         <div class="row clearfix">
@@ -54,17 +54,18 @@
                 <div class="card">
                     <div class="body">
 
-                        <h2 class="card-inside-title">Chat Details</h2>
+                        <h2 class="card-inside-title">Send Message</h2>
                         <form class="form-horizontal">
                         	<div class="row clearfix">
                                 <div class="col-md-12">
-                                    <select  id="chatID" class="form-control show-tick" multiple>
+                                    <select  id="chatID" class="form-control show-tick">
+                                        <option value=""></option>
                                         <option th:each="pooler:${poolers}" th:value="${pooler.email}" th:text="${pooler.screenname}"></option>
                                     </select>
                                 </div>
                             </div>
                             <div class="row clearfix">
-	                            <div class="col-sm-12">
+	                            <div class="col-md-12">
 	                                <div class="form-group">
 	                                    <div class="form-line">
 	                                        <input type="text" id="subject" class="form-control" placeholder="SUBJECT" required/>
@@ -73,7 +74,7 @@
 	                            </div>
                         	</div>
                             <div class="row clearfix">
-	                            <div class="col-sm-12">
+	                            <div class="col-md-12">
 	                                <div class="form-group">
 	                                    <div class="form-line">
 	                                        <textarea rows="4" id="message" class="form-control no-resize" placeholder="Message Content..."></textarea>

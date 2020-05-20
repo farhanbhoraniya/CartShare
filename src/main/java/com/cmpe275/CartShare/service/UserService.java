@@ -53,6 +53,14 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
+    public Boolean userNickNameExists(String nickname) {
+        return userRepository.existsByNickname(nickname);
+    }
+
+    public Boolean userScreenNameExists(String screenname) {
+        return userRepository.existsByScreenname(screenname);
+    }
+
     public Pool findUserPool(User user)
     {
         Pool pool = poolRepository.findByLeader(user);
