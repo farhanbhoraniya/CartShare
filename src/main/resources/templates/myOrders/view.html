@@ -120,8 +120,8 @@
                                     <td th:text="${orderItem.getProduct().getName()}"></td>
                                     <td th:text="${orderItem.getProduct().getDescription()}"></td>
                                     <td th:text="${orderItem.getQty()}"></td>
+                                    <td th:text="${orderItem.getPrice() / orderItem.getQty()}"></td>
                                     <td th:text="${orderItem.getPrice()}"></td>
-                                    <td th:text="${orderItem.getQty() * orderItem.getPrice()}"></td>
                                 </tr>
                                 </tbody>
                             </table>
