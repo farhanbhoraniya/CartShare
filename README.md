@@ -1,9 +1,9 @@
 # CartShare - Term Project - Team2
 
-Alok Goyal<br>
-Shraddha Nayak<br>
-Farhan Bhoraniya<br>
-Shubham Singh <br>
+Alok Goyal - 014499355 (alok.goyal@sjsu.edu) <br>
+Farhan Bhoraniya - 014506531 (farhan.bhoraniya@sjsu.edu)<br>
+Shraddha Nayak - 014008943 (shraddha.nayak@sjsu.edu)<br>
+Shubham Singh - 014153009(shubham.singh@sjsu.edu)<br>
 
 App URL: http://ec2-3-12-183-51.us-east-2.compute.amazonaws.com/
 
