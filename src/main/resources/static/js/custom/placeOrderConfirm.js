@@ -55,13 +55,13 @@ $(document).ready(function(){
 				data: JSON.stringify(data),
 				contentType: "application/json",
 				success: function(req){
-					if(req.status === "PLACED"){
+					
 						showNotification("Order Placed successfully",'bg-green','bottom','right');
 
 						
 							location.href = "/myOrders";
 						
-					}
+					
 				},
 				error: function(req){
 					showNotification("Error in Placing Order. Add items in the cart/Join a Pool to process order",'bg-red','bottom','right');
@@ -106,7 +106,7 @@ $(document).ready(function(){
 			data: JSON.stringify(data),
 			contentType: "application/json",
 			success: function(req){
-				if(req.status === "PLACED"){
+				
 					showNotification("Order Placed successfully",'bg-green','bottom','right');
 
 					if(selfPick != false){
@@ -115,7 +115,7 @@ $(document).ready(function(){
 					}else{
 						location.href = "/myOrders";
 					}
-				}
+				
 			},
 			error: function(req){
 				showNotification("Error in Placing Order. Add items in the cart/Join a Pool to process order",'bg-red','bottom','right');
