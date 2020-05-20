@@ -5,6 +5,7 @@ Shraddha Nayak<br>
 Farhan Bhoraniya<br>
 Shubham Singh <br>
 
+App URL: http://ec2-3-12-183-51.us-east-2.compute.amazonaws.com/
 
 How to use:
 1. Import as maven project
