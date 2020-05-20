@@ -25,4 +25,4 @@ How to use:
 **Info:**
 The application runs on port 9000.
 
-Nginx is configured to sit in front on port 80 and forwards all the requests to port 9000.
+For server: Nginx is configured to sit in front on port 80 and forwards all the requests to port 9000.
